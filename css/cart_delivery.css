@@ -1,0 +1,347 @@
+.checkout-row .change-icon {
+  cursor: pointer;
+  position: relative;
+}
+
+.checkout-row .change-icon:hover::after {
+  content: "Изменить";
+  position: absolute;
+  top: -20px;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 2px 5px;
+  font-size: 12px;
+  color: #333;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.delivery-info {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.delivery-info img {
+  margin-left: 10px;
+  cursor: pointer;
+  height: 25px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #f9f9f9;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+}
+
+.map-container {
+  margin-top: 20px;
+  height: 300px;
+  background-color: #ddd;
+}
+
+.placemark {
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 200px;
+  min-width: 150px;
+  cursor: pointer;
+}
+
+.select-button {
+  z-index: 9999999999999 !important;
+  cursor: pointer !important;
+}
+
+.placemark-logo img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.ymaps-2-1-79-image-with-content-content {
+  width: 200px !important;
+  height: 200px !important;
+}
+
+.placemark-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 12px;
+}
+
+.placemark-content strong {
+  font-size: 14px;
+}
+
+.placemark-content .address,
+.placemark-content .working-hours,
+.placemark-content .distance,
+.placemark-content .availability {
+  margin-bottom: 5px;
+}
+
+.placemark-price {
+  color: green;
+  font-weight: bold;
+  margin-top: 5px;
+  font-size: 18px;
+  display: flex;
+  justify-content: flex-start !important;
+  margin-left: 0 !important;
+}
+
+.select-button {
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.select-button:hover {
+  background-color: #45a049;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.modal-buttons .cancel-button,
+.modal-buttons .confirm-button {
+  background-color: rgb(60, 160, 60);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.modal-buttons .cancel-button:hover,
+.modal-buttons .confirm-button:hover {
+  background-color: #45a049;
+}
+
+.show-with-list {
+  background-color: rgb(60, 160, 60);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.show-with-list:hover {
+  background-color: #45a049;
+}
+
+.show-with-list.map {
+  display: none;
+}
+
+.placemarks-list {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.placemarks-list-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #cccccccf;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+
+.placemark-section {
+  display: flex;
+  align-items: center;
+}
+
+.placemark-logo {
+  width: 25px;
+  height: 25px;
+}
+
+.placemark-list-price {
+  width: 80px;
+  font-weight: 500;
+  font-size: 16px;
+  margin: 0;
+  text-align: left;
+}
+
+.placemark-list-price sup {
+  margin-right: 5px;
+}
+
+.placemark-distance,
+.placemark-walking-time {
+  width: 40px;
+  font-size: 12px;
+  margin: 0;
+}
+
+.placemark-name {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
+  text-align: left;
+}
+
+.placemark-availability {
+  font-weight: 400;
+  font-size: 16px;
+  margin: 0;
+}
+
+.map-modal-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.map-modal-input {
+  width: 100%;
+}
+
+.map-modal-input input {
+  width: 98%;
+}
+
+.suggestions-wrapper {
+  width: 100% !important;
+}
+
+.suggestions-value {
+  width: 100% !important;
+  text-align: left !important;
+  justify-content: flex-start;
+}
+
+.suggestions-suggestion {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.suggestions-hint {
+  text-align: left;
+}
+
+.sort {
+  display: none;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.sort button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.sort img {
+  width: 10px !important;
+}
+
+.ymaps-2-1-79-events-pane {
+  z-index: 4000 !important;
+}
+
+.ymaps-2-1-79-placemark-overlay,
+.ymaps-2-1-79-places-pane {
+  z-index: 4205 !important;
+}
+
+.ymaps-2-1-79-placemark-overlay:hover {
+  z-index: 4206 !important;
+}
+
+.modal input {
+  font-size: 16px;
+  padding: 7px 10px;
+  border: none;
+  border-bottom: 1px solid #333;
+  background: none;
+}
+
+.modal input:focus {
+  outline: none;
+}
+
+.modal input:hover {
+  border-bottom: 1px solid #000 !important;
+}
+
+.sendCodeAgain {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  width: calc(100% - 40px);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 20px;
+}
+
+.sendCodeAgain.available {
+  color: #007bff;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}

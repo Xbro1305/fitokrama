@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/footer.css">
+    <link rel="stylesheet" href="./css/product-in-cart.css">
+    <link rel="stylesheet" href="./css/cart.css">
+    <link rel="stylesheet" href="./css/cart_delivery.css">
+    <link rel="stylesheet" href="./css/cart_payment.css">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>Корзина</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU" type="text/javascript"></script> <!-- Подключаем API Яндекс.Карт -->
+    <script src="./js/cart.js" defer></script>
+</head>
+<body class="cart-page">
+    <header>
+        <div class="top-bar">
+            <div class="contact-info">
+                <a href="https://www.instagram.com/kovrochистка/"><img src="./logos/instagram_icon.png" alt="Instagram"></a>
+                <a href="viber://chat?number=+375296562441"><img src="./logos/viber_icon.png" alt="Viber"></a>
+                <a href="https://t.me/+375336150464"><img src="./logos/telegram_icon.png" alt="Telegram"></a>
+                <a href="tel:+375172222222">+375 17 222-22-22</a>
+            </div>
+            <div class="menu-buttons">
+                <a href="#" class="menu-button">Каталог</a>
+                <a href="#" class="menu-button">Оплата и доставка</a>
+                <a href="#" class="menu-button">Контакты</a>
+            </div>
+        </div>
+
+        <div class="bottom-bar">
+            <div class="bottom-bar-content">
+                <img src="./logos/ftkrm_logo.png" alt="Логотип компании" class="company-logo">
+                <div class="search-container">
+                    <input type="text" placeholder="Поиск" class="search-input">
+                    <button class="search-button"><img src="./logos/search_logo.png" alt="Поиск"></button>
+                </div>
+                <div class="account-buttons">
+                    <a href="#"><img src="./logos/account_logo.png" alt="Аккаунт"></a>
+                    <a href="#"><img src="./logos/wallet_logo.png" alt="Кошелек"></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="cart-content">
+        <h3>КОРЗИНА</h3>
+        <div class="cart-item">
+            <img src="./goods_pics/losterin.png" alt="Product" class="product-image">
+            <div class="product-info">
+                <div class="cart-item-info">
+                    <h4 class="product-name">Наименование товара</h4>
+                    <div class="product-prices">
+                        <div class="old-price">14,<sup>75</sup></div>
+                        <div class="new-price">12,<sup>75</sup> <span class="currency">руб.</span></div>
+                    </div>
+                    <div class="quantity-selector">
+                        <button class="quantity-button" onclick="changeQuantity(-1, 'item1')">-</button>
+                        <input type="number" class="quantity-input" id="quantity-item1" value="2" readonly>
+                        <button class="quantity-button" onclick="changeQuantity(1, 'item1')">+</button>
+                    </div>
+                    <div class="total-price" id="total-price-item1" data-price="12.75">25,<sup>50</sup> <span class="currency">руб.</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="cart-item">
+            <img src="./goods_pics/losterin.png" alt="Product" class="product-image">
+            <div class="product-info">
+                <div class="cart-item-info">
+                    <h4 class="product-name">Наименование товара 2</h4>
+                    <div class="product-prices">
+                        <div class="old-price">18,<sup>90</sup></div>
+                        <div class="new-price">15,<sup>50</sup> <span class="currency">руб.</span></div>
+                    </div>
+                    <div class="quantity-selector">
+                        <button class="quantity-button" onclick="changeQuantity(-1, 'item2')">-</button>
+                        <input type="number" class="quantity-input" id="quantity-item2" value="1" readonly>
+                        <button class="quantity-button" onclick="changeQuantity(1, 'item2')">+</button>
+                    </div>
+                    <div class="total-price" id="total-price-item2" data-price="15.50">15,<sup>50</sup> <span class="currency">руб.</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="cart-summary">
+            <div class="summary-label">ИТОГО:</div>
+            <div class="summary-total" id="summary-total">41,<sup>00</sup> <span class="currency">руб.</span></div>
+        </div>
+        <div class="checkout-info">
+            <div class="checkout-row">
+                <label for="fio">Ф.И.О.</label>
+                <input type="text" id="fio" value="Иванов Иван Иванович">
+            </div>
+            <div class="checkout-row">
+                <label for="email">e-mail</label>
+                <input type="email" id="email" value="mail@mail.com">
+                <img src="./logos/green_ok.png" alt="ok" class="ok-icon">
+            </div>
+            <div class="checkout-row">
+                <label for="phone">Телефон</label>
+                <input type="text" id="phone" value="+375291234567">
+                <img src="./logos/green_ok.png" alt="ok" class="ok-icon">
+            </div>
+            <div class="checkout-row">
+                <label for="address">Адрес</label>
+                <input type="text" id="address" value="Минск, ул. Андреевская, 1, кв. 1">
+            </div>
+            <div class="checkout-row">
+                <label>Доставка</label>
+                <div class="delivery-info">
+                    <img src="./logos/yandex_logo.png" alt="Yandex">
+                    <input type="text" id="delivery-address" value="Минск, ул. Андреевская, 1, кв. 1" readonly>
+                    <img src="./logos/change_icon.png" alt="Change" class="change-icon" title="Изменить" onclick="openDeliveryModal()">
+                </div>
+            </div>			
+            <div class="checkout-row">
+                <label>Оплата:</label>
+                <div class="payment-info">
+                    <input type="text" value="картой XXXX XXXX XXXX 1234" readonly>
+                    <img src="./logos/change_icon.png" alt="Change" class="change-icon" title="Изменить" onclick="openPaymentModal('paymentModal')">
+                </div>
+            </div>   
+            <div id="deliveryModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('deliveryModal')">&times;</span>
+                    <div class="checkout-row">
+                        <label for="address-modal">Адрес</label>
+                        <input type="text" id="address-modal" value="Минск, ул. Андреевская, 1, кв. 1">
+                    </div>
+                    <div id="map" class="map-container">
+                        <!-- Здесь будет карта -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модальное окно для подтверждения выбора метода доставки -->
+            <div id="confirmDeliveryMethodModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeConfirmDeliveryMethodModal()">&times;</span>
+                    <h2>Выбрать указанный метод доставки?</h2>
+                    <p id="selectedDeliveryMethod"></p> <!-- Добавлен элемент для отображения выбранного метода доставки -->
+                    <div class="modal-buttons">
+                        <button class="cancel-button" onclick="closeConfirmDeliveryMethodModal()">Нет</button>
+                        <button class="confirm-button" onclick="confirmDeliveryMethod()">Да</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модальное окно для изменения оплаты -->
+            <div id="paymentModal" class="modal">
+                <div class="modal-content">
+                    <span id="closePaymentModal" class="close">&times;</span>
+                    <h2>Оплата</h2>
+                    <input type="text" id="paymentMethod" value="картой XXXX XXXX XXXX 1234">
+                    <!-- Здесь можно добавить другие элементы формы или информации -->
+                </div>
+            </div>
+            
+            <div class="checkout-button-row">
+                <button class="buy-button">КУПИТЬ</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <img src="./logos/ftkrm_logo.png" alt="Логотип компании" class="footer-logo">
+            <div class="footer-info">
+                <p>ООО "ООО"</p>
+                <p>Реквизиты</p>
+                <p>Банк счет</p>
+                <p>Телефон</p>
+                <p>Факс</p>
+                <p>Стучать три раза</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Обработка персональных данных</a>
+                <a href="#">Хранение cookies</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
