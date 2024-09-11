@@ -1,8 +1,23 @@
-- name: FTP Deploy
-  uses: SamKirkland/FTP-Deploy-Action@4.1.0
-  with:
-    ftp-server: ${{ secrets.FTP_HOST }}
-    ftp-username: ${{ secrets.FTP_USERNAME }}
-    ftp-password: ${{ secrets.FTP_PASSWORD }}
-    local-dir: ./
-    server-dir: public_html/
+name: FTP Deploy
+
+on:
+  push:
+    branches:
+      - main  # Убедись, что ветка указана правильно
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Upload files via FTP
+        uses: sebastianpopp/ftp-action@v1
+        with:
+          host: ${{ secrets.FTP_HOST }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          localDir: .  # Локальная директория
+          remoteDir: /public_html/  # Директория на сервере
