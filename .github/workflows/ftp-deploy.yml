@@ -1,9 +1,23 @@
-steps:
-  - name: Upload files via FTP
-    uses: sebastianpopp/ftp-action@v1
-    with:
-      host: ${{ secrets.FTP_HOST }}
-      user: ${{ secrets.FTP_USERNAME }}
-      password: ${{ secrets.FTP_PASSWORD }}
-      localDir: .  # Локальная директория для загрузки
-      remoteDir: /public_html/  # Путь на сервере
+name: FTP Deploy
+
+on:
+  push:
+    branches:
+      - main  # Запуск деплоя при пуше в основную ветку
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Upload files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /public_html/
