@@ -3,7 +3,7 @@ name: FTP Deploy
 on:
   push:
     branches:
-      - main  # Убедись, что ветка указана правильно
+      - main  # Запуск деплоя при пуше в основную ветку
 
 jobs:
   deploy:
@@ -14,10 +14,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Upload files via FTP
-        uses: sebastianpopp/ftp-action@v1
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          host: ${{ secrets.FTP_HOST }}
-          user: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          localDir: .  # Локальная директория
-          remoteDir: /public_html/  # Директория на сервере
+          ftp-server: ${{ secrets.FTP_HOST }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /public_html/
