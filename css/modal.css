@@ -1,11 +1,11 @@
-/* Модальное окно */
-
 .modal {
   display: none;
 
   position: fixed;
+  top: 50%;
+  left: 50%;
 
-  z-index: 1001999; /* Делаем z-index больше, чтобы модальное окно было выше шапки */
+  z-index: 100;
 
   left: 0;
 
@@ -20,14 +20,16 @@
   background-color: rgb(0, 0, 0);
 
   background-color: rgba(0, 0, 0, 0.4);
-
-  padding-top: 60px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  z-index: 99999999 !important;
 }
 
 .modal-content {
   background-color: #fefefe;
 
-  margin: 5% auto;
+  margin: 0 !important;
 
   padding: 20px;
 
@@ -38,44 +40,51 @@
   max-width: 500px;
 
   text-align: center;
-  z-index: 999;
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+
+  border-radius: 10px;
+  position: relative;
+  z-index: 999999999999 !important;
 }
 
-.close {
-  color: #aaa;
+.modal-body {
+  display: flex;
 
-  float: right;
+  align-items: center;
 
-  font-size: 28px;
-
-  font-weight: bold;
+  justify-content: center;
 }
 
-.close:hover,
-.close:focus {
-  color: black;
+.modal-image {
+  width: 25px;
 
-  text-decoration: none;
-
-  cursor: pointer;
+  margin-right: 20px;
 }
 
-.modal p {
-  font-size: 12px;
+.modal-text {
+  text-align: left;
+}
 
-  color: #666;
+.modal-text h2 {
+  font-size: 24px;
+
+  color: rgb(97, 129, 98); /* Зеленый цвет */
+
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
 }
 
 .modal-buttons {
   display: flex;
 
   justify-content: space-around;
-
-  margin-top: 20px;
 }
 
-.modal-buttons button {
-  background-color: rgb(60, 160, 60);
+.continue-shopping,
+.checkout {
+  background-color: rgb(97, 129, 98);
 
   color: white;
 
@@ -88,8 +97,191 @@
   font-size: 16px;
 
   cursor: pointer;
+
+  margin: 10px;
 }
 
-.modal-buttons button:hover {
-  background-color: #45a049;
+.continue-shopping:hover,
+.checkout:hover {
+  background-color: rgb(158, 184, 158);
+}
+
+.close {
+  color: #aaa;
+
+  float: right;
+
+  font-size: 28px;
+
+  font-weight: bold;
+  z-index: 99999999;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+#confirmEmail .modal-content,
+#universalConfirm .modal-content {
+  z-index: 99999999 !important;
+}
+
+#confirmEmail .modal-content,
+#confirmEmail {
+  z-index: 99999999999999 !important;
+}
+
+.show-with-list {
+  background-color: rgb(97, 129, 98);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#universalConfirm {
+  z-index: 9999999999;
+}
+
+#authModal .modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emailAuth {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.getAgain {
+  color: rgb(158, 184, 158);
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid rgb(158, 184, 158);
+  padding: 3px;
+  margin: 10px 0 !important;
+  width: 163px;
+  text-align: center;
+}
+
+.emailAuth h4 {
+  text-align: left;
+}
+
+.getEmailCode {
+  display: flex;
+  flex-direction: column;
+}
+
+#authModal input {
+  padding: 5px;
+  width: 160px;
+  height: 28px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.emailAuth label {
+  display: flex;
+  flex-direction: row;
+}
+
+.appleID {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 190px;
+  margin-top: 10px;
+}
+
+.appleID img {
+  height: 32px;
+}
+
+.appleID p {
+  margin: 0;
+}
+
+.getEmailCode span {
+  width: 30px;
+  height: 15px;
+  font-size: 20px;
+}
+
+.getEmailCode button {
+  width: 160px !important;
+  background-color: rgb(97, 129, 98);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.getEmailCode i,
+.getEmailCode p {
+  font-size: 12px;
+  font-style: normal;
+  text-align: center;
+}
+
+.emailCodeLabel p {
+  text-align: left !important;
+}
+
+.getEmailCode p {
+  margin: 0;
+  margin-bottom: -10px;
+}
+
+.code-input,
+.code-container input {
+  width: 23px !important;
+
+  height: 23px !important;
+
+  font-size: 18px;
+
+  text-align: center;
+  padding: 0 !important;
+
+  margin: 5px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 5px !important;
+}
+
+.code-container {
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+  width: 193px;
+}
+
+.nomap {
+  text-align: center;
+  width: 100%;
+  z-index: 0;
+  position: absolute;
+  top: 0;
 }

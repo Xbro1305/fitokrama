@@ -1,5 +1,7 @@
 function showAddedToCartModal(art, price, quantity) {
   if (sessionId) {
+    document.querySelector("#waiting").style.display = "flex";
+
     fetch("https://fitokrama.by/cart_correct.php", {
       method: "POST",
       body: JSON.stringify({
@@ -10,12 +12,15 @@ function showAddedToCartModal(art, price, quantity) {
     })
       .then((response) => response.json())
       .then((data) => {
-        document.querySelector("#addedToCartModal").style.display = "block";
+        document.querySelector("#addedToCartModal").style.display = "flex";
         document.querySelector(".cart_count").innerHTML = data.cart_count;
         document.querySelector(".cart-float").style.display = "flex";
       })
       .catch(
-        (error) => (document.getElementById("fail").style.display = "block")
+        (error) => (document.getElementById("fail").style.display = "flex")
+      )
+      .finally(
+        () => (document.querySelector("#waiting").style.display = "none")
       );
   } else {
     document.querySelector(".cookiesagainstpopup").style.display = "flex";
@@ -32,7 +37,7 @@ function showAddedToCartModal(art, price, quantity) {
 function declineagain() {
   document.querySelector(".cookiesagainstpopup").style.display = "none";
 
-  document.getElementById("fail").style.display = "block";
+  document.getElementById("fail").style.display = "flex";
 }
 
 function closeAddedToCartModal() {

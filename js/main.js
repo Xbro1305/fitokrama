@@ -2,36 +2,10 @@ function navigateTo(art) {
   window.location.href = `http://fitokrama.by/art_page.php?art=${art}`;
 }
 
-function search() {
-  let searchValue = document.querySelector(".search-input").value;
-
-  if (searchValue.length < 3) {
-    document.querySelector(".search-results").style.display = "none";
-    return;
-  }
-
-  fetch("https://fitokrama.by/search.php?search=" + searchValue)
-    .then((response) => response.json())
-    .then((data) => {
-      let resultsContainer = document.querySelector(".search-results");
-      resultsContainer.innerHTML = "";
-      data.forEach((item) => {
-        let resultItem = document.createElement("div");
-        resultItem.className = "search-result-item";
-        resultItem.textContent = item.name;
-        resultItem.onclick = () => {
-          window.location.href = item.art;
-        };
-        resultsContainer.appendChild(resultItem);
-      });
-      resultsContainer.style.display = "block";
-    })
-    .catch((error) => console.error(error));
-}
-
 const getEmailCode = () => {
   const email = document.querySelector(".authWindowEmailInput").value;
   const emailST = email?.split("@");
+  document.querySelector("#waiting").style.display = "flex";
 
   if (
     emailST[0]?.length > 1 &&
@@ -66,7 +40,10 @@ const getEmailCode = () => {
           document.querySelector(".getCodeAgainButton").innerHTML =
             "<i onclick='getEmailCode()' class='getCodeButton'>Получить код повторно</i>";
         }, 60000);
-      });
+      })
+      .finally(
+        () => (document.querySelector("#waiting").style.display = "none")
+      );
   } else {
     document.querySelector(".authWindowEmailInput").style.border =
       "2px solid red";
@@ -101,12 +78,13 @@ function checkCode(inputs) {
 
   if (code.length === 5) {
     const url = `https://fitokrama.by/check_authorization.php?code=${code}`;
+    document.querySelector("#waiting").style.display = "flex";
 
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
         if (res.status === "error") {
-          document.querySelector("#universalConfirm").style.display = "block";
+          document.querySelector("#universalConfirm").style.display = "flex";
           document.querySelector(".msg").innerHTML = res.message;
           inputs.forEach((input) => {
             input.value = "";
@@ -114,10 +92,13 @@ function checkCode(inputs) {
           inputs[0].focus();
         } else {
           document.querySelector("#authModal").style.display = "none";
-          document.querySelector("#confirmAuth").style.display = "block";
+          document.querySelector("#confirmAuth").style.display = "flex";
           document.querySelector(".authMsg").innerHTML = res.message;
         }
-      });
+      })
+      .finally(
+        () => (document.querySelector("#waiting").style.display = "none")
+      );
   }
 }
 
@@ -139,12 +120,13 @@ function checkCodePhoneInput(inputs) {
 
   if (code.length === 5) {
     const url = `https://fitokrama.by/confirm_phone.php?code=${code}`;
+    document.querySelector("#waiting").style.display = "flex";
 
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
         if (res.status === "error") {
-          document.querySelector("#universalConfirm").style.display = "block";
+          document.querySelector("#universalConfirm").style.display = "flex";
           document.querySelector(".msg").innerHTML = res.message;
           inputs.forEach((input) => {
             input.value = "";
@@ -152,10 +134,13 @@ function checkCodePhoneInput(inputs) {
           inputs[0].focus();
         } else {
           document.querySelector("#authModal").style.display = "none";
-          document.querySelector("#confirmAuth").style.display = "block";
+          document.querySelector("#confirmAuth").style.display = "flex";
           document.querySelector(".authMsg").innerHTML = res.message;
         }
-      });
+      })
+      .finally(
+        () => (document.querySelector("#waiting").style.display = "none")
+      );
   }
 }
 
@@ -168,23 +153,22 @@ function checkBackspacePhoneInput(event, elem, index, inputs) {
 }
 
 function exitaccount() {
-  document.querySelector("#exitModal").style.display = "block";
+  document.querySelector("#exitModal").style.display = "flex";
 }
 
 function confirmExitAccont() {
+  document.querySelector("#waiting").style.display = "flex";
+
   fetch("https://fitokrama.by/unauthorization.php")
     .then((res) => res.json())
     .then((res) => {
-      window.location.reload();
-    });
-}
-
-function goToPage(page) {
-  window.location.href = "https://fitokrama.by/profilepage.php?page=" + page;
+      window.location.href = "https://fitokrama.by/catalog_page.php";
+    })
+    .finally(() => (document.querySelector("#waiting").style.display = "none"));
 }
 
 function showAuthMetods() {
-  document.getElementById("authModal").style.display = "block";
+  document.getElementById("authModal").style.display = "flex";
 }
 
 function checkPhoneAndEmail(response) {
@@ -208,7 +192,7 @@ function checkPhoneAndEmail(response) {
     document.querySelector(".ENC").style.backgroundColor = "#ccc";
     document.querySelector(".ENC").disabled = true;
   } else if (document.querySelector("#client_email").value != "") {
-    document.querySelector(".ENC").style.backgroundColor = "#45a049";
+    document.querySelector(".ENC").style.backgroundColor = "rgb(97, 129, 98);";
     document.querySelector(".ENC").disabled = false;
   }
 
@@ -216,7 +200,7 @@ function checkPhoneAndEmail(response) {
     document.querySelector(".PNC").style.backgroundColor = "#ccc";
     document.querySelector(".PNC").disabled = true;
   } else if (document.querySelector("#client_phone").value != "") {
-    document.querySelector(".PNC").style.backgroundColor = "#45a049";
+    document.querySelector(".PNC").style.backgroundColor = "rgb(97, 129, 98);";
     document.querySelector(".PNC").disabled = false;
   }
 }
@@ -234,13 +218,15 @@ const openConfirmEmail = () => {
     }
 
     document.querySelector(".emailtimer").innerHTML = timer;
+    document.querySelector("#waiting").style.display = "flex";
+
     timer--;
   }, 1000);
-  document.getElementById("confirmEmail").style.display = "block";
+  document.getElementById("confirmEmail").style.display = "flex";
 
-  fetch("https://fitokrama.by/confirm_email_request.php")
-    .then((res) => res.json())
-    .then((res) => console.log(res));
+  fetch("https://fitokrama.by/confirm_email_request.php").finally(
+    () => (document.querySelector("#waiting").style.display = "none")
+  );
 
   document.querySelector(".first-email-code-input").focus();
 
@@ -254,6 +240,7 @@ const openConfirmEmail = () => {
 
     document.querySelector(".availableEmail").addEventListener("click", () => {
       sendbutton.classList.remove("available");
+      sendbutton.classList.remove("availableEmaill");
       const emailtimer = document.querySelector(".emailtimer");
 
       emailtimerzero.style.display = "flex";
@@ -282,7 +269,7 @@ document.querySelectorAll(".code-input").forEach((input) => {
 
       inputs.forEach((input, i) => (input.value = pasteData[i]));
 
-      checkCode(inputsx);
+      checkCode(inputs);
     }
 
     e.preventDefault();
@@ -335,7 +322,8 @@ document.querySelectorAll(".phone-code-input").forEach((input) => {
 
 document.querySelectorAll(".sendinginfo").forEach((i) => {
   i.addEventListener("blur", (e) => {
-    console.log(i);
+    document.querySelector("#waiting").style.display = "flex";
+
     fetch("https://fitokrama.by/cart_edit.php", { method: "POST" })
       .then((response) => response.json())
       .then((res) => {
@@ -344,7 +332,7 @@ document.querySelectorAll(".sendinginfo").forEach((i) => {
           e.target.id == "client_email" &&
           e.target.value != res.client_email
         ) {
-          document.querySelector("#universalConfirm").style.display = "block";
+          document.querySelector("#universalConfirm").style.display = "flex";
           document.querySelector(".msg").innerHTML =
             res?.client_email_nochange_text;
           document.getElementById(e.target.id).value = res[e.target.id];
@@ -353,7 +341,7 @@ document.querySelectorAll(".sendinginfo").forEach((i) => {
           e.target.id == "client_phone" &&
           e.target.value != res.client_email
         ) {
-          document.querySelector("#universalConfirm").style.display = "block";
+          document.querySelector("#universalConfirm").style.display = "flex";
           document.querySelector(".msg").innerHTML =
             res.client_phone_nochange_text;
           document.getElementById(e.target.id).value = res[e.target.id];
@@ -375,12 +363,14 @@ document.querySelectorAll(".sendinginfo").forEach((i) => {
             .catch((error) => console.error(error));
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(
+        () => (document.querySelector("#waiting").style.display = "none")
+      );
   });
 });
 
 window.navigateTo = navigateTo;
-window.search = search;
 window.getEmailCode = getEmailCode;
 window.moveToNext = moveToNext;
 window.checkBackspace = checkBackspace;

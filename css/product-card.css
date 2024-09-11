@@ -116,7 +116,7 @@
 .new-price {
   font-size: 36px;
 
-  color: green;
+  color: rgb(97, 129, 98);
 
   font-weight: bold;
 
@@ -138,7 +138,7 @@
 .new-price .currency {
   font-size: 24px;
 
-  color: green;
+  color: rgb(97, 129, 98);
 }
 
 .product-actions {
@@ -199,7 +199,7 @@
 }
 
 .add-to-cart {
-  background-color: rgb(60, 160, 60);
+  background-color: rgb(97, 129, 98);
 
   color: white;
 
@@ -215,7 +215,7 @@
 }
 
 .add-to-cart:hover {
-  background-color: #45a049;
+  background-color: rgb(158, 184, 158);
 }
 
 .delivery-time {
@@ -343,7 +343,7 @@
 .modal-text h2 {
   font-size: 24px;
 
-  color: rgb(60, 160, 60); /* Зеленый цвет */
+  color: rgb(97, 129, 98); /* Зеленый цвет */
 
   margin: 0 0 20px;
   display: flex;
@@ -358,7 +358,7 @@
 
 .continue-shopping,
 .checkout {
-  background-color: rgb(60, 160, 60);
+  background-color: rgb(97, 129, 98);
 
   color: white;
 
@@ -377,7 +377,7 @@
 
 .continue-shopping:hover,
 .checkout:hover {
-  background-color: #45a049;
+  background-color: rgb(158, 184, 158);
 }
 
 .close {
@@ -397,66 +397,6 @@
   text-decoration: none;
 
   cursor: pointer;
-}
-
-.popup {
-  position: fixed;
-  z-index: 100;
-  left: 10px;
-  bottom: 10px;
-  overflow: auto;
-  background-color: rgb(255, 255, 255);
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  border-radius: 25px;
-  padding: 15px;
-  display: none;
-  flex-direction: column;
-  justify-content: center !important;
-  max-width: 300px;
-  width: 100%;
-}
-
-.popup figure {
-  width: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-}
-
-.popup img {
-  width: 80%;
-}
-
-.popup h1 {
-  font-size: 24px;
-  color: rgb(60, 160, 60);
-  margin: 0 0 20px;
-  text-align: center;
-}
-
-.popup p {
-  font-size: 16px;
-  color: #666;
-  margin: 0 0 20px;
-  max-width: 360px;
-  width: 100%;
-  text-align: center;
-}
-
-.popup-buttons {
-  display: flex;
-  justify-content: center;
-}
-
-.popup button {
-  background-color: rgb(60, 160, 60);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 10px;
 }
 
 @media (max-width: 421px) {

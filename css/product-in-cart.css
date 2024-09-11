@@ -74,9 +74,18 @@
 
   align-items: center;
 
-  flex: 1;
-
   justify-content: space-between;
+}
+
+.orderItemQty {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+  width: 80px;
+  display: flex;
+  justify-content: flex-end;
+  color: black;
+  margin-left: 20px;
 }
 
 .cart-item-info .old-price {
@@ -93,6 +102,7 @@
   font-size: 12px;
 
   vertical-align: super;
+  color: red;
 }
 
 .cart-item-info .old-price::before {
@@ -116,7 +126,7 @@
 .cart-item-info .new-price {
   font-size: 24px;
 
-  color: green;
+  color: rgb(97, 129, 98);
 
   font-weight: bold;
 
@@ -129,12 +139,14 @@
   font-size: 16px;
 
   vertical-align: super;
+
+  color: rgb(97, 129, 98) !important;
 }
 
 .cart-item-info .new-price .currency {
   font-size: 16px;
 
-  color: green;
+  color: rgb(97, 129, 98);
 }
 
 .quantity-selector {

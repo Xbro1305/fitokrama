@@ -1,123 +1,77 @@
 body {
-  padding-top: 250px; /* Отступ для контента, учитывающий высоту шапки */
+  padding-top: 250px;
 }
 
 .header {
   position: relative;
 }
 
-
-
-
-.hidden {
-    display: none;
+.delivery_option {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 5px 0;
 }
 
-.option-row {
-    display: flex;
-    align-items: flex-start;
-    padding: 10px 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    padding-left: 10px;
+.hidden_option {
+  display: none;
 }
 
-.option-logo, .delivery-image {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
-    object-fit: contain;
+.dn {
+  display: flex;
+}
+
+.delivery-choosing-button {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+}
+
+.delivery-info {
+  display: flex;
+  width: calc(100% - 37px);
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.delivery-price {
+  width: 100px;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .method-info {
-    display: flex;
-    flex-direction: column; /* Размещаем элементы вертикально */
-}
-
-.cart-item-info {
-    margin-left: 10px; /* Добавляем отступ слева для корректного позиционирования */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .method-name {
-    line-height: 1.2;
-    margin-bottom: 5px; /* Добавляем отступ между названием и вариантами */
+  font-size: 20px;
+  margin: 0;
 }
 
-.submethod-container {
-    display: inline-block; /* Чтобы оба элемента (название и комментарий) находились в одном контейнере */
-    margin-left: 5px; /* Отступ слева от радиобаттона */
-    vertical-align: middle;
+.method-details {
+  display: flex;
+  gap: 5px;
 }
 
-.submethod-name {
-    font-weight: bold; /* Можно сделать название полужирным для акцента */
+.method-description * {
+  word-break: break-all;
+  margin: 0;
+  padding: 0;
 }
-
-.submethod-comment {
-    display: block; /* Новый блок для комментария */
-    font-size: 0.9em; /* Размер шрифта для комментария немного меньше */
-    color: #666; /* Цвет текста для комментария может быть серым */
-}
-
-
-.variant-options {
-    margin-top: 5px;
-    margin-left: 20px; /* Отступ для смещения вариантов правее */
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.variant-options label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.variant-options input[type="radio"] {
-    margin-right: 5px;
-}
-
-.method-duration-text {
-    margin-top: 10px; /* Отступ сверху для текста с продолжительностью */
-}
-
-.method-prices {
-    margin-top: auto;
-    margin-left: auto;
-    text-align: right;
-}
-
-/* Для больших экранов */
-@media (min-width: 768px) {
-    .option-row {
-        margin-left: 0;
-        padding-left: 0;
-    }
-
-    .option-row input[type="radio"] {
-        margin-right: 15px;
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
 
 .show-with-list {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .delivery-options {
-    padding-top: 10px;
+  padding-top: 10px;
 }
 
 .cart-content {
@@ -155,6 +109,7 @@ body {
   margin-bottom: 0 !important;
   min-width: 200px;
   text-align: left;
+  word-break: break-all;
 }
 
 .cart_item .product-prices {
@@ -179,7 +134,7 @@ body {
   width: 100%;
   height: 1px;
   background-color: red;
-  transform: rotate(-45deg); /* Диагональное зачеркивание */
+  transform: rotate(-45deg);
 }
 
 .new-price {
@@ -308,7 +263,7 @@ body {
 
 .delivery-info img,
 .payment-info img {
-  height: 100%; /* Устанавливает высоту иконки равной высоте поля ввода */
+  height: 100%;
   margin-right: 10px;
 }
 
@@ -333,60 +288,6 @@ body {
 
 .buy-button:hover {
   background-color: rgb(158, 184, 158);
-}
-
-@media (max-width: 421px) {
-  .cart-item {
-    flex-direction: column;
-  }
-
-  .product-image {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
-
-  .product-info {
-    text-align: center;
-  }
-
-  .cart-item-info {
-    flex-wrap: wrap;
-  }
-
-  .quantity-input {
-    margin: 5px 0;
-  }
-
-  .old-price {
-    display: none;
-  }
-
-  .new-price {
-    display: flex;
-    gap: 4px;
-  }
-
-  .currency {
-    font-size: 24px !important;
-  }
-
-  .checkout-row {
-    flex-direction: column;
-  }
-
-  .checkout-row label {
-    width: auto;
-    margin-bottom: 5px;
-  }
-
-  .checkout-row input {
-    width: 100%;
-  }
-
-  .buy-button {
-    width: 100%;
-  }
 }
 
 .exitButton {
@@ -423,4 +324,110 @@ body {
     width: 100%;
     top: 20px;
   }
+
+  .cart-item-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .old-price {
+    display: none;
+  }
+
+  .total-price {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 500px) {
+  .delivery-choosing-button {
+    margin-top: 12px;
+  }
+
+  .delivery-info {
+    flex-direction: column;
+  }
+
+  .method-info {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 421px) {
+  .cart-item {
+    flex-direction: column;
+  }
+
+  .product-image {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .product-info {
+    text-align: center;
+  }
+
+  .cart-item-info {
+    flex-wrap: wrap;
+  }
+
+  .quantity-input {
+    margin: 5px 0;
+  }
+
+  .new-price {
+    display: flex;
+    gap: 4px;
+  }
+
+  .currency {
+    font-size: 24px !important;
+  }
+
+  .checkout-row {
+    flex-direction: column;
+  }
+
+  .checkout-row label {
+    width: auto;
+    margin-bottom: 5px;
+  }
+
+  .checkout-row input {
+    width: 100%;
+  }
+
+  .buy-button {
+    width: 100%;
+  }
+
+  .cart-item-info {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+  }
+}
+
+#toggleOptionsBtn {
+  border: none !important;
+  background: none !important;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.delivery_note {
+  font-size: 12px;
+  color: #666;
+  width: fit-content !important;
+  border-radius: 5px;
+  padding: 1px 3px;
+  font-weight: 600;
+}
+
+.delivery_checkout {
+  align-items: flex-start !important;
+}
+
+.delivery_checkout section {
+  width: 100%;
 }

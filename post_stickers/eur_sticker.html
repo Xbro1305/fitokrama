@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF to HTML</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+      }
+
+      main {
+        display: flex;
+      }
+      .left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 20px;
+      }
+
+      .left > img {
+        height: 15px;
+        object-fit: contain;
+        margin-top: 2px;
+        margin-bottom: 7px;
+      }
+
+      .left section {
+        height: 176px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .emptyDivDashedborder {
+        border: 1px dashed #000;
+        width: 80%;
+        height: 1px;
+        margin-top: 10px;
+        height: 25px;
+      }
+
+      .string152 {
+        width: 85%;
+        border: 2px solid #ccc;
+        padding-bottom: 100px;
+        height: 168px;
+      }
+
+      .string152 p {
+        text-align: center;
+        color: #fff;
+        background: #000;
+        font-weight: 600;
+        font-size: 70px;
+        width: 100% !important;
+      }
+
+      .left > span {
+        font-size: 9.5px;
+        letter-spacing: 2.5px;
+        margin-top: 5px;
+      }
+
+      .right {
+        display: grid;
+        grid-template-columns: repeat(2, 320px);
+      }
+
+      .right .orderNumber {
+        font-size: 24px;
+        font-weight: 700;
+        width: 100%;
+        border: 1px solid #000;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        height: fit-content;
+        padding: 0 20px;
+        gap: 5px;
+        text-align: center;
+      }
+
+      .right .orderNumber b {
+        font-size: 42px;
+        margin-bottom: -4px;
+      }
+
+      .right .barcode {
+        display: flex;
+        align-items: flex-end;
+        height: 46px;
+      }
+
+      .right #barcode {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .topInfo {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0;
+        border: 1px solid #000;
+        border-top: none;
+        font-size: 18px;
+      }
+
+      .topInfo span {
+        width: 50px;
+        text-align: center;
+        padding: 7px;
+        color: #fff;
+        background: #000;
+        font-weight: 600;
+      }
+
+      .topInfo b {
+        text-align: center;
+      }
+
+      .bottomInfo {
+        display: flex;
+        border: 1px solid #000;
+        border-top: none;
+      }
+
+      .bottomInfo > span {
+        height: fit-content;
+        writing-mode: vertical-lr;
+        transform: rotate(180deg);
+        padding: 2px;
+        padding-left: 5px;
+        border-left: 1px solid #000;
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-size: 10px;
+        padding: 10px;
+        font-weight: 500;
+      }
+
+      .info .name {
+        font-size: 14px;
+      }
+
+      .senderPolice {
+        border: 1px solid #000;
+        padding: 3px 5px;
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border-left: none;
+      }
+
+      .senderPolice > h4 {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+      }
+
+      .senderPolice h4 span {
+        border-bottom: 1px solid #000;
+        width: 100px;
+        margin-bottom: 5px;
+        margin-top: 20px;
+        font-weight: 400;
+      }
+
+      .senderPolice h4 i {
+        font-size: 7px;
+        text-align: center;
+        font-weight: 400;
+        list-style: none;
+      }
+
+      .senderPolice h3 {
+        font-size: 12px;
+        font-weight: 500;
+        display: flex;
+        gap: 5px;
+        align-items: flex-start;
+      }
+
+      .senderPolice h3 b {
+        font-size: 10px;
+        font-weight: 400;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+      }
+
+      .senderPolice h3 b span {
+        border-bottom: 1px solid #000;
+        width: 100%;
+        margin-bottom: 5px;
+        margin-top: 10px;
+        font-weight: 400;
+      }
+
+      .senderPolice section {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .senderPolice h5 {
+        font-size: 10px;
+        font-weight: 400;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .senderPolice h5 b {
+        font-weight: 500;
+      }
+
+      .receiverInfo .topInfo {
+        background: #000;
+        padding: 4px;
+      }
+
+      .receiverInfo .topInfo span {
+        color: #000;
+        background: #fff;
+        padding: 3px;
+      }
+
+      .receiverInfo .topInfo b {
+        color: #fff;
+        padding: 5px;
+      }
+
+      .receiverInfo .bottomInfo p {
+        font-size: 12px;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .receiverInfo .bottomInfo p b {
+        font-size: 14px;
+        list-style: none !important;
+        font-weight: 500;
+      }
+
+      .productInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        font-size: 13px;
+        border: 1px solid #000;
+        padding: 5px;
+        border-top: none;
+        border-left: none;
+      }
+
+      .productInfo p {
+        display: flex;
+        width: 100%;
+        gap: 7px;
+      }
+
+      .productInfo i {
+        width: 100px !important;
+        border-bottom: 1px solid #000;
+      }
+
+      .receiverName {
+        font-size: 28px;
+        font-weight: 700;
+        margin-top: 10px;
+      }
+
+      .id {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .id section {
+        font-size: 12px;
+        font-weight: 500;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+      }
+
+      .id sup {
+        font-size: 10px;
+        font-weight: 400;
+        list-style: none;
+        font-weight: 500;
+      }
+
+      .id b {
+        font-size: 14px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <!-- <div class="left">
+        <img
+          src="https://fitokrama.by/logos/europost_sticker_logo.png"
+          alt=""
+        />
+        <section>
+          <div class="qrcode">
+            <div id="qrcode"></div>
+          </div>
+          <div class="emptyDivDashedborder"></div>
+        </section>
+        <div class="string152"><p>6.2</p></div>
+        <span>BY080038633781</span>
+      </div>
+
+      <div class="right">
+        <div class="orderNumber">BY08003863 <b>3781</b></div>
+        <div class="barcode"><svg id="barcode"></svg></div>
+        <div class="senderInfo">
+          <div class="topInfo">
+            <span>9</span>
+            <b>Минск</b>
+            <span>2000</span>
+          </div>
+          <section class="bottomInfo">
+            <span>ОТПРАВИТЕЛЬ</span>
+            <div class="info">
+              <b class="name">ООО "ФИТОМАГАЗИН"</b>
+              <p>
+                220006, Г. МИНСК, УЛ. НАДЕЖДИНСКАЯ, Д. 2, ПОМ. 1(КАБИНЕТ 21)
+              </p>
+              <p>тел: &nbsp;&nbsp; 375445961228</p>
+            </div>
+          </section>
+        </div>
+        <div class="senderPolice">
+          <p>
+            С требованиями к упаковке ознакомлен. Запрещенных к пересылке
+            вложений нет
+          </p>
+          <h4>
+            <span></span>
+            <i>(подпись отправителя)</i>
+          </h4>
+          <h3>
+            Принято:
+            <b><span></span> <i>(дата, подпись работника) </i></b>
+          </h3>
+          <h3>
+            <span> на: </span>
+            Отделение №2000 Курьер-СКЛАД г. Минск, ул. Академика Жебрака, 35
+          </h3>
+          <section>
+            <h5>распечатано: <b>09.09.2024 22:58</b></h5>
+            <h5>создано: <b>09.09.2024 22:04</b></h5>
+          </section>
+        </div>
+        <div class="receiverInfo">
+          <div class="topInfo">
+            <span>МИН</span>
+            <b>Минск</b>
+            <span>137</span>
+          </div>
+
+          <section class="bottomInfo">
+            <span>ПОЛУЧАТЕЛЬ</span>
+            <div class="info">
+              <b class="name">Петров Петрович</b>
+              <p>
+                <b>Отделение №137 </b>
+                ул. Матусевича д35г - кв., г.Минск
+              </p>
+              <p>тел: &nbsp;&nbsp; 375296562441</p>
+            </div>
+          </section>
+        </div>
+        <div class="productInfo">
+          <p>Объявленная ценность: <i>0</i> руб</p>
+          <p>Наложенный платеж: <i>0</i> руб</p>
+          <p>Вес: <i>0</i> кг</p>
+          <p>Доп. услуги:</p>
+        </div>
+        <div class="receiverName">Петров</div>
+        <div class="id">
+          <section>
+            <sup>Внешний Id:</sup>
+            <b> FTKR_883440_53E3 </b>
+          </section>
+        </div>
+      </div> -->
+      <div class="left">
+        <img
+          src="https://fitokrama.by/logos/europost_sticker_logo.png"
+          alt=""
+        />
+        <section>
+          <div class="qrcode">
+            <div id="qrcode"></div>
+          </div>
+          <div class="emptyDivDashedborder"></div>
+        </section>
+        <div class="string152"><p>[StringValueFinish_154]</p></div>
+        <span>[Number]</span>
+      </div>
+
+      <div class="right">
+        <div class="orderNumber">[Number] <b></b></div>
+        <div class="barcode"><svg id="barcode"></svg></div>
+        <div class="senderInfo">
+          <div class="topInfo">
+            <span>[StringValueStart_154]</span>
+            <b>[AddressRecieverName]</b>
+            <span>[StringValueStart_152]</span>
+          </div>
+          <section class="bottomInfo">
+            <span>ОТПРАВИТЕЛЬ</span>
+            <div class="info">
+              <b class="name">[FromWhomFIO]</b>
+              <p>[FromWhomAddress]</p>
+              <p>тел: &nbsp;&nbsp; [FromWhomPhone]</p>
+            </div>
+          </section>
+        </div>
+        <div class="senderPolice">
+          <p>
+            С требованиями к упаковке ознакомлен. Запрещенных к пересылке
+            вложений нет
+          </p>
+          <h4>
+            <span></span>
+            <i>(подпись отправителя)</i>
+          </h4>
+          <h3>
+            Принято:
+            <b><span></span> <i>(дата, подпись работника) </i></b>
+          </h3>
+          <h3>
+            <span> на: </span>
+            [FromAddress]
+          </h3>
+          <section>
+            <h5>распечатано: <b>[DateTimeOPS]</b></h5>
+            <h5>создано: <b>[DateTimeBegin]</b></h5>
+          </section>
+        </div>
+        <div class="receiverInfo">
+          <div class="topInfo">
+            <span>[StringValueFinish_153]</span>
+            <b>[AddressSender]</b>
+            <span>[StringValueFinish_152]</span>
+          </div>
+
+          <section class="bottomInfo">
+            <span>ПОЛУЧАТЕЛЬ</span>
+            <div class="info">
+              <b class="name">[WhereFIO]</b>
+              <p>
+                <b>[OPS]</b>
+                [WhereAddress]
+              </p>
+              <p>тел: &nbsp;&nbsp; [PhoneNumberReciever]</p>
+            </div>
+          </section>
+        </div>
+        <div class="productInfo">
+          <p>
+            Объявленная ценность: <i>[CashOnDeliveryDeclaredValueSum_1]</i> руб
+          </p>
+          <p>Наложенный платеж: <i>[CashOnDeliverySum_1]</i> руб</p>
+          <p>Вес: <i>0</i> кг</p>
+          <p>Доп. услуги:</p>
+        </div>
+        <div class="receiverName">[Name1Reciever]</div>
+        <div class="id">
+          <section>
+            <sup>Внешний Id:</sup>
+            <b>[PostalItemExternalId]</b>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: "[Number]",
+        width: 128,
+        height: 128,
+        colorDark: "#888",
+        colorLight: "#ffffff",
+      });
+
+      JsBarcode("#barcode", "[Number]", {
+        format: "CODE39",
+        lineColor: "#000",
+        width: 2.4,
+        height: 50,
+        displayValue: false,
+      });
+
+      const num = "[Number]";
+      const numLength = num.toString().length;
+      const firstNum = num.toString().slice(0, numLength - 4);
+      const secondNum = num.toString().slice(numLength - 4, numLength);
+      document.querySelector(
+        ".orderNumber"
+      ).innerHTML = `${firstNum} <b>${secondNum}</b>`;
+    </script>
+  </body>
+</html>

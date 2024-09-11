@@ -1,5 +1,5 @@
 .top-bar {
-  background-color: rgb(60, 160, 60);
+  background-color: rgb(97, 129, 98);
 
   color: white;
 
@@ -71,7 +71,7 @@
 
   padding: 10px 15px;
 
-  background-color: rgb(60, 160, 60);
+  background-color: rgb(97, 129, 98);
 
   border: none;
 
@@ -79,7 +79,7 @@
 }
 
 .menu-button:hover {
-  background-color: #3e8e41;
+  background-color: rgb(158, 184, 158);
 }
 
 .bottom-bar {
@@ -121,7 +121,7 @@
 }
 
 .company-logo {
-  height: 160px; /* Используем такую же высоту, как в футере */
+  height: 80px; /* Используем такую же высоту, как в футере */
 
   margin-right: 20px;
 }
@@ -314,10 +314,10 @@
   position: absolute;
   width: 15px;
   height: 15px;
-  background-color: #3e8e41;
+  background-color: rgb(158, 184, 158);
   color: white;
   border-radius: 50%;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
@@ -328,4 +328,39 @@
 .cart-float p {
   margin: 0;
   padding: 0;
+}
+
+.profileButton {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.profileButton .account_actions {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 40px;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  width: 150px;
+}
+
+.account_actions button {
+  background: rgb(158, 184, 158);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  width: 150px;
+  margin: 10px 0;
+  border-radius: 25px;
+}
+
+.account_actions.show {
+  display: flex;
 }

@@ -57,17 +57,16 @@
 
   text-decoration: none;
 
-  color: #4caf50;
+  color: rgb(97, 129, 98);
 }
 
 .footer-links a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 421px) {
+@media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
-
   }
 
   .footer-logo {
