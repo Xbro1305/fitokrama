@@ -3,3 +3,7 @@ Disallow: /
 /dmm/
 /допы/
 /old/
+
+# IDEs
+.idea
+.vscode
