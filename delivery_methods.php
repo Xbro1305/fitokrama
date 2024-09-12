@@ -265,7 +265,6 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 					ORDER BY 
 						distance
 					LIMIT 3";
-				
 				$method['points'] = ExecSQL($link,$que);				
 			
 			}

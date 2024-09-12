@@ -17,7 +17,7 @@ function dpd_request($method, $operation, $data,$tag,$test=false) {
     $request[$tag] = $data;
 //					die ('----- REQUEST -----'.PHP_EOL.json_encode(($request), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL);
 
-	
+	//send_warning_telegram(json_encode($request));
     try {
 			$ret = $client->__soapCall($operation, array($request));	
 			$base64File = $ret->return->file;
@@ -42,7 +42,7 @@ function dpd_request($method, $operation, $data,$tag,$test=false) {
 		{
 			file_put_contents('dpd_errors_log.txt', json_encode($request).PHP_EOL , FILE_APPEND | LOCK_EX);
 			file_put_contents('dpd_errors_log.txt', ($fault).PHP_EOL.PHP_EOL , FILE_APPEND | LOCK_EX);
-			send_warning_telegram('DPD_request error. '.json_encode($fault));
+			//send_warning_telegram('DPD_request error. '.json_encode($fault));
 			if ($test) 
 			{
 				echo ('----- REQUEST -----'.PHP_EOL.json_encode(($request), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL);
@@ -138,7 +138,7 @@ function dpd_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL
 		if ($index=='211792') $index='211793';	// ошибка dadata
 		if ($index=='231891') $index='231893';	// ошибка DPD
 		if ($index=='231892') $index='231893';	// ошибка DPD
-		$data['delivery']['index']		=$index;
+		//$data['delivery']['index']		=$index;
 		
 		
 	}
@@ -156,9 +156,11 @@ function dpd_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL
 	$data['weight']=$weight;
 	$data['volume']=$volume;
 	
+	//send_warning_telegram(json_encode($data));
+	
 	//$data['serviceCode']=;
 	//$data['pickupDate']=;
-	echo 'Data'.PHP_EOL.json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
+	//echo 'Data'.PHP_EOL.json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
 	$calc = dpd_request('calculator2?wsdl','getServiceCost2',$data,'request');	
 	//echo 'Result'.PHP_EOL.json_encode($calc, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
 	//die(json_encode($calc));
@@ -373,7 +375,7 @@ if ($method=='test') // тестирование функций
 	echo "lat,lng = $lat,$lng".PHP_EOL;
 	echo "index = $index".PHP_EOL;
 			
-	$res = dpd_calculator('Минск',0.5,0.4*0.2*0.1,false);
+	$res = dpd_calculator('Минск',0.5,0.4*0.2*0.1,true);
 	echo 'dpd_calculator'.PHP_EOL.json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
 	
 	

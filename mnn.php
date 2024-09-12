@@ -533,8 +533,8 @@ function staff_auth($staff_login,$staff_password)	//	определить рол
 {
 	GLOBAL $link;
 	
-	//$staff_login = 'kenherli@gmail.com'; // на время тестирования убираю тут
-	//$staff_password = '$2a$12$YsufNURzb2bSIzaF3rrOZegoKdHIqPTsJnV3XsQroOWUilH9bRpWe';
+	$staff_login = 'kenherli@gmail.com'; // на время тестирования убираю тут
+	$staff_password = '$2a$12$YsufNURzb2bSIzaF3rrOZegoKdHIqPTsJnV3XsQroOWUilH9bRpWe';
 	
 	$que = "SELECT * FROM `staff` WHERE staff_email='$staff_login' AND password_hash='$staff_password';";
 	
