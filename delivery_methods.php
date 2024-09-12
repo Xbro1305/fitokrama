@@ -217,7 +217,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 			if ($method_id==5)	//	это DPD - пункт выдачи
 			{
 					if ($count_DPD_postomat>0) continue;			 // не выбираем пункты выдачи DPD, если есть почтоматы DPD
-					$dpd_postomat_res = dpd_calculator($city,$weight,$volume,true,$postindex);
+					$dpd_postomat_res = dpd_calculator(/*$city*/'Минск',$weight,$volume,true,$postindex);
 					if (is_null($dpd_postomat_res)) continue;
 					$index = array_search('NDY', array_column($dpd_postomat_res, 'serviceCode')); // отбираем по сервису NDY
 					if (is_null($index)) continue;
