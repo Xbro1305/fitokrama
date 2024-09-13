@@ -187,7 +187,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 			}
 			if ($method_id==4)	//	это DPD-доставка до дверей
 			{
-				$dpd_res = dpd_calculator($city,0.5,0.4*0.2*0.1,false/*,$postindex*/);
+				$dpd_res = dpd_calculator($city,0.5,0.4*0.2*0.1,false,$postindex);
 				if (!is_null($dpd_res))
 				if (!is_null(array_column($dpd_res, 'serviceCode')))
 					$index = array_search('NDY', array_column($dpd_res, 'serviceCode')); // отбираем по сервису NDY	

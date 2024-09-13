@@ -163,6 +163,8 @@ function dpd_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL
 		
 	}
 	
+	//send_warning_telegram($index);
+	
 	
 	
 	
