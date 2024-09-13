@@ -15,9 +15,27 @@ function dpd_request($method, $operation, $data,$tag,$test=false) {
         'clientKey' => $dpd_clientKey
     );
     $request[$tag] = $data;
-//					die ('----- REQUEST -----'.PHP_EOL.json_encode(($request), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL);
 
-	//send_warning_telegram(json_encode($request));
+	
+	try 
+	{
+		$ret = $client->__soapCall($operation, array($request));	
+		$ret = json_decode(json_encode($ret),TRUE);
+		if (isset($ret['return'])) return  $ret['return'];
+		send_warning_telegram(json_encode($ret));
+		return $ret;
+	}
+	catch (SoapFault $fault) 
+	{
+		send_warning_telegram(json_encode($request));
+		file_put_contents('dpd_errors_log.txt', json_encode($request).PHP_EOL , FILE_APPEND | LOCK_EX);
+		file_put_contents('dpd_errors_log.txt', ($fault).PHP_EOL.PHP_EOL , FILE_APPEND | LOCK_EX);
+		return NULL;
+	}
+	
+	
+	
+	/*
     try {
 			$ret = $client->__soapCall($operation, array($request));	
 			$base64File = $ret->return->file;
@@ -50,7 +68,7 @@ function dpd_request($method, $operation, $data,$tag,$test=false) {
 				echo ('----- RESPONSE -----'.PHP_EOL.json_encode($fault, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL);
 			}			//echo "SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})";
 			return null;
-		}
+		}*/
 }
 
 
@@ -124,8 +142,10 @@ function refresh_dpd_data() { //обновление базы пунктов в�
 	exit (json_encode(['status'=>'ok', 'message'=> "Activated $activated points, Deactivated $deactivated points"])); 
 }
 
-function dpd_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL) 		//	произвести расчет стоимости доставки
+function dpd_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL,$test=NULL) 		//	произвести расчет стоимости доставки
 { 	
+		
+	//send_warning_telegram(json_encode($index));
 	//$data['pickup']['cityId']		='196058326';
 	//$data['pickup']['index']		='200400';
 	$data['pickup']['cityName']		='Минск';
@@ -138,7 +158,7 @@ function dpd_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL
 		if ($index=='211792') $index='211793';	// ошибка dadata
 		if ($index=='231891') $index='231893';	// ошибка DPD
 		if ($index=='231892') $index='231893';	// ошибка DPD
-		//$data['delivery']['index']		=$index;
+		$data['delivery']['index']		=$index;
 		
 		
 	}
@@ -156,17 +176,22 @@ function dpd_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL
 	$data['weight']=$weight;
 	$data['volume']=$volume;
 	
-	//send_warning_telegram(json_encode($data));
 	
 	//$data['serviceCode']=;
 	//$data['pickupDate']=;
 	//echo 'Data'.PHP_EOL.json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
-	$calc = dpd_request('calculator2?wsdl','getServiceCost2',$data,'request');	
+	$calc = dpd_request('calculator2?wsdl','getServiceCost2',$data,'request',$test);	
 	//echo 'Result'.PHP_EOL.json_encode($calc, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
 	//die(json_encode($calc));
+	//if (isset($calc[0]['cost']))
+		
+	//send_warning_telegram(json_encode($calc));
+	
+	if (isset($calc['serviceCode'])) return $calc[]=$calc; // если метод один, то он не массив
 	if (is_array($calc))
 		if (isset($calc[0]['cost']))
 			return $calc;
+	
 	
 	//die(json_encode($calc));
 	
@@ -371,11 +396,11 @@ if ($method=='test') // тестирование функций
 	
 	
 	[$city, $lat, $lng, $index] = array_values(city_by_address_dadata($address));
-	echo "city = $city".PHP_EOL;
-	echo "lat,lng = $lat,$lng".PHP_EOL;
-	echo "index = $index".PHP_EOL;
-			
-	$res = dpd_calculator('Минск',0.5,0.4*0.2*0.1,true);
+	echo "address = $address".PHP_EOL;
+	//echo "city = $city".PHP_EOL;
+	//echo "lat,lng = $lat,$lng".PHP_EOL;
+	//echo "index = $index".PHP_EOL;
+	$res = dpd_calculator($city,0.5,round(0.4*0.2*0.1,4),true,$index/*,null*//*,true*/);
 	echo 'dpd_calculator'.PHP_EOL.json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
 	
 	

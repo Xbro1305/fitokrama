@@ -187,7 +187,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 			}
 			if ($method_id==4)	//	это DPD-доставка до дверей
 			{
-				$dpd_res = dpd_calculator($city,0.5,0.4*0.2*0.1,false,$postindex);
+				$dpd_res = dpd_calculator($city,0.5,0.4*0.2*0.1,false/*,$postindex*/);
 				if (!is_null($dpd_res))
 				if (!is_null(array_column($dpd_res, 'serviceCode')))
 					$index = array_search('NDY', array_column($dpd_res, 'serviceCode')); // отбираем по сервису NDY	
@@ -217,7 +217,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 			if ($method_id==5)	//	это DPD - пункт выдачи
 			{
 					if ($count_DPD_postomat>0) continue;			 // не выбираем пункты выдачи DPD, если есть почтоматы DPD
-					$dpd_postomat_res = dpd_calculator(/*$city*/'Минск',$weight,$volume,true,$postindex);
+					$dpd_postomat_res = dpd_calculator(/*$city*/'Минск',$weight,$volume,true/*,$postindex*/);
 					if (is_null($dpd_postomat_res)) continue;
 					$index = array_search('NDY', array_column($dpd_postomat_res, 'serviceCode')); // отбираем по сервису NDY
 					if (is_null($index)) continue;
@@ -265,7 +265,8 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 					ORDER BY 
 						distance
 					LIMIT 3";
-				$method['points'] = ExecSQL($link,$que);				
+				$method['points'] = ExecSQL($link,$que);	
+
 			
 			}
 			if ($method_id==6)	//	это Белпочта - пункт выдачи
