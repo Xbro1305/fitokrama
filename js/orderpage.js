@@ -15,6 +15,5 @@ function openCustomWindow(url) {
 }
 
 window.openModal = openModal;
-
 window.openTextModal = openTextModal;
 window.openCustomWindow = openCustomWindow;

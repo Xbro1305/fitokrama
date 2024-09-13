@@ -207,7 +207,11 @@ document.addEventListener("DOMContentLoaded", function () {
           document.querySelector(".orderInfoText").innerHTML = res.text;
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        document.querySelector("#orderInfo").style.display = "flex";
+        document.querySelector(".orderInfoImg").src = res.icon;
+        document.querySelector(".orderInfoText").innerHTML = res.text;
+      })
       .finally(
         () => (document.querySelector("#waiting").style.display = "none")
       );

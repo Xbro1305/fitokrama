@@ -1,13 +1,14 @@
 .footer {
   background-color: #f9f9f9;
 
-  padding: 20px;
+  padding: 20px 0;
 
   border-top: 1px solid #ddd;
 
   display: flex;
-
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
 
   box-sizing: border-box;
 }
@@ -22,6 +23,7 @@
   width: 100%;
 
   max-width: 1000px;
+  padding: 0 20px;
 }
 
 .footer-logo {
@@ -64,6 +66,36 @@
   text-decoration: underline;
 }
 
+.bankIcons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background: #fff;
+}
+
+.bankIcons .iconWrapper {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bankIcons figure {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 0;
+}
+
+.bankIcons img {
+  height: 25px;
+  opacity: 0.6;
+}
+
+.bankIcons img:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
 @media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
@@ -77,5 +109,15 @@
 
   .footer-links {
     margin-left: 0;
+  }
+
+  .bankIcons figure {
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .bankIcons img {
+    height: 20px;
   }
 }
