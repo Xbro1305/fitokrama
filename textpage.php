@@ -9,6 +9,8 @@
 	
 	
 	$page = $_GET['page'];
+	$pagetext = file_get_contents("./pages/$page.html");
+
 	
 	
 	
