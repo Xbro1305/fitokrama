@@ -199,13 +199,13 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch("https://fitokrama.by/cart_finish.php")
       .then((res) => res.json())
       .then((res) => {
-        if (!res.error) {
-          window.location.href = res.redirect_url;
-        } else {
+        if (res.error_text) {
           document.querySelector("#orderInfo").style.display = "flex";
           document.querySelector(".orderInfoImg").src = res.icon;
           document.querySelector(".orderInfoText").innerHTML = res.text;
+          return;
         }
+        window.location.href = res.redirect_url;
       })
       .catch((err) => {
         console.log(err);
