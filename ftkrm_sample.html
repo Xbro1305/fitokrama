@@ -1,1232 +1,1400 @@
 <!DOCTYPE html>
 
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="logos/favicon.png" type="image/png" />
-    <link rel="stylesheet" href="./css/base.css" />
-    <link rel="stylesheet" href="./css/header.css" />
-    <link rel="stylesheet" href="./css/footer.css" />
-    <link rel="stylesheet" href="./css/modal.css" />
-    <link href="./css/font.css" rel="stylesheet" />
-    <link rel="stylesheet" href="./css/suggestion.css" />
-    <link rel="stylesheet" href="./css/loader.css" />
-    <link href="./css/font.css" rel="stylesheet" />
-    <title>[pagename]</title>
-    <style>
-      .nsm7Bb-HzV7m-LgbsSe-bN97Pc-sM5MNb {
-        display: flex;
-        flex-direction: row-reverse;
-      }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="logos/favicon.png" type="image/png" />
+        <link rel="stylesheet" href="./css/base.css" />
+        <link rel="stylesheet" href="./css/header.css" />
+        <link rel="stylesheet" href="./css/footer.css" />
+        <link rel="stylesheet" href="./css/modal.css" />
+        <link href="./css/font.css" rel="stylesheet" />
+        <link rel="stylesheet" href="./css/suggestion.css" />
+        <link rel="stylesheet" href="./css/loader.css" />
+        <link href="./css/font.css" rel="stylesheet" />
+        <title>[pagename]</title>
+        <style>
+            .nsm7Bb-HzV7m-LgbsSe-bN97Pc-sM5MNb {
+                display: flex;
+                flex-direction: row-reverse;
+            }
 
-      body {
-        padding-top: 180px;
-      }
-      #suggest {
-        width: 500px;
-        padding: 10px;
-        margin-top: 20px;
-        font-size: 16px;
-      }
-      #suggestionBox {
-        position: absolute;
-        background-color: #fff;
-        width: calc(100% - 100px);
-        z-index: 1000;
-        font-size: 16px;
-        transform: translateY(33px);
-      }
-      .suggestionItem {
-        padding: 5px;
-        cursor: pointer;
-        white-space: nowrap; /* Оставить предложения в одну строку */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: left;
-      }
-      .suggestionItem:hover {
-        background-color: #e9e9e9;
-      }
-    </style>
-    <script
-      src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
-      async
-      defer
-    ></script>
-  </head>
+            body {
+                padding-top: 180px;
+            }
+            #suggest {
+                width: 500px;
+                padding: 10px;
+                margin-top: 20px;
+                font-size: 16px;
+            }
+            #suggestionBox {
+                position: absolute;
+                background-color: #fff;
+                width: calc(100% - 100px);
+                z-index: 1000;
+                font-size: 16px;
+                transform: translateY(33px);
+            }
+            .suggestionItem {
+                padding: 5px;
+                cursor: pointer;
+                white-space: nowrap; /* Оставить предложения в одну строку */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: left;
+            }
+            .suggestionItem:hover {
+                background-color: #e9e9e9;
+            }
+        </style>
+        <script
+            src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+            async
+            defer
+        ></script>
+    </head>
 
-  <body>
-    <div class="top-bar">
-      <div class="contact-info">
-        <a href="https://www.instagram.com/kovrochistka/"
-          ><img src="../logos/instagram_icon.png" alt="Instagram"
-        /></a>
+    <body>
+        <div class="top-bar">
+            <div class="contact-info">
+                <a href="https://www.instagram.com/kovrochistka/"
+                    ><img src="../logos/instagram_icon.png" alt="Instagram"
+                /></a>
 
-        <a href="viber://chat?number=+375296562441"
-          ><img src="../logos/viber_icon.png" alt="Viber"
-        /></a>
+                <a href="viber://chat?number=+375296562441"
+                    ><img src="../logos/viber_icon.png" alt="Viber"
+                /></a>
 
-        <a href="https://t.me/+375336150464"
-          ><img src="../logos/telegram_icon.png" alt="Telegram"
-        /></a>
+                <a href="https://t.me/+375336150464"
+                    ><img src="../logos/telegram_icon.png" alt="Telegram"
+                /></a>
 
-        <a href="tel:+375172222222">+375 17 222-22-22</a>
-      </div>
-
-      <div class="menu-buttons">
-        <a href="http://fitokrama.by/catalog_page.php" class="menu-button"
-          >Каталог</a
-        >
-
-        <a href="/textpage.php?page=payments_and_delivery" class="menu-button"
-          >Оплата и доставка</a
-        >
-
-        <a href="textpage.php?page=contacts" class="menu-button">Контакты</a>
-      </div>
-    </div>
-    <div class="bottom-bar">
-      <div class="bottom-bar-content">
-        <img
-          src="../logos/ftkrm_logo.png"
-          alt="Логотип компании"
-          class="company-logo"
-          onclick="goTo('/index_page.php')"
-        />
-
-        <div class="search-container">
-          <section>
-            <input type="text" placeholder="Поиск" class="search-input" />
-            <button class="search-button">
-              <img
-                src="../logos/search_logo.png"
-                onclick="search()"
-                alt="Поиск"
-              />
-            </button>
-          </section>
-          <div class="search-results"></div>
-        </div>
-
-        <div class="account-buttons">
-          <div class="profileButton" onclick="[account_action]">
-            <a href="#" onclick="[account_action]">
-              <img
-                src="../logos/account_logo.png"
-                alt="Аккаунт"
-                onclick="[account_action]"
-              />
-            </a>
-            <!-- RED_DOT_START -->
-            <div class="redDot"></div>
-            <div class="needAction">[reddottext]</div>
-            <!-- RED_DOT_END -->
-          </div>
-
-          <a href="/cart_page.php">
-            <img src="../logos/wallet_logo.png" alt="Кошелек" />
-            <!-- CART_COUNT_START -->
-            <div class="cart-float"><p class="cart_count">[cart_count]</p></div>
-            <!-- CART_COUNT_END -->
-          </a>
-        </div>
-      </div>
-    </div>
-    <!-- MAIN_TEXT_BEGIN -->
-    <div class="maintext">[main_text]</div>
-    <!-- MAIN_TEXT_END -->
-    <!--ORDER_PAGE_BEGIN -->
-    <link rel="stylesheet" href="./css/product-in-cart.css" />
-    <link rel="stylesheet" href="./css/cart.css" />
-    <link rel="stylesheet" href="./css/cart_delivery.css" />
-    <link rel="stylesheet" href="./css/cart_payment.css" />
-    <div class="cart-content">
-      <h3>
-        ЗАКАЗ № [order_number] ОТ [order_date].
-        <p style="color: [order_color]">[order_status]</p>
-      </h3>
-      <!-- BUTTON_PAY_BEGIN -->
-      <div class="payment-options">
-        <div class="payment-option" onclick="openModal('qrModal')">
-          <img src="data:image/jpeg;base64,[payqrpicture]" alt="QR Code" />
-          <p>Оплатить по QR-коду</p>
-        </div>
-        <div class="payment-option" onclick="openCustomWindow('[paylink]')">
-          <img src="../logos/cardpay.png" alt="Оплата картой" />
-          <p>Оплатить картой</p>
-        </div>
-        <div
-          class="payment-option"
-          onclick="openTextModal('В дереве ЕРИП выберите услугу «E-POS - оплата товаров и услуг» и введите код: [paycode]')"
-        >
-          <img src="../logos/epospay.png" alt="Оплата EPOS" />
-          <p>Оплатить через EPOS</p>
-        </div>
-        <div
-          class="payment-option"
-          onclick="openTextModal('Метод в разработке')"
-        >
-          <img src="../logos/alphapay.png" alt="Оплата Альфа" />
-          <p>Оплатить Альфа</p>
-        </div>
-      </div>
-
-      <div class="checkout-button-row">
-        <button class="buy-button" onclick="location.reload();">
-          ПРОВЕРИТЬ ОПЛАТУ
-        </button>
-      </div>
-
-      <div id="qrModal" class="modal">
-        <div class="modal-content">
-          <span class="close" onclick="closeModal('qrModal')">&times;</span>
-          <img
-            src="data:image/jpeg;base64,[payqrpicture]"
-            alt="QR Code"
-            style="width: 300px; height: 300px"
-          />
-        </div>
-      </div>
-      <div id="messageModal" class="modal">
-        <div class="modal-content">
-          <span class="close" onclick="closeModal('messageModal')"
-            >&times;</span
-          >
-          <h3 id="modalMessageContent"></h3>
-        </div>
-      </div>
-      <link rel="stylesheet" href="./css/orderpage.css" />
-
-      <script src="./js/orderpage.js"></script>
-      <script>
-        window.addEventListener("focus", function () {
-          location.reload();
-        });
-      </script>
-
-      <!-- BUTTON_PAY_END -->
-
-      <!-- ORDER_GOOD_1_BEGIN -->
-      <div class="cart-item">
-        <img
-          onclick="navigateTo([goodart])"
-          src="../goods_pics/[good_pic]"
-          alt="Product"
-          class="product-image"
-        />
-
-        <div class="product-info">
-          <div class="cart-item-info">
-            <h4 class="product-name" onclick="navigateTo([goodart])">
-              [good_name]
-            </h4>
-
-            <div class="product-prices">
-              <div class="new-price">
-                [good_price_rub],<sup>[good_price_kop]</sup
-                ><span class="currency">руб.</span>
-              </div>
+                <a href="tel:+375172222222">+375 17 222-22-22</a>
             </div>
 
-            <div
-              class="orderItemQty"
-              id="total-price-item[good_count]"
-              data-price="[good_price]"
-            >
-              <span class="price-full-[good_count]">[good_qty] шт. </span>
-            </div>
-
-            <div
-              class="total-price"
-              id="total-price-item[good_count]"
-              data-price="[good_price]"
-            >
-              <span class="price-full-[good_count]">[good_sum_rub]</span>,
-              <sup class="price-small-[good_count]">[good_sum_kop] </sup>
-              <span class="currency"> руб.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- ORDER_GOOD_1_END -->
-
-      <div class="checkout-info authorized">
-        <div class="cart-summary">
-          <div class="summary-label">СУММА ЗАКАЗА:</div>
-
-          <div class="summary-total" id="summary-total">
-            <span class="totalPriceRub">[sum_rub]</span>,<sup
-              class="totalPriceKop"
-              >[sum_kop]</sup
-            >
-            <span class="currency">руб.</span>
-          </div>
-        </div>
-      </div>
-
-      <!--ORDER_PAGE_END -->
-      <!--PROFILE_PAGE_BEGIN -->
-      <link rel="stylesheet" href="./css/product-in-cart.css" />
-      <link rel="stylesheet" href="./css/cart.css" />
-      <link rel="stylesheet" href="./css/cart_delivery.css" />
-      <link rel="stylesheet" href="./css/cart_payment.css" />
-      <div class="cart-content">
-        <h3>Клиент: [client_email]</h3>
-
-        <!-- ORDER_1_BEGIN -->
-        <a href="[order_link]" class="cart-item">
-          <div class="product-info">
-            <div class="cart-item-info">
-              <h4 class="product-name">[order_number]</h4>
-              <!-- BUTTON_PAY_BEGIN -->
-              <div class="checkout-button-row">
-                <button class="buy-button" onclick="buyItem()">ОПЛАТИТЬ</button>
-              </div>
-              <!-- BUTTON_PAY_END -->
-              <!-- BUTTON_GET_BEGIN -->
-              <div class="checkout-button-row">
-                <button
-                  class="buy-button"
-                  onclick="goTo('fitokrama.by/order_page.php?order=[order_number]')"
-                  style="background: #bf8424 !important"
+            <div class="menu-buttons">
+                <a
+                    href="http://fitokrama.by/catalog_page.php"
+                    class="menu-button"
+                    >Каталог</a
                 >
-                  ИНСТРУКЦИЯ ПО ПОЛУЧЕНИЮ
-                </button>
-              </div>
-              <!-- BUTTON_GET_END -->
 
-              <div
-                class="total-price"
-                id="total-price-item[good_count]"
-                data-price="[good_price]"
-              >
-                <span class="price-full-[good_count]">[order_sum_rub]</span>,
-                <sup class="price-small-[good_count]">[order_sum_kop] </sup>
-                <span class="currency"> руб.</span>
-              </div>
+                <a
+                    href="/textpage.php?page=payments_and_delivery"
+                    class="menu-button"
+                    >Оплата и доставка</a
+                >
+
+                <a href="textpage.php?page=contacts" class="menu-button"
+                    >Контакты</a
+                >
             </div>
-          </div>
-        </a>
-        <!-- ORDER_1_END -->
-        <button class="exitButton" onclick="exitaccount()">
-          Выйти из профиля
-        </button>
-      </div>
-    </div>
-    <!--PROFILE_PAGE_END -->
-    <!-- BANNERS_PAGE_BEGIN -->
-    <link rel="stylesheet" href="./css/banner.css" />
-    <div class="banner">
-      <img src="" class="bannerimg" alt="" />
-      <div class="controls">
-        <button class="prevbutton" onclick="moveTo(-1)"><</button>
-        <button class="nextbutton" onclick="moveTo(1)">></button>
-      </div>
-      <div class="pagination"></div>
-    </div>
-    <script src="./js/banner.js"></script>
-
-    <!-- BANNERS_PAGE_END -->
-    <!-- GOOD_PAGE_BEGIN -->
-    <link rel="stylesheet" href="./css/product-card.css" />
-    <div class="content product-card">
-      <div class="product-without-description">
-        <img
-          src="../goods_pics/[goodspics]"
-          alt="Product"
-          class="product-image"
-        />
-
-        <div class="product-info">
-          <h1 class="product-title">[goodname]</h1>
-
-          <p class="product-description">[gooddef1]</p>
-
-          <div class="product-prices">
-            <div class="old-price">[goodoldprice]</div>
-
-            <div class="new-price">[goodactprice] руб.</div>
-
-            <div class="product-actions">
-              <div class="quantity-selector">
-                <button class="quantity-button" onclick="dec(0)">-</button>
-
-                <input
-                  type="number"
-                  class="quantity-input quantity-input-0"
-                  value="1"
+        </div>
+        <div class="bottom-bar">
+            <div class="bottom-bar-content">
+                <img
+                    src="../logos/ftkrm_logo.png"
+                    alt="Логотип компании"
+                    class="company-logo"
+                    onclick="goTo('/index_page.php')"
                 />
 
-                <button class="quantity-button" onclick="inc(0)">+</button>
-              </div>
-
-              <button
-                class="add-to-cart"
-                onclick="showAddedToCartModal([goodart],[goodactprice],document.querySelector('.quantity-input-0').value)"
-              >
-                В КОРЗИНУ
-              </button>
-            </div>
-          </div>
-
-          <p class="delivery-time">↯ доставка [timedelievery]</p>
-
-          <div class="product-details">
-            <p>Код: [goodbarcode]</p>
-
-            <p>
-              <a href="/catalog_page.php?cat=[goodcat]">[goodcat]</a> /
-              <a href="catalog_page.php?subcat=[goodsubcat]">[goodsubcat]</a>
-            </p>
-
-            <p>[goodtegs]</p>
-
-            <p>Производитель: [goodprod]</p>
-
-            <p>Цена за 1 кг: [good1kg]</p>
-          </div>
-        </div>
-      </div>
-      <p class="product-description">[gooddef2]</p>
-    </div>
-    <!-- GOOD_PAGE_END -->
-    <!-- SIMILAR_GOODS_BEGIN -->
-    <link rel="stylesheet" href="./css/product-card.css" />
-    <link rel="stylesheet" href="./css/similar-products.css" />
-    <div class="similar-products">
-      <h3>ПОХОЖИЕ ТОВАРЫ</h3>
-
-      <div class="products-container">
-        <!-- GOOD_1_BEGIN -->
-        <div class="product-item">
-          <img
-            src="./goods_pics/[goodspics]"
-            alt="Product"
-            onclick="navigateTo([goodart])"
-          />
-
-          <h4 class="product-name" onclick="navigateTo([goodart])">
-            [goodname]
-          </h4>
-
-          <p class="product-description" onclick="navigateTo([goodart])">
-            [gooddef1]
-          </p>
-
-          <div class="product-prices">
-            <div class="old-price">[goodoldprice]</div>
-
-            <div class="new-price">[goodactprice] руб.</div>
-          </div>
-
-          <div class="quantity-selector">
-            <section class="quantity-section">
-              <button class="quantity-button-small" onclick="dec([goodart])">
-                -
-              </button>
-
-              <input
-                type="number"
-                class="quantity-input-small quantity-input-[goodart]"
-                value="1"
-              />
-
-              <button class="quantity-button-small" onclick="inc([goodart])">
-                +
-              </button>
-            </section>
-
-            <button
-              class="add-to-cart-small"
-              onclick="showAddedToCartModal([goodart], [goodactprice], document.querySelector('.quantity-input-[goodart]').value)"
-            >
-              В КОРЗИНУ
-            </button>
-          </div>
-        </div>
-        <!-- GOOD_1_END -->
-      </div>
-    </div>
-    <div class="modal" id="fail">
-      <div class="modal-content">
-        <span class="close" onclick="closeFailModal()">&times;</span>
-
-        <div class="modal-body">
-          <div class="modal-text">
-            <h2>Товар не добавлен в корзину</h2>
-            <p>что-то пошло не так</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="addedToCartModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeAddedToCartModal()">&times;</span>
-
-        <div class="modal-body">
-          <div class="modal-text">
-            <h2>
-              <img src="./logos/good_added.png" class="modal-image" alt="" />
-              Товар добавлен в корзину!
-            </h2>
-            <div class="modal-buttons">
-              <button
-                class="continue-shopping"
-                onclick="closeAddedToCartModal()"
-              >
-                Продолжить покупки
-              </button>
-
-              <button
-                class="checkout"
-                onclick="window.location.href='/cart_page.php'"
-              >
-                Оформить заказ
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script src="./js/productpage.js"></script>
-    <!-- SIMILAR_GOODS_END -->
-
-    <!-- CART_BEGIN -->
-    <link rel="stylesheet" href="./css/product-in-cart.css" />
-    <link rel="stylesheet" href="./css/cart.css" />
-    <link rel="stylesheet" href="./css/cart_delivery.css" />
-    <link rel="stylesheet" href="./css/cart_payment.css" />
-    <div class="cart-content">
-      <h3>КОРЗИНА</h3>
-      <!-- CART_GOOD_1_BEGIN -->
-      <div class="cart-item">
-        <img
-          onclick="navigateTo([goodart])"
-          src="../goods_pics/[good_pic]"
-          alt="Product"
-          class="product-image"
-        />
-
-        <div class="product-info">
-          <div class="cart-item-info">
-            <h4 class="product-name" onclick="navigateTo([goodart])">
-              [good_name]
-            </h4>
-
-            <div class="product-prices">
-              <div class="old-price">
-                [good_old_price_rub],<sup>[good_old_price_kop]</sup>
-              </div>
-
-              <div class="new-price">
-                [good_price_rub],<sup>[good_price_kop]</sup>
-                <span class="currency">руб.</span>
-              </div>
-            </div>
-
-            <div class="quantity-selector">
-              <button
-                class="quantity-button"
-                onclick="changeQuantity(-1, 'item[good_count]', [good_art], [good_price])"
-              >
-                -
-              </button>
-
-              <input
-                type="number"
-                class="quantity-input"
-                id="quantity-item[good_count]"
-                value="[good_qty]"
-                readonly
-              />
-
-              <button
-                class="quantity-button"
-                onclick="changeQuantity(1, 'item[good_count]', [good_art], [good_price])"
-              >
-                +
-              </button>
-            </div>
-
-            <div
-              class="total-price"
-              id="total-price-item[good_count]"
-              data-price="[good_price]"
-            >
-              <span class="price-full-[good_count]">[good_sum_rub]</span>,
-              <sup class="price-small-[good_count]">[good_sum_kop] </sup>
-              <span class="currency"> руб.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- CART_GOOD_1_END -->
-
-      <!-- NONAUTHORIZED_START -->
-      <div class="checkout-info nonauthorized checkout-button-row">
-        <button onclick="showAuthMetods()" class="buy-button">
-          Оформить покупку
-        </button>
-      </div>
-      <!-- NONAUTHORIZED_END -->
-
-      <!-- AUTHORIZED_START -->
-      <div class="checkout-info authorized">
-        <div class="checkout-row">
-          <label for="client_name">Ф.И.О.</label>
-
-          <input
-            type="text"
-            class="sendinginfo"
-            id="client_name"
-            value="[client_name]"
-          />
-        </div>
-
-        <div class="checkout-row">
-          <label for="client_email">e-mail</label>
-
-          <input
-            type="email"
-            class="sendinginfo"
-            id="client_email"
-            value="[client_email]"
-          />
-
-          <img src="./logos/green_ok.png" alt="ok" class="ok-icon EC" />
-
-          <button onclick="openConfirmEmail()" class="show-with-list ENC">
-            Подтвердить
-          </button>
-        </div>
-
-        <div class="checkout-row">
-          <label for="client_phone">Телефон</label>
-
-          <input
-            type="text"
-            id="client_phone"
-            class="sendinginfo"
-            value="[client_phone]"
-          />
-          <img src="./logos/green_ok.png" alt="ok" class="ok-icon PC" />
-
-          <button onclick="openConfirmPhone()" class="show-with-list PNC">
-            Подтвердить
-          </button>
-        </div>
-
-        <div class="checkout-row">
-          <label for="client_address">Адрес</label>
-
-          <input
-            type="text"
-            id="client_address"
-            class="addr suggestaddr"
-            value="[client_address]"
-          />
-          <div class="suggestionbox" id="suggestionBox"></div>
-        </div>
-        <div class="checkout-row delivery_checkout">
-          <label for="client_address">Доставка</label>
-
-          <section>
-            <!-- METHOD_1_BEGIN -->
-
-            <div class="[option_class]">
-              <img
-                src="../logos/[button_pic]"
-                alt="Выбор"
-                class="delivery-choosing-button"
-                data-submethod-id="[method_id]"
-                onclick="sendPostRequest(this)"
-              />
-
-              <div class="delivery-info">
-                <div class="method-info">
-                  <h1 class="method-name">[method_name]</h1>
-                  <section class="method-details">
-                    <img
-                      src="../logos/[method_pic]"
-                      alt="Delivery"
-                      class="delivery-image"
-                    />
-                    <div class="method-description">
-                      <p>[method_address]</p>
-                      <p>
-                        [method_note] [method_distance] [method_duration_text]
-                      </p>
-                    </div>
-                  </section>
-                  <section
-                    class="delivery_note"
-                    style="background: [plate_color]"
-                  >
-                    [plate_text]
-                  </section>
+                <div class="search-container">
+                    <section>
+                        <input
+                            type="text"
+                            placeholder="Поиск"
+                            class="search-input"
+                        />
+                        <button class="search-button">
+                            <img
+                                src="../logos/search_logo.png"
+                                onclick="search()"
+                                alt="Поиск"
+                            />
+                        </button>
+                    </section>
+                    <div class="search-results"></div>
                 </div>
-                <p class="delivery-price">
-                  [method_price_rub],<sup>[method_price_kop]</sup
-                  ><span class="currency">руб.</span>
-                </p>
-              </div>
+
+                <div class="account-buttons">
+                    <div class="profileButton" onclick="[account_action]">
+                        <a href="#" onclick="[account_action]">
+                            <img
+                                src="../logos/account_logo.png"
+                                alt="Аккаунт"
+                                onclick="[account_action]"
+                            />
+                        </a>
+                        <!-- RED_DOT_START -->
+                        <div class="redDot"></div>
+                        <div class="needAction">[reddottext]</div>
+                        <!-- RED_DOT_END -->
+                    </div>
+
+                    <a href="/cart_page.php">
+                        <img src="../logos/wallet_logo.png" alt="Кошелек" />
+                        <!-- CART_COUNT_START -->
+                        <div class="cart-float">
+                            <p class="cart_count">[cart_count]</p>
+                        </div>
+                        <!-- CART_COUNT_END -->
+                    </a>
+                </div>
             </div>
-            <!-- METHOD_1_END -->
-            <button id="toggleOptionsBtn" onclick="toggleOptions()">
-              Больше вариантов ⋁
-            </button>
-          </section>
         </div>
-
-        <div class="cart-summary">
-          <div class="summary-label">ИТОГО К ОПЛАТЕ:</div>
-
-          <div class="summary-total" id="summary-total">
-            <span class="totalPriceRub">[sum_rub]</span>,<sup
-              class="totalPriceKop"
-              >[sum_kop]</sup
-            >
-            <span class="currency">руб.</span>
-          </div>
-        </div>
-
-        <div id="confirmDeliveryMethodModal" class="modal">
-          <div class="modal-content">
-            <span class="close" onclick="closeConfirmDeliveryMethodModal()"
-              >&times;</span
-            >
-
-            <h2>Выбрать указанный метод доставки?</h2>
-
-            <p id="selectedDeliveryMethod"></p>
-
-            <div class="modal-buttons">
-              <button
-                class="cancel-button"
-                onclick="closeConfirmDeliveryMethodModal()"
-              >
-                Нет
-              </button>
-
-              <button class="confirm-button" onclick="confirmDeliveryMethod()">
-                Да
-              </button>
+        <!-- MAIN_TEXT_BEGIN -->
+        <div class="maintext">[main_text]</div>
+        <!-- MAIN_TEXT_END -->
+        <!--ORDER_PAGE_BEGIN -->
+        <link rel="stylesheet" href="./css/product-in-cart.css" />
+        <link rel="stylesheet" href="./css/cart.css" />
+        <link rel="stylesheet" href="./css/cart_delivery.css" />
+        <link rel="stylesheet" href="./css/cart_payment.css" />
+        <div class="cart-content">
+            <h3>
+                ЗАКАЗ № [order_number] ОТ [order_date].
+                <p style="color: [order_color]">[order_status]</p>
+            </h3>
+            <!-- BUTTON_PAY_BEGIN -->
+            <div class="payment-options">
+                <div class="payment-option" onclick="openModal('qrModal')">
+                    <img
+                        src="data:image/jpeg;base64,[payqrpicture]"
+                        alt="QR Code"
+                    />
+                    <p>Оплатить по QR-коду</p>
+                </div>
+                <div
+                    class="payment-option"
+                    onclick="openCustomWindow('[paylink]')"
+                >
+                    <img src="../logos/cardpay.png" alt="Оплата картой" />
+                    <p>Оплатить картой</p>
+                </div>
+                <div
+                    class="payment-option"
+                    onclick="openTextModal('В дереве ЕРИП выберите услугу «E-POS - оплата товаров и услуг» и введите код: [paycode]')"
+                >
+                    <img src="../logos/epospay.png" alt="Оплата EPOS" />
+                    <p>Оплатить через EPOS</p>
+                </div>
+                <div
+                    class="payment-option"
+                    onclick="openTextModal('Метод в разработке')"
+                >
+                    <img src="../logos/alphapay.png" alt="Оплата Альфа" />
+                    <p>Оплатить Альфа</p>
+                </div>
             </div>
-          </div>
-        </div>
 
-        <div class="modal" id="deleteItem">
-          <div class="modal-content">
-            <span class="close" onclick="closeModal('deleteItem')">
-              &times;
-            </span>
-
-            <h2>Удалить товар?</h2>
-
-            <div class="modal-buttons">
-              <button class="cancel-button" onclick="closeModal('deleteItem')">
-                Нет
-              </button>
-
-              <button class="confirm-button" onclick="deleteItem()">Да</button>
+            <div class="checkout-button-row">
+                <button class="buy-button" onclick="location.reload();">
+                    ПРОВЕРИТЬ ОПЛАТУ
+                </button>
             </div>
-          </div>
+
+            <div id="qrModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('qrModal')"
+                        >&times;</span
+                    >
+                    <img
+                        src="data:image/jpeg;base64,[payqrpicture]"
+                        alt="QR Code"
+                        style="width: 300px; height: 300px"
+                    />
+                </div>
+            </div>
+            <div id="messageModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('messageModal')"
+                        >&times;</span
+                    >
+                    <h3 id="modalMessageContent"></h3>
+                </div>
+            </div>
+            <link rel="stylesheet" href="./css/orderpage.css" />
+
+            <script src="./js/orderpage.js"></script>
+            <script>
+                window.addEventListener("focus", function () {
+                    location.reload();
+                });
+            </script>
+
+            <!-- BUTTON_PAY_END -->
+
+            <!-- ORDER_GOOD_1_BEGIN -->
+            <div class="cart-item">
+                <img
+                    onclick="navigateTo([goodart])"
+                    src="../goods_pics/[good_pic]"
+                    alt="Product"
+                    class="product-image"
+                />
+
+                <div class="product-info">
+                    <div class="cart-item-info">
+                        <h4
+                            class="product-name"
+                            onclick="navigateTo([goodart])"
+                        >
+                            [good_name]
+                        </h4>
+
+                        <div class="product-prices">
+                            <div class="new-price">
+                                [good_price_rub],<sup>[good_price_kop]</sup
+                                ><span class="currency">руб.</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="orderItemQty"
+                            id="total-price-item[good_count]"
+                            data-price="[good_price]"
+                        >
+                            <span class="price-full-[good_count]"
+                                >[good_qty] шт.
+                            </span>
+                        </div>
+
+                        <div
+                            class="total-price"
+                            id="total-price-item[good_count]"
+                            data-price="[good_price]"
+                        >
+                            <span class="price-full-[good_count]"
+                                >[good_sum_rub]</span
+                            >,
+                            <sup class="price-small-[good_count]"
+                                >[good_sum_kop]
+                            </sup>
+                            <span class="currency"> руб.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ORDER_GOOD_1_END -->
+
+            <div class="checkout-info authorized">
+                <div class="cart-summary">
+                    <div class="summary-label">СУММА ЗАКАЗА:</div>
+
+                    <div class="summary-total" id="summary-total">
+                        <span class="totalPriceRub">[sum_rub]</span>,<sup
+                            class="totalPriceKop"
+                            >[sum_kop]</sup
+                        >
+                        <span class="currency">руб.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!--ORDER_PAGE_END -->
+            <!--PROFILE_PAGE_BEGIN -->
+            <link rel="stylesheet" href="./css/product-in-cart.css" />
+            <link rel="stylesheet" href="./css/cart.css" />
+            <link rel="stylesheet" href="./css/cart_delivery.css" />
+            <link rel="stylesheet" href="./css/cart_payment.css" />
+            <div class="cart-content">
+                <h3>Клиент: [client_email]</h3>
+
+                <!-- ORDER_1_BEGIN -->
+                <a href="[order_link]" class="cart-item">
+                    <div class="product-info">
+                        <div class="cart-item-info">
+                            <h4 class="product-name">[order_number]</h4>
+                            <!-- BUTTON_PAY_BEGIN -->
+                            <div class="checkout-button-row">
+                                <button class="buy-button" onclick="buyItem()">
+                                    ОПЛАТИТЬ
+                                </button>
+                            </div>
+                            <!-- BUTTON_PAY_END -->
+                            <!-- BUTTON_GET_BEGIN -->
+                            <div class="checkout-button-row">
+                                <button
+                                    class="buy-button"
+                                    onclick="goTo('fitokrama.by/order_page.php?order=[order_number]')"
+                                    style="background: #bf8424 !important"
+                                >
+                                    ИНСТРУКЦИЯ ПО ПОЛУЧЕНИЮ
+                                </button>
+                            </div>
+                            <!-- BUTTON_GET_END -->
+
+                            <div
+                                class="total-price"
+                                id="total-price-item[good_count]"
+                                data-price="[good_price]"
+                            >
+                                <span class="price-full-[good_count]"
+                                    >[order_sum_rub]</span
+                                >,
+                                <sup class="price-small-[good_count]"
+                                    >[order_sum_kop]
+                                </sup>
+                                <span class="currency"> руб.</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <!-- ORDER_1_END -->
+                <button class="exitButton" onclick="exitaccount()">
+                    Выйти из профиля
+                </button>
+            </div>
+        </div>
+        <!--PROFILE_PAGE_END -->
+        <!-- BANNERS_PAGE_BEGIN -->
+        <link rel="stylesheet" href="./css/banner.css" />
+        <div class="banner">
+            <img src="" class="bannerimg" alt="" />
+            <div class="controls">
+                <button class="prevbutton" onclick="moveTo(-1)"><</button>
+                <button class="nextbutton" onclick="moveTo(1)">></button>
+            </div>
+            <div class="pagination"></div>
+        </div>
+        <script src="./js/banner.js"></script>
+
+        <!-- BANNERS_PAGE_END -->
+        <!-- GOOD_PAGE_BEGIN -->
+        <link rel="stylesheet" href="./css/product-card.css" />
+        <div class="content product-card">
+            <div class="product-without-description">
+                <img
+                    src="../goods_pics/[goodspics]"
+                    alt="Product"
+                    class="product-image"
+                />
+
+                <div class="product-info">
+                    <h1 class="product-title">[goodname]</h1>
+
+                    <p class="product-description">[gooddef1]</p>
+
+                    <div class="product-prices">
+                        <div class="old-price">[goodoldprice]</div>
+
+                        <div class="new-price">[goodactprice] руб.</div>
+
+                        <div class="product-actions">
+                            <div class="quantity-selector">
+                                <button
+                                    class="quantity-button"
+                                    onclick="dec(0)"
+                                >
+                                    -
+                                </button>
+
+                                <input
+                                    type="number"
+                                    class="quantity-input quantity-input-0"
+                                    value="1"
+                                />
+
+                                <button
+                                    class="quantity-button"
+                                    onclick="inc(0)"
+                                >
+                                    +
+                                </button>
+                            </div>
+
+                            <button
+                                class="add-to-cart"
+                                onclick="showAddedToCartModal([goodart],[goodactprice],document.querySelector('.quantity-input-0').value)"
+                            >
+                                В КОРЗИНУ
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="delivery-time">↯ доставка [timedelievery]</p>
+
+                    <div class="product-details">
+                        <p>Код: [goodbarcode]</p>
+
+                        <p>
+                            <a href="/catalog_page.php?cat=[goodcat]"
+                                >[goodcat]</a
+                            >
+                            /
+                            <a href="catalog_page.php?subcat=[goodsubcat]"
+                                >[goodsubcat]</a
+                            >
+                        </p>
+
+                        <p>[goodtegs]</p>
+
+                        <p>Производитель: [goodprod]</p>
+
+                        <p>Цена за 1 кг: [good1kg]</p>
+                    </div>
+                </div>
+            </div>
+            <p class="product-description">[gooddef2]</p>
+        </div>
+        <!-- GOOD_PAGE_END -->
+        <!-- SIMILAR_GOODS_BEGIN -->
+        <link rel="stylesheet" href="./css/product-card.css" />
+        <link rel="stylesheet" href="./css/similar-products.css" />
+        <div class="similar-products">
+            <h3>ПОХОЖИЕ ТОВАРЫ</h3>
+
+            <div class="products-container">
+                <!-- GOOD_1_BEGIN -->
+                <div class="product-item">
+                    <img
+                        src="./goods_pics/[goodspics]"
+                        alt="Product"
+                        onclick="navigateTo([goodart])"
+                    />
+
+                    <h4 class="product-name" onclick="navigateTo([goodart])">
+                        [goodname]
+                    </h4>
+
+                    <p
+                        class="product-description"
+                        onclick="navigateTo([goodart])"
+                    >
+                        [gooddef1]
+                    </p>
+
+                    <div class="product-prices">
+                        <div class="old-price">[goodoldprice]</div>
+
+                        <div class="new-price">[goodactprice] руб.</div>
+                    </div>
+
+                    <div class="quantity-selector">
+                        <section class="quantity-section">
+                            <button
+                                class="quantity-button-small"
+                                onclick="dec([goodart])"
+                            >
+                                -
+                            </button>
+
+                            <input
+                                type="number"
+                                class="quantity-input-small quantity-input-[goodart]"
+                                value="1"
+                            />
+
+                            <button
+                                class="quantity-button-small"
+                                onclick="inc([goodart])"
+                            >
+                                +
+                            </button>
+                        </section>
+
+                        <button
+                            class="add-to-cart-small"
+                            onclick="showAddedToCartModal([goodart], [goodactprice], document.querySelector('.quantity-input-[goodart]').value)"
+                        >
+                            В КОРЗИНУ
+                        </button>
+                    </div>
+                </div>
+                <!-- GOOD_1_END -->
+            </div>
+        </div>
+        <div class="modal" id="fail">
+            <div class="modal-content">
+                <span class="close" onclick="closeFailModal()">&times;</span>
+
+                <div class="modal-body">
+                    <div class="modal-text">
+                        <h2>Товар не добавлен в корзину</h2>
+                        <p>что-то пошло не так</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="addedToCartModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAddedToCartModal()"
+                    >&times;</span
+                >
+
+                <div class="modal-body">
+                    <div class="modal-text">
+                        <h2>
+                            <img
+                                src="./logos/good_added.png"
+                                class="modal-image"
+                                alt=""
+                            />
+                            Товар добавлен в корзину!
+                        </h2>
+                        <div class="modal-buttons">
+                            <button
+                                class="continue-shopping"
+                                onclick="closeAddedToCartModal()"
+                            >
+                                Продолжить покупки
+                            </button>
+
+                            <button class="checkout" onclick="gotoCart()">
+                                Оформить заказ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="checkout-button-row">
-          <button class="buy-button" onclick="buyItem()">КУПИТЬ</button>
-        </div>
-      </div>
-      <!-- AUTHORIZED_END -->
+        <script src="./js/productpage.js"></script>
+        <!-- SIMILAR_GOODS_END -->
 
-      <div class="modal" id="confirmPhone">
-        <div
-          class="modal-content"
-          style="display: flex; flex-direction: column; align-items: center"
-        >
-          <span class="close" onclick="closeModal('confirmPhone')"
-            >&times;</span
-          >
-          <h3>
-            На ваш номер телефона был отправлен код подтверждения, пожалуйста
-            введите его
-          </h3>
-          <section style="width: 200px">
-            <div class="code-container">
-              <input
-                type="text"
-                class="phone-code-input first-phone-code-input"
-                maxlength="1"
-                oninput="moveToNextPhoneInput(this, 0,
+        <!-- CART_BEGIN -->
+        <link rel="stylesheet" href="./css/product-in-cart.css" />
+        <link rel="stylesheet" href="./css/cart.css" />
+        <link rel="stylesheet" href="./css/cart_delivery.css" />
+        <link rel="stylesheet" href="./css/cart_payment.css" />
+        <div class="cart-content">
+            <h3>КОРЗИНА</h3>
+            <!-- CART_GOOD_1_BEGIN -->
+            <div class="cart-item">
+                <img
+                    onclick="navigateTo([goodart])"
+                    src="../goods_pics/[good_pic]"
+                    alt="Product"
+                    class="product-image"
+                />
+
+                <div class="product-info">
+                    <div class="cart-item-info">
+                        <h4
+                            class="product-name"
+                            onclick="navigateTo([goodart])"
+                        >
+                            [good_name]
+                        </h4>
+
+                        <div class="product-prices">
+                            <div class="old-price">
+                                [good_old_price_rub],<sup
+                                    >[good_old_price_kop]</sup
+                                >
+                            </div>
+
+                            <div class="new-price">
+                                [good_price_rub],<sup>[good_price_kop]</sup>
+                                <span class="currency">руб.</span>
+                            </div>
+                        </div>
+
+                        <div class="quantity-selector">
+                            <button
+                                class="quantity-button"
+                                onclick="changeQuantity(-1, 'item[good_count]', [good_art], [good_price])"
+                            >
+                                -
+                            </button>
+
+                            <input
+                                type="number"
+                                class="quantity-input"
+                                id="quantity-item[good_count]"
+                                value="[good_qty]"
+                                readonly
+                            />
+
+                            <button
+                                class="quantity-button"
+                                onclick="changeQuantity(1, 'item[good_count]', [good_art], [good_price])"
+                            >
+                                +
+                            </button>
+                        </div>
+
+                        <div
+                            class="total-price"
+                            id="total-price-item[good_count]"
+                            data-price="[good_price]"
+                        >
+                            <span class="price-full-[good_count]"
+                                >[good_sum_rub]</span
+                            >,
+                            <sup class="price-small-[good_count]"
+                                >[good_sum_kop]
+                            </sup>
+                            <span class="currency"> руб.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- CART_GOOD_1_END -->
+
+            <!-- NONAUTHORIZED_START -->
+            <div class="checkout-info nonauthorized checkout-button-row">
+                <button onclick="showAuthMetods()" class="buy-button">
+                    Оформить покупку
+                </button>
+            </div>
+            <!-- NONAUTHORIZED_END -->
+
+            <!-- AUTHORIZED_START -->
+            <div class="checkout-info authorized">
+                <div class="checkout-row">
+                    <label for="client_name">Ф.И.О.</label>
+
+                    <input
+                        type="text"
+                        class="sendinginfo"
+                        id="client_name"
+                        value="[client_name]"
+                    />
+                </div>
+
+                <div class="checkout-row">
+                    <label for="client_email">e-mail</label>
+
+                    <input
+                        type="email"
+                        class="sendinginfo"
+                        id="client_email"
+                        value="[client_email]"
+                    />
+
+                    <img
+                        src="./logos/green_ok.png"
+                        alt="ok"
+                        class="ok-icon EC"
+                    />
+
+                    <button
+                        onclick="openConfirmEmail()"
+                        class="show-with-list ENC"
+                    >
+                        Подтвердить
+                    </button>
+                </div>
+
+                <div class="checkout-row">
+                    <label for="client_phone">Телефон</label>
+
+                    <input
+                        type="text"
+                        id="client_phone"
+                        class="sendinginfo"
+                        value="[client_phone]"
+                    />
+                    <img
+                        src="./logos/green_ok.png"
+                        alt="ok"
+                        class="ok-icon PC"
+                    />
+
+                    <button
+                        onclick="openConfirmPhone()"
+                        class="show-with-list PNC"
+                    >
+                        Подтвердить
+                    </button>
+                </div>
+
+                <div class="checkout-row">
+                    <label for="client_address">Адрес</label>
+
+                    <input
+                        type="text"
+                        id="client_address"
+                        class="addr suggestaddr"
+                        value="[client_address]"
+                    />
+                    <div class="suggestionbox" id="suggestionBox"></div>
+                </div>
+                <div class="checkout-row delivery_checkout">
+                    <label for="client_address">Доставка</label>
+
+                    <section>
+                        <!-- METHOD_1_BEGIN -->
+
+                        <div class="[option_class]">
+                            <img
+                                src="../logos/[button_pic]"
+                                alt="Выбор"
+                                class="delivery-choosing-button"
+                                data-submethod-id="[method_id]"
+                                onclick="sendPostRequest(this)"
+                            />
+
+                            <div class="delivery-info">
+                                <div class="method-info">
+                                    <h1 class="method-name">[method_name]</h1>
+                                    <section class="method-details">
+                                        <img
+                                            src="../logos/[method_pic]"
+                                            alt="Delivery"
+                                            class="delivery-image"
+                                        />
+                                        <div class="method-description">
+                                            <p>[method_address]</p>
+                                            <p>
+                                                [method_note] [method_distance]
+                                                [method_duration_text]
+                                            </p>
+                                        </div>
+                                    </section>
+                                    <section
+                                        class="delivery_note"
+                                        style="background: [plate_color]"
+                                    >
+                                        [plate_text]
+                                    </section>
+                                </div>
+                                <p class="delivery-price">
+                                    [method_price_rub],<sup
+                                        >[method_price_kop]</sup
+                                    ><span class="currency">руб.</span>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- METHOD_1_END -->
+                        <button id="toggleOptionsBtn" onclick="toggleOptions()">
+                            Больше вариантов ⋁
+                        </button>
+                    </section>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="summary-label">ИТОГО К ОПЛАТЕ:</div>
+
+                    <div class="summary-total" id="summary-total">
+                        <span class="totalPriceRub">[sum_rub]</span>,<sup
+                            class="totalPriceKop"
+                            >[sum_kop]</sup
+                        >
+                        <span class="currency">руб.</span>
+                    </div>
+                </div>
+
+                <div id="confirmDeliveryMethodModal" class="modal">
+                    <div class="modal-content">
+                        <span
+                            class="close"
+                            onclick="closeConfirmDeliveryMethodModal()"
+                            >&times;</span
+                        >
+
+                        <h2>Выбрать указанный метод доставки?</h2>
+
+                        <p id="selectedDeliveryMethod"></p>
+
+                        <div class="modal-buttons">
+                            <button
+                                class="cancel-button"
+                                onclick="closeConfirmDeliveryMethodModal()"
+                            >
+                                Нет
+                            </button>
+
+                            <button
+                                class="confirm-button"
+                                onclick="confirmDeliveryMethod()"
+                            >
+                                Да
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal" id="deleteItem">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal('deleteItem')">
+                            &times;
+                        </span>
+
+                        <h2>Удалить товар?</h2>
+
+                        <div class="modal-buttons">
+                            <button
+                                class="cancel-button"
+                                onclick="closeModal('deleteItem')"
+                            >
+                                Нет
+                            </button>
+
+                            <button
+                                class="confirm-button"
+                                onclick="deleteItem()"
+                            >
+                                Да
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-button-row">
+                    <button class="buy-button" onclick="buyItem()">
+                        КУПИТЬ
+                    </button>
+                </div>
+            </div>
+            <!-- AUTHORIZED_END -->
+
+            <div class="modal" id="confirmPhone">
+                <div
+                    class="modal-content"
+                    style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    "
+                >
+                    <span class="close" onclick="closeModal('confirmPhone')"
+                        >&times;</span
+                    >
+                    <h3>
+                        На ваш номер телефона был отправлен код подтверждения,
+                        пожалуйста введите его
+                    </h3>
+                    <section style="width: 200px">
+                        <div class="code-container">
+                            <input
+                                type="text"
+                                class="phone-code-input first-phone-code-input"
+                                maxlength="1"
+                                oninput="moveToNextPhoneInput(this, 0,
                 document.querySelectorAll('.phone-code-input'))"
-                onkeydown="checkBackspacePhoneInput(event, this, 0, document.querySelectorAll('.phone-code-input'))"
-              />
+                                onkeydown="checkBackspacePhoneInput(event, this, 0, document.querySelectorAll('.phone-code-input'))"
+                            />
 
-              <input
-                type="text"
-                class="phone-code-input"
-                maxlength="1"
-                oninput="moveToNextPhoneInput(this, 1, document.querySelectorAll('.phone-code-input'))"
-                onkeydown="checkBackspacePhoneInput(event, this, 1, document.querySelectorAll('.phone-code-input'))"
-              />
+                            <input
+                                type="text"
+                                class="phone-code-input"
+                                maxlength="1"
+                                oninput="moveToNextPhoneInput(this, 1, document.querySelectorAll('.phone-code-input'))"
+                                onkeydown="checkBackspacePhoneInput(event, this, 1, document.querySelectorAll('.phone-code-input'))"
+                            />
 
-              <input
-                type="text"
-                class="phone-code-input"
-                maxlength="1"
-                oninput="moveToNextPhoneInput(this, 2, document.querySelectorAll('.phone-code-input'))"
-                onkeydown="checkBackspacePhoneInput(event, this, 2, document.querySelectorAll('.phone-code-input'))"
-              />
+                            <input
+                                type="text"
+                                class="phone-code-input"
+                                maxlength="1"
+                                oninput="moveToNextPhoneInput(this, 2, document.querySelectorAll('.phone-code-input'))"
+                                onkeydown="checkBackspacePhoneInput(event, this, 2, document.querySelectorAll('.phone-code-input'))"
+                            />
 
-              <input
-                type="text"
-                class="phone-code-input"
-                maxlength="1"
-                oninput="moveToNextPhoneInput(this, 3, document.querySelectorAll('.phone-code-input'))"
-                onkeydown="checkBackspacePhoneInput(event, this, 3, document.querySelectorAll('.phone-code-input'))"
-              />
+                            <input
+                                type="text"
+                                class="phone-code-input"
+                                maxlength="1"
+                                oninput="moveToNextPhoneInput(this, 3, document.querySelectorAll('.phone-code-input'))"
+                                onkeydown="checkBackspacePhoneInput(event, this, 3, document.querySelectorAll('.phone-code-input'))"
+                            />
 
-              <input
-                type="text"
-                class="phone-code-input"
-                maxlength="1"
-                oninput="moveToNextPhoneInput(this, 4, document.querySelectorAll('.phone-code-input'))"
-                onkeydown="checkBackspacePhoneInput(event, this, 4, document.querySelectorAll('.phone-code-input'))"
-              />
+                            <input
+                                type="text"
+                                class="phone-code-input"
+                                maxlength="1"
+                                oninput="moveToNextPhoneInput(this, 4, document.querySelectorAll('.phone-code-input'))"
+                                onkeydown="checkBackspacePhoneInput(event, this, 4, document.querySelectorAll('.phone-code-input'))"
+                            />
+                        </div>
+                    </section>
+
+                    <button class="sendCodeAgain sendCodeAgainPhone">
+                        Отправить код повторно &nbsp;
+                        <span class="phonetimerzero">0:</span
+                        ><span class="phonetimer">59</span>
+                    </button>
+                </div>
             </div>
-          </section>
 
-          <button class="sendCodeAgain sendCodeAgainPhone">
-            Отправить код повторно &nbsp; <span class="phonetimerzero">0:</span
-            ><span class="phonetimer">59</span>
-          </button>
+            <div class="modal" id="failedConfirm">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('failedConfirm')">
+                        &times;
+                    </span>
+                    <h3 class="errorMessage"></h3>
+                </div>
+            </div>
         </div>
-      </div>
+        <script src="./js/address.js"></script>
+        <script src="./js/cart.js" defer></script>
 
-      <div class="modal" id="failedConfirm">
-        <div class="modal-content">
-          <span class="close" onclick="closeModal('failedConfirm')">
-            &times;
-          </span>
-          <h3 class="errorMessage"></h3>
-        </div>
-      </div>
-    </div>
-    <script src="./js/address.js"></script>
-    <script src="./js/cart.js" defer></script>
+        <!-- CART_END -->
 
-    <!-- CART_END -->
-
-    <div class="modal" id="confirmEmail">
-      <div
-        class="modal-content"
-        style="display: flex; flex-direction: column; align-items: center"
-      >
-        <span class="close" onclick="closeModal('confirmEmail')">&times;</span>
-        <h3>
-          На вашу почту был отправлен код подтверждения, пожалуйста введите его
-        </h3>
-        <section style="width: 200px">
-          <div class="code-container">
-            <input
-              type="text"
-              class="email-code-input first-email-code-input"
-              maxlength="1"
-              oninput="moveToNext(this, 0,
+        <div class="modal" id="confirmEmail">
+            <div
+                class="modal-content"
+                style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                "
+            >
+                <span class="close" onclick="closeModal('confirmEmail')"
+                    >&times;</span
+                >
+                <h3>
+                    На вашу почту был отправлен код подтверждения, пожалуйста
+                    введите его
+                </h3>
+                <section style="width: 200px">
+                    <div class="code-container">
+                        <input
+                            type="text"
+                            class="email-code-input first-email-code-input"
+                            maxlength="1"
+                            oninput="moveToNext(this, 0,
                 document.querySelectorAll('.email-code-input'))"
-              onkeydown="checkBackspace(event, this, 0, document.querySelectorAll('.email-code-input'))"
-            />
+                            onkeydown="checkBackspace(event, this, 0, document.querySelectorAll('.email-code-input'))"
+                        />
 
-            <input
-              type="text"
-              class="email-code-input"
-              maxlength="1"
-              oninput="moveToNext(this, 1, document.querySelectorAll('.email-code-input'))"
-              onkeydown="checkBackspace(event, this, 1, document.querySelectorAll('.email-code-input'))"
-            />
+                        <input
+                            type="text"
+                            class="email-code-input"
+                            maxlength="1"
+                            oninput="moveToNext(this, 1, document.querySelectorAll('.email-code-input'))"
+                            onkeydown="checkBackspace(event, this, 1, document.querySelectorAll('.email-code-input'))"
+                        />
 
-            <input
-              type="text"
-              class="email-code-input"
-              maxlength="1"
-              oninput="moveToNext(this, 2, document.querySelectorAll('.email-code-input'))"
-              onkeydown="checkBackspace(event, this, 2, document.querySelectorAll('.email-code-input'))"
-            />
+                        <input
+                            type="text"
+                            class="email-code-input"
+                            maxlength="1"
+                            oninput="moveToNext(this, 2, document.querySelectorAll('.email-code-input'))"
+                            onkeydown="checkBackspace(event, this, 2, document.querySelectorAll('.email-code-input'))"
+                        />
 
-            <input
-              type="text"
-              class="email-code-input"
-              maxlength="1"
-              oninput="moveToNext(this, 3, document.querySelectorAll('.email-code-input'))"
-              onkeydown="checkBackspace(event, this, 3, document.querySelectorAll('.email-code-input'))"
-            />
+                        <input
+                            type="text"
+                            class="email-code-input"
+                            maxlength="1"
+                            oninput="moveToNext(this, 3, document.querySelectorAll('.email-code-input'))"
+                            onkeydown="checkBackspace(event, this, 3, document.querySelectorAll('.email-code-input'))"
+                        />
 
-            <input
-              type="text"
-              class="email-code-input"
-              maxlength="1"
-              oninput="moveToNext(this, 4, document.querySelectorAll('.email-code-input'))"
-              onkeydown="checkBackspace(event, this, 4, document.querySelectorAll('.email-code-input'))"
-            />
-          </div>
-        </section>
+                        <input
+                            type="text"
+                            class="email-code-input"
+                            maxlength="1"
+                            oninput="moveToNext(this, 4, document.querySelectorAll('.email-code-input'))"
+                            onkeydown="checkBackspace(event, this, 4, document.querySelectorAll('.email-code-input'))"
+                        />
+                    </div>
+                </section>
 
-        <button class="sendCodeAgain sendCodeAgainEmail">
-          Отправить код повторно &nbsp; <span class="emailtimerzero">0:</span
-          ><span class="emailtimer">59</span>
-        </button>
-      </div>
-    </div>
-    <div class="modal" id="universalConfirm">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('universalConfirm')">
-          &times;
-        </span>
-        <h3 class="msg"></h3>
-        <div class="modal-buttons">
-          <button
-            class="confirm-button checkout"
-            onclick="closeModal('universalConfirm')"
-          >
-            OK
-          </button>
+                <button class="sendCodeAgain sendCodeAgainEmail">
+                    Отправить код повторно &nbsp;
+                    <span class="emailtimerzero">0:</span
+                    ><span class="emailtimer">59</span>
+                </button>
+            </div>
         </div>
-      </div>
-    </div>
-
-    <div class="modal" id="confirmAuth">
-      <div class="modal-content">
-        <span class="close" onclick="closeAuthModal()"> &times; </span>
-        <h3 class="authMsg"></h3>
-        <div class="modal-buttons">
-          <button class="confirm-button checkout" onclick="closeAuthModal()">
-            OK
-          </button>
+        <div class="modal" id="universalConfirm">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('universalConfirm')">
+                    &times;
+                </span>
+                <h3 class="msg"></h3>
+                <div class="modal-buttons">
+                    <button
+                        class="confirm-button checkout"
+                        onclick="closeModal('universalConfirm')"
+                    >
+                        OK
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="modal" id="ordeInfo">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('ordeInfo')">&times;</span>
-        <div class="modal-body">
-          <div class="modal-text">
-            <h2>
-              <img src="" class="ordeInfoImg" alt="" />
-              <p class="orderInfoText"></p>
-            </h2>
-          </div>
+        <div class="modal" id="confirmAuth">
+            <div class="modal-content">
+                <span class="close" onclick="closeAuthModal()"> &times; </span>
+                <h3 class="authMsg"></h3>
+                <div class="modal-buttons">
+                    <button
+                        class="confirm-button checkout"
+                        onclick="closeAuthModal()"
+                    >
+                        OK
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="modal" id="authModal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('authModal')">&times;</span>
-        <h4>давайте пройдем авторизацию</h4>
-        <center>
-          <button
-            class="custom-google-button appleID"
-            onclick="onGoogleSignIn()"
-          >
-            <img src="https://cdn-teams-slug.flaticon.com/google.jpg" alt="" />
-            <p>Google</p>
-          </button>
-        </center>
-        <center>
-          <button class="appleID authWithAppleID" id="custom-appleid-signin">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvpQr7jRfGRZXz54j5HdGf6MDP8w5l53a3UQ&s"
-              alt=""
-            />
-            <p>Apple ID</p>
-          </button>
-        </center>
-        <div class="emailAuth">
-          <h4>или через почту</h4>
+        <div class="modal" id="ordeInfo">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('ordeInfo')"
+                    >&times;</span
+                >
+                <div class="modal-body">
+                    <div class="modal-text">
+                        <h2>
+                            <img src="" class="ordeInfoImg" alt="" />
+                            <p class="orderInfoText"></p>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-          <section class="getEmailCode">
-            <label>
-              <span>@</span>
-              <input
-                type="email"
-                name=""
-                id="client_email"
-                class="authWindowEmailInput"
-              />
-            </label>
-            <label class="getButton" style="display: none">
-              <span></span>
-              <button
-                onclick="getEmailCode()"
-                class="show-with-list getCodeButton"
-              >
-                Получить код
-              </button>
-            </label>
-            <label>
-              <span></span>
-              <p class="getCodeAgainButton getAgain" style="display: none">
-                <i>Получить код повторно &nbsp;</i>
-                <i class="getCodeButtonZero">0:</i>
-                <i class="getCodeButtonTimer">59</i>
-              </p>
-            </label>
-            <label style="display: none" class="emailCodeLabel">
-              <p>введите пришедший на почту код</p>
-              <br />
-              <div class="code-container">
-                <input
-                  type="text"
-                  class="code-input first-code-input"
-                  maxlength="1"
-                  oninput="moveToNext(this, 0,
+        <div class="modal" id="authModal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('authModal')"
+                    >&times;</span
+                >
+                <h4>давайте пройдем авторизацию</h4>
+                <center>
+                    <button
+                        class="custom-google-button appleID"
+                        onclick="onGoogleSignIn()"
+                    >
+                        <img
+                            src="https://cdn-teams-slug.flaticon.com/google.jpg"
+                            alt=""
+                        />
+                        <p>Google</p>
+                    </button>
+                </center>
+                <center>
+                    <button
+                        class="appleID authWithAppleID"
+                        id="custom-appleid-signin"
+                    >
+                        <img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvpQr7jRfGRZXz54j5HdGf6MDP8w5l53a3UQ&s"
+                            alt=""
+                        />
+                        <p>Apple ID</p>
+                    </button>
+                </center>
+                <div class="emailAuth">
+                    <h4>или через почту</h4>
+
+                    <section class="getEmailCode">
+                        <label>
+                            <span>@</span>
+                            <input
+                                type="email"
+                                name=""
+                                id="client_email"
+                                class="authWindowEmailInput"
+                            />
+                        </label>
+                        <label class="getButton" style="display: none">
+                            <span></span>
+                            <button
+                                onclick="getEmailCode()"
+                                class="show-with-list getCodeButton"
+                            >
+                                Получить код
+                            </button>
+                        </label>
+                        <label>
+                            <span></span>
+                            <p
+                                class="getCodeAgainButton getAgain"
+                                style="display: none"
+                            >
+                                <i>Получить код повторно &nbsp;</i>
+                                <i class="getCodeButtonZero">0:</i>
+                                <i class="getCodeButtonTimer">59</i>
+                            </p>
+                        </label>
+                        <label style="display: none" class="emailCodeLabel">
+                            <p>введите пришедший на почту код</p>
+                            <br />
+                            <div class="code-container">
+                                <input
+                                    type="text"
+                                    class="code-input first-code-input"
+                                    maxlength="1"
+                                    oninput="moveToNext(this, 0,
                 document.querySelectorAll('.code-input'))"
-                  onkeydown="checkBackspace(event, this, 0, document.querySelectorAll('.code-input'))"
-                />
+                                    onkeydown="checkBackspace(event, this, 0, document.querySelectorAll('.code-input'))"
+                                />
 
-                <input
-                  type="text"
-                  class="code-input"
-                  maxlength="1"
-                  oninput="moveToNext(this, 1, document.querySelectorAll('.code-input'))"
-                  onkeydown="checkBackspace(event, this, 1, document.querySelectorAll('.code-input'))"
-                />
+                                <input
+                                    type="text"
+                                    class="code-input"
+                                    maxlength="1"
+                                    oninput="moveToNext(this, 1, document.querySelectorAll('.code-input'))"
+                                    onkeydown="checkBackspace(event, this, 1, document.querySelectorAll('.code-input'))"
+                                />
 
-                <input
-                  type="text"
-                  class="code-input"
-                  maxlength="1"
-                  oninput="moveToNext(this, 2, document.querySelectorAll('.code-input'))"
-                  onkeydown="checkBackspace(event, this, 2, document.querySelectorAll('.code-input'))"
-                />
+                                <input
+                                    type="text"
+                                    class="code-input"
+                                    maxlength="1"
+                                    oninput="moveToNext(this, 2, document.querySelectorAll('.code-input'))"
+                                    onkeydown="checkBackspace(event, this, 2, document.querySelectorAll('.code-input'))"
+                                />
 
-                <input
-                  type="text"
-                  class="code-input"
-                  maxlength="1"
-                  oninput="moveToNext(this, 3, document.querySelectorAll('.code-input'))"
-                  onkeydown="checkBackspace(event, this, 3, document.querySelectorAll('.code-input'))"
-                />
+                                <input
+                                    type="text"
+                                    class="code-input"
+                                    maxlength="1"
+                                    oninput="moveToNext(this, 3, document.querySelectorAll('.code-input'))"
+                                    onkeydown="checkBackspace(event, this, 3, document.querySelectorAll('.code-input'))"
+                                />
 
-                <input
-                  type="text"
-                  class="code-input"
-                  maxlength="1"
-                  oninput="moveToNext(this, 4, document.querySelectorAll('.code-input'))"
-                  onkeydown="checkBackspace(event, this, 4, document.querySelectorAll('.code-input'))"
-                />
-              </div>
-            </label>
-          </section>
+                                <input
+                                    type="text"
+                                    class="code-input"
+                                    maxlength="1"
+                                    oninput="moveToNext(this, 4, document.querySelectorAll('.code-input'))"
+                                    onkeydown="checkBackspace(event, this, 4, document.querySelectorAll('.code-input'))"
+                                />
+                            </div>
+                        </label>
+                    </section>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="modal" id="exitModal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('exitModal')">&times;</span>
-        <h3>Вы уверены что хотите выйти?</h3>
-        <div class="modal-buttons">
-          <button class="confirm-button" onclick="confirmExitAccont()">
-            Да
-          </button>
-          <button class="cancel-button" onclick="closeModal('exitModal')">
-            Нет
-          </button>
+        <div class="modal" id="exitModal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('exitModal')"
+                    >&times;</span
+                >
+                <h3>Вы уверены что хотите выйти?</h3>
+                <div class="modal-buttons">
+                    <button
+                        class="confirm-button"
+                        onclick="confirmExitAccont()"
+                    >
+                        Да
+                    </button>
+                    <button
+                        class="cancel-button"
+                        onclick="closeModal('exitModal')"
+                    >
+                        Нет
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="popup cookiespopup">
-      <figure>
-        <img src="./logos/images.png" alt="" />
-      </figure>
-      <h1>Мы используем куки</h1>
-      <p>
-        Мы используем куки, чтобы улучшить ваше взаимодействие с сайтом.
-        Разрешите использование куки?
-      </p>
-      <div class="popup-buttons">
-        <button class="accept-cookies" onclick="accept()">Принять</button>
-        <button class="decline-cookies" onclick="decline()">Отказаться</button>
-      </div>
-    </div>
-    <div class="popup cookiesagainstpopup">
-      <figure>
-        <img src="./logos/images.png" alt="" />
-      </figure>
-      <h1>Мы используем куки</h1>
-      <p>
-        Для хранения товаров в корзине и улучшения вашего взаимодействия с
-        сайтом мы используем cookies. Разрешите хранение cookies что бы
-        пользоваться корзиной
-      </p>
-      <div class="popup-buttons">
-        <button class="accept-cookies-again" onclick="accept()">Принять</button>
-        <button class="decline-cookies" onclick="declineagain()">
-          Отказаться
-        </button>
-      </div>
-    </div>
-
-    <div class="modal" id="waiting">
-      <div class="loader">
-        <img src="./logos/waiting.gif" alt="" />
-      </div>
-      <h1>Загрузка...</h1>
-    </div>
-    <!-- </div> -->
-    <footer class="footer">
-      <div class="footer-content">
-        <img
-          src="../logos/ftkrm_logo_full.png"
-          alt="Логотип компании"
-          class="footer-logo"
-          onclick="goTo('/index_page.php')"
-        />
-
-        <div class="footer-info">
-          <p>ООО «Фитомагазин» / ТАА «Фiтакрама»</p>
-
-          <p>УНП 193784232. Зарегистрировано 20.08.2024 г. Мингорисполкомом.</p>
-
-          <p>
-            Р/с BY93ALFA30122F46870010270000 в ЗАО «Альфа-Банк», код ALFABY2X.
-          </p>
-
-          <p>Телефоны ... info@fitokrama.by</p>
-
-          <p>Запись в реестре ...</p>
-
-          <p></p>
+        <div class="popup cookiespopup">
+            <figure>
+                <img src="./logos/images.png" alt="" />
+            </figure>
+            <h1>Мы используем куки</h1>
+            <p>
+                Мы используем куки, чтобы улучшить ваше взаимодействие с сайтом.
+                Разрешите использование куки?
+            </p>
+            <div class="popup-buttons">
+                <button class="accept-cookies" onclick="accept()">
+                    Принять
+                </button>
+                <button class="decline-cookies" onclick="decline()">
+                    Отказаться
+                </button>
+            </div>
+        </div>
+        <div class="popup cookiesagainstpopup">
+            <figure>
+                <img src="./logos/images.png" alt="" />
+            </figure>
+            <h1>Мы используем куки</h1>
+            <p>
+                Для хранения товаров в корзине и улучшения вашего взаимодействия
+                с сайтом мы используем cookies. Разрешите хранение cookies что
+                бы пользоваться корзиной
+            </p>
+            <div class="popup-buttons">
+                <button class="accept-cookies-again" onclick="accept()">
+                    Принять
+                </button>
+                <button class="decline-cookies" onclick="declineagain()">
+                    Отказаться
+                </button>
+            </div>
         </div>
 
-        <div class="footer-links">
-          <a href="/textpage.php?page=persdata"
-            >Обработка персональных данных</a
-          >
-
-          <a href="/textpage.php?page=about_cookies">Хранение cookies</a>
+        <div class="modal" id="waiting">
+            <div class="loader">
+                <img src="./logos/waiting.gif" alt="" />
+            </div>
+            <h1>Загрузка...</h1>
         </div>
-      </div>
-      <!-- BANK_ICONS_BEGIN -->
-      <div class="bankIcons">
-        <div class="iconWrapper">
-          <figure>
-            <img src="./bank logos/Black-11.png" alt="" />
-            <img src="./bank logos/Black-12.png" alt="" />
-            <img src="./bank logos/Black-13.png" alt="" />
-            <img src="./bank logos/Black-15.png" alt="" />
-            <img src="./bank logos/Black-14.png" alt="" />
-            <img src="./bank logos/Black-16.png" alt="" />
-            <img src="./bank logos/Black-17.png" alt="" />
-            <img src="./bank logos/Black-18.png" alt="" />
-            <img src="./bank logos/Black-19.png" alt="" />
-          </figure>
-        </div>
-      </div>
-      <!-- BANK_ICONS_END -->
-    </footer>
+        <!-- </div> -->
+        <footer class="footer">
+            <div class="footer-content">
+                <img
+                    src="../logos/ftkrm_logo_full.png"
+                    alt="Логотип компании"
+                    class="footer-logo"
+                    onclick="goTo('/index_page.php')"
+                />
 
-    <script src="./js/auth.js"></script>
+                <div class="footer-info">
+                    <p>ООО «Фитомагазин» / ТАА «Фiтакрама»</p>
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script>
-      const closeModal = (modalId) => {
-        const modal = document.getElementById(modalId);
+                    <p>
+                        УНП 193784232. Зарегистрировано 20.08.2024 г.
+                        Мингорисполкомом.
+                    </p>
 
-        modal.style.display = "none";
-      };
+                    <p>
+                        Р/с BY93ALFA30122F46870010270000 в ЗАО «Альфа-Банк», код
+                        ALFABY2X.
+                    </p>
 
-      document
-        .querySelector(".authWindowEmailInput")
-        .addEventListener("input", checkAuthEmail);
+                    <p>Телефоны ... info@fitokrama.by</p>
 
-      const SI = document.querySelector(".search-input");
-      if (SI)
-        SI.addEventListener("input", () => {
-          let searchValue = document.querySelector(".search-input").value;
+                    <p>Запись в реестре ...</p>
 
-          if (searchValue.length < 3) {
-            document.querySelector(".search-results").style.display = "none";
-            return;
-          }
+                    <p></p>
+                </div>
 
-          fetch("https://fitokrama.by/search.php?search=" + searchValue)
-            .then((response) => response.json())
-            .then((data) => {
-              let resultsContainer = document.querySelector(".search-results");
-              resultsContainer.innerHTML = "";
-              data.forEach((item) => {
-                let resultItem = document.createElement("div");
-                resultItem.className = "search-result-item";
-                resultItem.textContent = item.name;
-                resultItem.onclick = () => {
-                  window.location.href = item.art;
+                <div class="footer-links">
+                    <a href="/textpage.php?page=persdata"
+                        >Обработка персональных данных</a
+                    >
+
+                    <a href="/textpage.php?page=about_cookies"
+                        >Хранение cookies</a
+                    >
+                </div>
+            </div>
+            <!-- BANK_ICONS_BEGIN -->
+            <div class="bankIcons">
+                <div class="iconWrapper">
+                    <figure>
+                        <img src="./bank logos/Black-11.png" alt="" />
+                        <img src="./bank logos/Black-12.png" alt="" />
+                        <img src="./bank logos/Black-13.png" alt="" />
+                        <img src="./bank logos/Black-15.png" alt="" />
+                        <img src="./bank logos/Black-14.png" alt="" />
+                        <img src="./bank logos/Black-16.png" alt="" />
+                        <img src="./bank logos/Black-17.png" alt="" />
+                        <img src="./bank logos/Black-18.png" alt="" />
+                        <img src="./bank logos/Black-19.png" alt="" />
+                    </figure>
+                </div>
+            </div>
+            <!-- BANK_ICONS_END -->
+        </footer>
+
+        <script src="./js/auth.js"></script>
+
+        <script
+            src="https://accounts.google.com/gsi/client"
+            async
+            defer
+        ></script>
+        <script>
+            const closeModal = (modalId) => {
+                const modal = document.getElementById(modalId);
+
+                modal.style.display = "none";
+            };
+
+            document
+                .querySelector(".authWindowEmailInput")
+                .addEventListener("input", checkAuthEmail);
+
+            const SI = document.querySelector(".search-input");
+            if (SI)
+                SI.addEventListener("input", () => {
+                    let searchValue =
+                        document.querySelector(".search-input").value;
+
+                    if (searchValue.length < 3) {
+                        document.querySelector(
+                            ".search-results"
+                        ).style.display = "none";
+                        return;
+                    }
+
+                    fetch(
+                        "https://fitokrama.by/search.php?search=" + searchValue
+                    )
+                        .then((response) => response.json())
+                        .then((data) => {
+                            let resultsContainer =
+                                document.querySelector(".search-results");
+                            resultsContainer.innerHTML = "";
+                            data.forEach((item) => {
+                                let resultItem = document.createElement("div");
+                                resultItem.className = "search-result-item";
+                                resultItem.textContent = item.name;
+                                resultItem.onclick = () => {
+                                    window.location.href = item.art;
+                                };
+                                resultsContainer.appendChild(resultItem);
+                            });
+                            resultsContainer.style.display = "block";
+                        })
+                        .catch((error) => console.error(error));
+                });
+
+            document.addEventListener("DOMContentLoaded", () => {
+                document.querySelector(".cart-float").style.display =
+                    [cart_count] != 0 ? "flex" : "none";
+            });
+            function goToPage(page) {
+                window.location.href =
+                    "https://fitokrama.by/profile_page.php?page=";
+            }
+            const goTo = (url) => {
+                window.location.href = url;
+            };
+
+            function sendPostRequest(element) {
+                const url = "https://fitokrama.by/delivery_assign.php";
+                const submethodId = element.getAttribute("data-submethod-id");
+                document.querySelector("#waiting").style.display = "flex";
+
+                const data = {
+                    submethod_id: submethodId,
                 };
-                resultsContainer.appendChild(resultItem);
-              });
-              resultsContainer.style.display = "block";
-            })
-            .catch((error) => console.error(error));
-        });
 
-      document.addEventListener("DOMContentLoaded", () => {
-        document.querySelector(".cart-float").style.display =
-          [cart_count] != 0 ? "flex" : "none";
-      });
-      function goToPage(page) {
-        window.location.href = "https://fitokrama.by/profile_page.php?page=";
-      }
-      const goTo = (url) => {
-        window.location.href = url;
-      };
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log("Success:", data);
 
-      function sendPostRequest(element) {
-        const url = "https://fitokrama.by/delivery_assign.php";
-        const submethodId = element.getAttribute("data-submethod-id");
-        document.querySelector("#waiting").style.display = "flex";
+                        window.location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    })
+                    .finally(() => window.location.reload());
+            }
 
-        const data = {
-          submethod_id: submethodId,
-        };
+            function toggleOptions() {
+                const options = document.querySelectorAll(".hidden_option");
+                const toggleBtn = document.getElementById("toggleOptionsBtn");
 
-        fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Success:", data);
+                const showMore =
+                    toggleBtn.textContent.trim() === "Больше вариантов ⋁";
 
-            window.location.reload();
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          })
-          .finally(() => window.location.reload());
-      }
+                if (showMore) {
+                    toggleBtn.textContent = "Меньше вариантов ⋀";
+                    options.forEach((opt) => opt.classList.add("dn"));
+                } else {
+                    toggleBtn.textContent = "Больше вариантов ⋁";
+                    options.forEach((opt) => opt.classList.remove("dn"));
+                }
+            }
 
-      function toggleOptions() {
-        const options = document.querySelectorAll(".hidden_option");
-        const toggleBtn = document.getElementById("toggleOptionsBtn");
+            const gotoCart = () => {
+                document.querySelector("#waiting").style.display = "flex";
+                window.location.href = "/cart_page.php";
+            };
+        </script>
 
-        const showMore = toggleBtn.textContent.trim() === "Больше вариантов ⋁";
-
-        if (showMore) {
-          toggleBtn.textContent = "Меньше вариантов ⋀";
-          options.forEach((opt) => opt.classList.add("dn"));
-        } else {
-          toggleBtn.textContent = "Больше вариантов ⋁";
-          options.forEach((opt) => opt.classList.remove("dn"));
-        }
-      }
-    </script>
-
-    <script src="./js/main.js"></script>
-  </body>
+        <script src="./js/main.js"></script>
+    </body>
 </html>
