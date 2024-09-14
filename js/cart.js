@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((res) => res.json())
       .then((res) => {
         if (res.error_text) {
-          document.querySelector("#universal").style.display = "flex";
+          document.querySelector("#universalConfirm").style.display = "flex";
           document.querySelector(".msg").innerHTML = res.error_text;
           return;
         }
