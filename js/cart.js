@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch("https://fitokrama.by/cart_finish.php")
       .then((res) => res.json())
       .then((res) => {
-        if (res.status === "success") {
+        if (!res.error) {
           window.location.href = res.redirect_url;
         } else {
           document.querySelector("#orderInfo").style.display = "flex";
@@ -208,9 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .catch((err) => {
-        document.querySelector("#orderInfo").style.display = "flex";
-        document.querySelector(".orderInfoImg").src = res.icon;
-        document.querySelector(".orderInfoText").innerHTML = res.text;
+        console.log(err);
       })
       .finally(
         () => (document.querySelector("#waiting").style.display = "none")
