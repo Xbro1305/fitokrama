@@ -10,7 +10,7 @@
 	
 	
 	if (!$cart['sum']>0 OR !$cart['cart_count']>0 OR $cart['datetime_phone_confirmed']==NULL OR $cart['datetime_email_confirmed']==NULL)
-		exit (json_encode(['icon'=>'./logos/problerm_red.png', 'error'=>'Ошибка оформления заказа. Не указаные некоторые необходимые данные.', 'data'=>json_encode([$cart['sum'],$cart['cart_count'],$cart['datetime_phone_confirmed'],$cart['datetime_email_confirmed']])], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		exit (json_encode(['icon'=>'./logos/problerm_red.png', 'error_text'=>'Ошибка оформления заказа. Не указаные некоторые необходимые данные.', 'data'=>json_encode([$cart['sum'],$cart['cart_count'],$cart['datetime_phone_confirmed'],$cart['datetime_email_confirmed']])], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 	
 	// переносим корзину в orders
 	
