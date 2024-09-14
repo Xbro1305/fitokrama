@@ -200,9 +200,8 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((res) => res.json())
       .then((res) => {
         if (res.error_text) {
-          document.querySelector("#orderInfo").style.display = "flex";
-          document.querySelector(".orderInfoImg").src = res.icon;
-          document.querySelector(".orderInfoText").innerHTML = res.text;
+          document.querySelector("#universal").style.display = "flex";
+          document.querySelector(".msg").innerHTML = res.error_text;
           return;
         }
         window.location.href = res.redirect_url;
