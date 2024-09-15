@@ -1,13 +1,13 @@
 <?php
-include '../varsse.php';
 
+include __DIR__ . '/../varsse.php';
 
-function ExecSQL($link,$query)       
+function ExecSQL($link,$query)
 {
-	$dataset = $link->query($query);    
+	$dataset = $link->query($query);
     if ($dataset === false)
         file_put_contents('debug_query_errors', date("Y-m-d H:i:s").'  '.$link->error.'   '.$query.PHP_EOL, FILE_APPEND);
-	
+
 	$answer = array();
     if (is_object($dataset)) { while (($row = $dataset->fetch_assoc()) != false) { $answer[] = $row;}}
      else { $answer = $link->insert_id; }
@@ -32,20 +32,20 @@ function enterregistration ()
 	GLOBAL $link;
 	$backtrace = debug_backtrace();
     $callerFile = basename($backtrace[0]['file']);
-	
+
 	$username = jwt_check($_COOKIE['jwt']);
 	$session_id =  ($_COOKIE['session_id']); // если нет JWT-токена, то надо брать session_id
-	
-	
-	
-	
+
+
+
+
 	//$que = "INSERT INTO `enters` (`session_id`, `method`,`get_params`, `post_params`, `datetime`) VALUES (('$session_id'), '".$callerFile."','".json_encode($_GET)."', '".json_encode($_POST)."', CURRENT_TIMESTAMP() );";
 	//ExecSQL($link,$que);
 	$cart = cart_by_session_id_and_username ($session_id,$username);
 	$client_id = $cart['client_id'];
-	$reddottext = orders_short_info ($client_id);	
+	$reddottext = orders_short_info ($client_id);
 
-	
+
     return [$session_id, $username, $cart, $client_id, $reddottext];
 }
 
@@ -55,10 +55,10 @@ function enterregistration_admin ()
 	return [$username, $staff_level];
 }
 
-function cart_by_session_id_and_username ($session_id,$username) 
+function cart_by_session_id_and_username ($session_id,$username)
 {
 	GLOBAL $link;
-	$que = "SELECT 
+	$que = "SELECT
 			id AS client_id,
 			datetime_last,
 			client_name,
@@ -75,27 +75,27 @@ function cart_by_session_id_and_username ($session_id,$username)
 			datetime_wait,
 			FLOOR(delivery_price) AS delivery_price_rub,
 			LPAD(ROUND((delivery_price - FLOOR(delivery_price)) * 100), 2, '0') AS delivery_price_kop
-		FROM 
-			clients 
-		WHERE 
+		FROM
+			clients
+		WHERE
 			client_email = '$username' OR session_id = '$session_id';
 		";
 	$cart = ExecSQL($link,$que)[0];
-	
+
 	if ($cart==NULL)
 	{
 		$query_add = "INSERT INTO clients (session_id, datetime_last) VALUES ('$session_id', CURRENT_TIMESTAMP());";
 		ExecSQL($link, $query_add);
 		$cart = ExecSQL($link,$que)[0];
 	}
-	
+
 	$client_id = $cart['client_id'];
 	if ($cart ['datetime_email_confirmed']!=NULL)
-		$cart ['client_email_nochange_text'] = 'E-mail подтвержден через авторизацию google. Изменить e-mail можно только после выхода из профиля.';	
-	
+		$cart ['client_email_nochange_text'] = 'E-mail подтвержден через авторизацию google. Изменить e-mail можно только после выхода из профиля.';
+
 	$que = "
-			SELECT 
-			carts_goods.id, 
+			SELECT
+			carts_goods.id,
 			good_art,
 			name,
 			carts_goods.price,
@@ -108,23 +108,23 @@ function cart_by_session_id_and_username ($session_id,$username)
 			ROUND(carts_goods.price * carts_goods.qty, 2) AS good_sum,
 			FLOOR(ROUND(carts_goods.price * carts_goods.qty, 2)) AS good_sum_rub,
 			LPAD(ROUND((ROUND(carts_goods.price * carts_goods.qty, 2) - FLOOR(ROUND(carts_goods.price * carts_goods.qty, 2))) * 100), 2, '0') AS good_sum_kop,
-			goods.pic_name 
-		FROM 
-			carts_goods 
-		JOIN 
-			goods ON goods.art = carts_goods.good_art 
-		WHERE 
-		    client_id = $client_id 
-		    AND carts_goods.qty > 0 
-		ORDER BY 
+			goods.pic_name
+		FROM
+			carts_goods
+		JOIN
+			goods ON goods.art = carts_goods.good_art
+		WHERE
+		    client_id = $client_id
+		    AND carts_goods.qty > 0
+		ORDER BY
 			carts_goods.id;
 	";
 	$cart['goods'] = ExecSQL($link,$que);
 	$cart['cart_count'] = count($cart['goods']);
-	
-	
-	
-	
+
+
+
+
 	$sum_goods = round(array_reduce($cart['goods'], function($carry, $item) {    return $carry + floatval($item['good_sum']);}, 0),2);
 	$sum = round($sum_goods + $cart['delivery_price'],2);
 
@@ -132,15 +132,15 @@ function cart_by_session_id_and_username ($session_id,$username)
 	$cart['sum'] = $sum;
 	$cart['sum_rub'] = f2_rub($sum);
 	$cart['sum_kop'] = f2_kop($sum);
-	
+
 	[ $cart['delivery_logo'], $cart['delivery_text'] ]= info_about_delivery_by_id ($cart['delivery_method'],$cart['delivery_submethod']);
-	
-	
-	
+
+
+
 	return $cart;
 }
-	
-function base64UrlDecode($input) 
+
+function base64UrlDecode($input)
 {
     $remainder = strlen($input) % 4;
     if ($remainder) {
@@ -149,14 +149,14 @@ function base64UrlDecode($input)
     }
     return base64_decode(strtr($input, '-_', '+/'));
 }
-	
+
 function f2z($input) {
     $number = floatval($input);
-    if ($number == 0) 
+    if ($number == 0)
         return '0,00';
     return number_format($number, 2, ',', '');
 }
-	
+
 function f2_rub($input) {
     return (string) intval(floatval($input));
 }
@@ -169,7 +169,7 @@ function f2_kop($input) {
 }
 
 function send_warning_telegram($text)	//	отправить сообщение на telegram
-{	
+{
 		GLOBAL $config;
 		GLOBAL $telegram_warning_token;
 		GLOBAL $telegram_mainadmin_chat_id;
@@ -183,7 +183,7 @@ function send_warning_telegram($text)	//	отправить сообщение �
 			return $response;
 }
 function send_telegram_info_group ($text)	//	отправить сообщение в инфо группу telegram
-{	
+{
 		GLOBAL $config;
 		GLOBAL $telegram_warning_token;
 		GLOBAL $telegram_warning_group_chat_id;
@@ -215,7 +215,7 @@ function cut_fragment($text, $begin, $end, $replacement, &$cut_fragment = null) 
     $end_pos += strlen($end);
 
     $cut_fragment = substr($text, $start_pos, $end_pos - $start_pos);
-    
+
     // Возвращаем текст с заменой фрагмента
 	$cutt = substr_replace($text, $replacement, $start_pos, $end_pos - $start_pos);
     return $cutt;
@@ -228,11 +228,11 @@ function send_sms_smstrafficby ($phone, $text)	//	отправить SMS на sm
 	global $smstrafficby_login;
 	global $smstrafficby_pass;
 	global $smstrafficby_originator;
-	
+
 	if ($text=='') return ('');
     $ekr_text=urlencode($text);
 	$urrl = "https://api.smstraffic.by/multi.php?login=$smstrafficby_login&password=$smstrafficby_pass&originator=$smstrafficby_originator&phones=".$phone."&message=".$ekr_text."&rus=5&route=sms&want_sms_ids=1";
-	
+
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
 			CURLOPT_URL => $urrl,
@@ -242,7 +242,7 @@ function send_sms_smstrafficby ($phone, $text)	//	отправить SMS на sm
 			CURLOPT_MAXREDIRS => 10,
 			CURLOPT_TIMEOUT => 1,
 			CURLOPT_CUSTOMREQUEST => "POST",
-			
+
 			CURLOPT_HTTPHEADER => array(
 				"Content-Type: application/x-www-form-urlencoded",
 				/*"Content-Length: 78",*/
@@ -255,21 +255,21 @@ function send_sms_smstrafficby ($phone, $text)	//	отправить SMS на sm
 
 	$response_arr = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
 	if ($response_arr->result=='OK') $response_arr->success ='true';
-	
+
 	return json_encode($response_arr);
 }
-	
+
 function jwt_check($token)	// проверить jwt-токен
 {
 	GLOBAL $jwtkey;
 	if (count(explode('.', $token))!=3) return;
 	$jwtArr = array_combine(['header', 'payload', 'signature'], explode('.', $token));
-	
+
 	$calculatedHash = hash_hmac('sha256',$jwtArr['header'] . '.' . $jwtArr['payload'], $jwtkey, true);
-	
+
 	if (str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($calculatedHash))!=$jwtArr['signature'])
 			return;
-	
+
 	$ret_payload = json_decode(base64_decode( $jwtArr['payload'] ));
 	$username =  $ret_payload->user_id;
 	$timeexpire = $ret_payload->expire;
@@ -282,12 +282,12 @@ function jwt_check_staff($token)	// проверить jwt-токен
 	GLOBAL $jwtkey_staff;
 	if (count(explode('.', $token))!=3) die(json_encode(['status'=>'error', 'error'=>'authorization_required']));
 	$jwtArr = array_combine(['header', 'payload', 'signature'], explode('.', $token));
-	
+
 	$calculatedHash = hash_hmac('sha256',$jwtArr['header'] . '.' . $jwtArr['payload'], $jwtkey_staff, true);
-	
+
 	if (str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($calculatedHash))!=$jwtArr['signature'])
 			die(json_encode(['status'=>'error', 'error'=>'authorization_required']));
-	
+
 	$ret_payload = json_decode(base64_decode( $jwtArr['payload'] ));
 	$username =  $ret_payload->user_id;
 	$timeexpire = $ret_payload->expire;
@@ -312,7 +312,7 @@ function jwt_create($user_id)	// выпустить jwt-токен
 	$signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $jwtkey, true);
 	$base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
 	return ($base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature);
-		
+
 }
 
 function jwt_create_staff($user_id,$staff_level)	// выпустить jwt-токен сотрудника
@@ -329,16 +329,16 @@ function jwt_create_staff($user_id,$staff_level)	// выпустить jwt-то�
 	$signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $jwtkey_staff, true);
 	$base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
 	return ($base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature);
-		
+
 }
 
-	
+
 function actual_by_auth ($username,$reddottext,$doc,$sum_goods=0)	// доработка html-шаблона doc в зависимости от наличия авторизации $username
 {
 	GLOBAL $min_sum_gratis_delivery;
 	if (strpos($username, 'https://t.me/') === 0 || strpos($username, '@') !== false) 		// пользователь авторизован
-	{ 	
-		$doc = str_replace('account_logo.png', 'account_logo_auth.png', $doc);		
+	{
+		$doc = str_replace('account_logo.png', 'account_logo_auth.png', $doc);
 		$doc = str_replace('[account_action]', 'showAccountActions()', $doc);
 		$doc = cut_fragment($doc, '<!-- NONAUTHORIZED_START -->', '<!-- NONAUTHORIZED_END -->','');
 	}
@@ -347,52 +347,52 @@ function actual_by_auth ($username,$reddottext,$doc,$sum_goods=0)	// дораб�
 		$doc = str_replace('[account_action]', 'showAuthMetods()', $doc);
 		$doc = cut_fragment($doc, '<!-- AUTHORIZED_START -->', '<!-- AUTHORIZED_END -->','');
 	}
-	
+
 	if ($reddottext=='') $doc = cut_fragment($doc, '<!-- RED_DOT_START -->','<!-- RED_DOT_END -->','');	// красная точка на профиле
 	$doc = str_replace('[reddottext]'	, $reddottext, $doc);
-	
-if ($sum_goods==0 || is_null($sum_goods)) 
+
+if ($sum_goods==0 || is_null($sum_goods))
 		$doc = str_replace('[main_text]', "БЕСПЛАТНАЯ ДОСТАВКА до пункта выдачи ОТ $min_sum_gratis_delivery руб.", $doc);
-	
+
 		if ($sum_goods>=$min_sum_gratis_delivery) $doc = str_replace('[main_text]', "✓ БЕСПЛАТНАЯ ДОСТАВКА до пункта выдачи!", $doc);
 		else $doc = str_replace('[main_text]', "Добавь товар на ".($min_sum_gratis_delivery-$sum_goods)." руб. для бесплатной доставки!", $doc);
-	
-	
+
+
 	return $doc;
-	
+
 }
 
 function info_about_delivery_by_id ($delivery_method,$delivery_submethod)
 {
 	GLOBAL $link;
 	$delivery_partner = ExecSQL($link,"SELECT * FROM `delivery_partners` WHERE `id`='$delivery_method'");
-	
+
 	if (is_null($delivery_partner)) return NULL;
-	
+
 	$delivery_logo = $delivery_partner[0]['logo'];
 	$delivery_prefix = $delivery_partner[0]['prefix'];
 	$delivery_text = $delivery_partner[0]['name'];
-	
+
 	$que = "SELECT * FROM `delivery_points` WHERE CONCAT('$delivery_prefix','-',`unique_id`)='$delivery_submethod'";
 	$sub_delivery = ExecSQL($link,$que);
-	
-	
+
+
 	if (count($sub_delivery)>0)	$delivery_text .= ' '.$sub_delivery[0]['address'].' '.$sub_delivery[0]['name']. ' '.$sub_delivery[0]['comment'];
-						else	$delivery_text .= ' Доставка до дверей'; 
-			
+						else	$delivery_text .= ' Доставка до дверей';
+
 	$delivery_text = htmlspecialchars($delivery_text, ENT_QUOTES, 'UTF-8');
 	return [$delivery_logo, $delivery_text];
 }
 
-function orders_short_info($client_id = null, $selection = null) // кратко требуются ли действия клиентов по ранее сделанным заказам 
+function orders_short_info($client_id = null, $selection = null) // кратко требуются ли действия клиентов по ранее сделанным заказам
 {
 	GLOBAL $link;
 	$reddottext = '';
 
-	
+
 	if (count(ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id AND datetime_delivery IS NOT NULL AND datetime_finish IS NULL AND datetime_cancel IS NOT NULL "))>0) $reddottext = 'Посылка ждёт вас!';
 	if (count(ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id AND datetime_paid IS NULL AND  datetime_cancel IS NOT NULL "))>0) $reddottext = 'Необходимо оплатить!';
-	
+
 	return $reddottext;
 }
 
@@ -407,69 +407,69 @@ function all_about_order($order_number,$type=NULL) // подробности п�
 	if (count($orders)==0) return NULL;
 	$order = $orders[0];
 		list($order['delivery_logo'], $order['delivery_text']) = info_about_delivery_by_id($order['delivery_method'],$order['delivery_submethod']);
-		
-		if ($type=='all_info') 
-			$que = "SELECT good_art,name,pic_name,barcode,orders_goods.price,orders_goods.qty,0 AS qty_as FROM `orders_goods` 
+
+		if ($type=='all_info')
+			$que = "SELECT good_art,name,pic_name,barcode,orders_goods.price,orders_goods.qty,0 AS qty_as FROM `orders_goods`
 				JOIN goods ON goods.art=orders_goods.good_art
 				WHERE order_id={$order['id']};";
-			else $que = "SELECT good_art,name,pic_name,orders_goods.price,orders_goods.qty FROM `orders_goods` 
+			else $que = "SELECT good_art,name,pic_name,orders_goods.price,orders_goods.qty FROM `orders_goods`
 				JOIN goods ON goods.art=orders_goods.good_art
 				WHERE order_id={$order['id']};";
-		
+
 		$order['goods'] = ExecSQL($link,$que);
-		
+
 		$order['paid'] = ExecSQL($link,"SELECT SUM(`sum`) AS paid FROM `payments` WHERE order_id={$order['id']};")[0]['paid'];
 		$order['steps'] = ExecSQL($link,"SELECT datetime,status FROM `orders_steps` WHERE order_id={$order['id']} ORDER BY datetime;");
 		if ($order['paid'] == NULL) $order['paid'] = 0;
-	
-		if ($order['datetime_cancel']!=NULL) 
+
+		if ($order['datetime_cancel']!=NULL)
 		{
 			$order['status']='cancelled';
 			$order['status_text_admin']='❌️ Заказ отменен.';
 			$order['status_text']='❌️ Заказ отменен.';
 			$order['status_color']='#bda6ae';
 		}
-		
-		elseif ($order['datetime_paid']==NULL) 
+
+		elseif ($order['datetime_paid']==NULL)
 		{
 			$order['status']='need_to_pay';
 			$order['status_text_admin']='⏰ Ждем оплаты клиента';
 			$order['status_text']='⚠️ Необходимо оплатить!';
 			$order['status_color']='#ff0000';
 		}
-		
-		elseif ($order['datetime_assembly']==NULL) 
+
+		elseif ($order['datetime_assembly']==NULL)
 		{
 			$order['status']='in_process_assembly';
 			$order['status_text_admin']='🤺 на сборку!';
 			$order['status_text']='⌛ Оплата принята! В процессе...';
 			$order['status_color']='#bfb524';
 		}
-		
-		elseif ($order['datetime_sent']==NULL) 
+
+		elseif ($order['datetime_sent']==NULL)
 		{
 			$order['status']='waiting_for_delivery';
 			$order['status_text_admin']='🚀 Необходимо отправить';
 			$order['status_text']='⌛ Оплата принята! В процессе...';
 			$order['status_color']='#bfb524';
 		}
-		
-		elseif ($order['datetime_delivery']==NULL) 
+
+		elseif ($order['datetime_delivery']==NULL)
 		{
 			$order['status']='in_process_sending';
 			$order['status_text_admin']='🚛 На стороне почты';
 			$order['status_text']='🚛 В доставке';
 			$order['status_color']='#bf8424';
 		}
-		
-		elseif ($order['datetime_finish']==NULL) 
+
+		elseif ($order['datetime_finish']==NULL)
 		{
 			$order['status']='waiting_for_receive';
 			$order['status_text_admin']='🫡 Клиент должен забрать!';
 			$order['status_text']='🫡 Посылка ждет вас!';
 			$order['status_color']='#bf8424';
 		}
-		
+
 		else
 		{
 			$order['status']='finished';
@@ -477,7 +477,7 @@ function all_about_order($order_number,$type=NULL) // подробности п�
 			$order['status_text']='✅ Заказ завершен!';
 			$order['status_color']='#b0aaa0';
 		}
-	
+
 	return $order;
 };
 
@@ -499,7 +499,7 @@ function generateTable($headers, $data) {
         foreach ($row as $cell) {
             // Обработка тегов для выравнивания и цветового оформления
             $style = "border: 1px solid black; text-align: center; padding: 5px; min-width: 100px;";
-            
+
             // Выравнивание по левому краю
             if (strpos($cell, '{left}') !== false) {
                 $style = str_replace('{left}', '', $style);
@@ -515,10 +515,10 @@ function generateTable($headers, $data) {
                 $style = str_replace('{red}', '', $style);
                 $style .= " background-color: red; color: white;";
             }
-            
+
             // Очистка кастомных тегов из значения
             $cleanCell = str_replace(['{left}', '{right}', '{red}' ], '', $cell);
-            
+
             $html .= "<td style='$style'>$cleanCell</td>";
         }
         $html .= "</tr>";
@@ -532,12 +532,12 @@ function generateTable($headers, $data) {
 function staff_auth($staff_login,$staff_password)	//	определить роль пользователя
 {
 	GLOBAL $link;
-	
+
 	//$staff_login = 'kenherli@gmail.com'; // на время тестирования убираю тут
 	//$staff_password = '$2a$12$YsufNURzb2bSIzaF3rrOZegoKdHIqPTsJnV3XsQroOWUilH9bRpWe';
-	
+
 	$que = "SELECT * FROM `staff` WHERE staff_email='$staff_login' AND password_hash='$staff_password';";
-	
+
 	$staffs = ExecSQL($link,$que);
 	if (count($staffs)==0) die (json_encode(['error'=>'Authorization error']));
 	$staff_role = $staffs[0]['role'];
@@ -545,10 +545,10 @@ function staff_auth($staff_login,$staff_password)	//	определить рол
 	$staff_id = $staffs[0]['id'];
 	$que = "UPDATE staff set datetime_last=CURRENT_TIMESTAMP() WHERE id=$staff_id";
 	ExecSQL($link,$que);
-	
+
 	return [$staff_id,$staff_name,$staff_role];
 }
-	
+
 function generateRow($tab1)
 {
     $rowHtml = "<tr>";
@@ -609,15 +609,15 @@ function haversineGreatCircleDistance($lat1, $lng1, $lat2, $lng2, $earthRadius =
 
 function qty_weight_volume_by_goods($goods)			// количество, вес, объем по набору товаров
 {
-	
-	$qty = round(array_reduce($goods, function($qtt, $item) {    return $qtt + floatval($item['qty']);}, 0),0); 
+
+	$qty = round(array_reduce($goods, function($qtt, $item) {    return $qtt + floatval($item['qty']);}, 0),0);
 	$weight = $qty*0.15; 					// !!!!!!!!!!!!!!!!!!!! подсчет веса примитивный!
 	$volume = round($qty*0.2*0.2*0.2,2); 			// !!!!!!!!!!!!!!!!!!!! подсчет объема примитивный!
 
 	return [$qty, $weight, $volume];
-	
-}	
-	
+
+}
+
 
 
 
