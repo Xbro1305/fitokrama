@@ -17,6 +17,10 @@ body {
     overflow-x: hidden;
 }
 
+body > div {
+    overflow-x: hidden;
+}
+
 a {
     text-decoration: none;
 
