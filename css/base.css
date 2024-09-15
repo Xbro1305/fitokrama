@@ -1,232 +1,234 @@
 /* Базовые стили */
 
 * {
-  box-sizing: border-box;
-  font-family: "PT Sans", sans-serif !important;
+    box-sizing: border-box;
+    font-family: "PT Sans", sans-serif !important;
 
-  /* color :R55 G78 B66 */
+    /* color :R55 G78 B66 */
 
-  color: rgb(55, 78, 66);
+    color: rgb(55, 78, 66);
 }
 
 body {
-  margin: 0;
+    margin: 0;
 
-  font-family: "PT Sans", sans-serif !important;
+    font-family: "PT Sans", sans-serif !important;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 a {
-  text-decoration: none;
+    text-decoration: none;
 
-  color: inherit;
+    color: inherit;
 }
 
 a:hover,
 button:hover {
-  background: #00000010;
-  cursor: pointer;
+    background: #00000010;
+    cursor: pointer;
 }
 
 input {
-  font-family: "PT Sans", sans-serif;
-  outline: none;
+    font-family: "PT Sans", sans-serif;
+    outline: none;
 }
 
 body ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .redDot {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: red;
-  border-radius: 50%;
-  top: 0;
-  right: 0;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    top: 0;
+    right: 0;
 }
 
 .profileButton:hover .redDot {
-  display: none;
+    display: none;
 }
 
 .needAction {
-  display: none;
-  font-size: 12px;
-  background: #fff;
-  border: 1px solid #ccc;
-  width: 110px;
-  text-align: center;
-  z-index: 999999;
+    display: none;
+    font-size: 12px;
+    background: #fff;
+    border: 1px solid #ccc;
+    width: 110px;
+    text-align: center;
+    z-index: 999999;
 }
 
 .profileButton:hover .needAction {
-  display: block;
-  position: absolute;
-  top: -20px;
-  left: 60%;
-  transform: translateX(-50%);
+    display: block;
+    position: absolute;
+    top: -20px;
+    left: 60%;
+    transform: translateX(-50%);
 }
 
 .popup {
-  position: fixed;
-  z-index: 100;
-  left: 10px;
-  bottom: 10px;
-  overflow: auto;
-  background-color: rgb(255, 255, 255);
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  border-radius: 25px;
-  padding: 15px;
-  display: none;
-  flex-direction: column;
-  justify-content: center !important;
-  max-width: 300px;
-  width: 100%;
+    position: fixed;
+    z-index: 100;
+    left: 10px;
+    bottom: 10px;
+    overflow: auto;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 25px;
+    padding: 15px;
+    display: none;
+    flex-direction: column;
+    justify-content: center !important;
+    max-width: 300px;
+    width: 100%;
 }
 
 .popup figure {
-  width: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
 }
 
 .popup img {
-  width: 80%;
+    width: 80%;
 }
 
 .popup h1 {
-  font-size: 24px;
-  color: rgb(97, 129, 98);
-  margin: 0 0 20px;
-  text-align: center;
+    font-size: 24px;
+    color: rgb(97, 129, 98);
+    margin: 0 0 20px;
+    text-align: center;
 }
 
 .popup p {
-  font-size: 16px;
-  color: #666;
-  margin: 0 0 20px;
-  max-width: 360px;
-  width: 100%;
-  text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin: 0 0 20px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
 }
 
 .popup-buttons {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .popup button {
-  background-color: rgb(97, 129, 98);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 10px;
+    background-color: rgb(97, 129, 98);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px;
 }
 
 /* Адаптивность */
 
 @media (max-width: 768px) {
-  body {
-    padding-top: 0px !important;
-  }
+    body {
+        padding-top: 0px !important;
+    }
 
-  .top-bar,
-  .bottom-bar {
-    flex-direction: column;
+    .top-bar,
+    .bottom-bar {
+        flex-direction: column;
 
-    align-items: flex-start;
-  }
+        align-items: flex-start;
+    }
 
-  .contact-info,
-  .menu-buttons,
-  .account-buttons {
-    justify-content: space-between;
+    .contact-info,
+    .menu-buttons,
+    .account-buttons {
+        justify-content: space-between;
 
-    width: 100%;
-  }
+        width: 100%;
+    }
 
-  .bottom-bar {
-    align-items: center;
-  }
+    .bottom-bar {
+        align-items: center;
+    }
 
-  .company-logo {
-    height: 60px;
+    .company-logo {
+        height: 60px;
 
-    margin-bottom: 10px;
-  }
+        margin-bottom: 10px;
+    }
 
-  .search-container {
-    width: 100%;
-  }
+    .search-container {
+        width: 100%;
+    }
 
-  .search-input {
-    border-radius: 25px;
-  }
+    .search-input {
+        border-radius: 25px;
+    }
 
-  .product-card {
-    flex-direction: column;
+    .product-card {
+        flex-direction: column;
 
-    align-items: center;
-  }
+        align-items: center;
+    }
 
-  .product-image {
-    width: 100%;
+    .product-image {
+        width: 100%;
 
-    height: auto;
+        height: auto;
 
-    margin-bottom: 20px;
-  }
+        margin-bottom: 20px;
+    }
 
-  .product-info {
-    align-items: center;
+    .product-info {
+        align-items: center;
 
-    text-align: center;
-  }
+        text-align: center;
+    }
 
-  .product-actions {
-    margin-left: 0;
+    .product-actions {
+        margin-left: 0;
 
-    margin-top: 20px;
+        margin-top: 20px;
 
-    flex-direction: column;
-  }
+        flex-direction: column;
+    }
 
-  .delivery-time {
-    position: static;
+    .delivery-time {
+        position: static;
 
-    margin-top: 10px;
-  }
+        margin-top: 10px;
+    }
 
-  .similar-products .product-item {
-    width: 100%;
+    .similar-products .product-item {
+        width: 100%;
 
-    margin-bottom: 20px;
-  }
+        margin-bottom: 20px;
+    }
 }
 
 .maintext {
-  width: 100%;
-  padding: 10px 0;
-  font-size: 18px;
-  position: sticky;
-  top: 181px;
-  background: rgb(97, 129, 98);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  z-index: 999999 !important;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 18px;
+    position: sticky;
+    top: 181px;
+    background: rgb(97, 129, 98);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    z-index: 999999 !important;
 }
 
 @media (max-width: 768px) {
-  .maintext {
-    font-size: 16px;
-    position: sticky;
-    top: 0 !important;
-  }
+    .maintext {
+        font-size: 16px;
+        position: sticky;
+        top: 0 !important;
+    }
 }
