@@ -13,6 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
   const loginDate = ref(localStorage.getItem('loginDate'))
   const email = ref(localStorage.getItem('email'))
   const password = ref(localStorage.getItem('password'))
+  const role = ref(localStorage.getItem('role'))
 
   const isAuthenticated = computed(() => {
     const date = new Date()
@@ -32,18 +33,25 @@ export const useAuthStore = defineStore('auth', () => {
     })
 
     if (data.value) {
-      console.log(data.value)
+      if (data.value.error) {
+        console.log(data.value.error)
+      }
+      else if (data.value.role) {
+        const date = new Date()
+        loginDate.value = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+        email.value = mail
+        password.value = pass
+        role.value = data.value.role
 
-      const date = new Date()
-      loginDate.value = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
-      email.value = mail
-      password.value = pass
+        localStorage.setItem('loginDate', loginDate.value)
+        localStorage.setItem('email', email.value)
+        localStorage.setItem('password', password.value)
+        localStorage.setItem('role', data.value.role)
 
-      localStorage.setItem('loginDate', loginDate.value)
-      localStorage.setItem('email', email.value)
-      localStorage.setItem('password', password.value)
+        navigateTo('/print')
+      }
     }
   }
 
-  return { isAuthenticated, login }
+  return { isAuthenticated, login, role }
 })
