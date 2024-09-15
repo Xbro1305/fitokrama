@@ -20,12 +20,12 @@
 	$code = random_int(10001,99999);
 	$longcode = bin2hex(random_bytes(32));
 	
-	$text = 'Введите код [code] или пройдите по ссылке https://fitokrama.by/confirm_email.php?longcode=[longcode] !';					// !!!!!!!!!!!!!!! взять из шаблона
+	$text = '🌿 Введите код [code] или пройдите по ссылке https://fitokrama.by/confirm_email.php?longcode=[longcode] !';					// !!!!!!!!!!!!!!! взять из шаблона
 	
 	$text = str_replace('[code]', $code, $text);
 	$text = str_replace('[longcode]', $longcode, $text);
 		
-	$rep = mail_sender($email, 'Код подтверждения Fitokrama - noreply', $text);
+	$rep = mail_sender($email, '🌿 Код подтверждения Fitokrama - noreply', $text);
 	
 	$que = "INSERT INTO email_confirm (client_id,email,code,longcode,datetime,report) VALUES ($client_id,'$email',$code,'$longcode',CURRENT_TIMESTAMP(),'$rep');";
 	
