@@ -147,9 +147,11 @@ function refresh_europochta_data() 			//обновление базы пункт
 	exit (json_encode(['status'=>'ok', 'message'=> "Activated $activated points, Deactivated $deactivated points"])); 
 }
 
-function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$client_address=NULL) 		//	произвести расчет стоимости доставки
+function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$client_address) 		//	произвести расчет стоимости доставки
 {
 	GLOBAL $link;
+	//echo (json_encode([$delivery_city,$weight,$volume,$selfDelivery,$client_address])).PHP_EOL;
+	
 	
 	$que = "SELECT * FROM `delivery_points` WHERE partner_id=3 AND address LIKE '%$delivery_city%' LIMIT 1;";
 	$eur_points = ExecSQL($link,$que);
@@ -158,7 +160,7 @@ function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$client_add
 		
 	$data=array();
 	$data['GoodsId'] = 836884;						// код отправления - посылка
-	if ($selfdelivery)
+	if ($selfDelivery)
 	{
 		$data['PostDeliveryTypeId'] = 1; 				// от отделения до отделения
 		$data['WarehouseIdFinish'] = $WarehouseIdFinish;	// ID пункта выдачи
@@ -168,8 +170,7 @@ function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$client_add
 		$data['PostDeliveryTypeId'] = 2; 				// от отделения до дверей
 		$data['Adress1IdReciever'] = europost_address_to_id($client_address); 				//  ID адреса выдачи (именно адреса, а не пункта!)
 	}
-	
-	$data['PostalWeightId'] = $europost_weight_id($weight);		// дип диапазона веса
+	$data['PostalWeightId'] = europost_weight_id($weight);		// дип диапазона веса
 	$data['IsJuristic'] = 1; 				// 1 - юрлицо
 	$data['isOversize'] = 0; 				// 
 	$data['IsRelabeling'] = 0; 				// 
@@ -187,7 +188,6 @@ function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$client_add
 	}
 	$calc ['price']=$res['Table'][0]['PriceWithTax'];
 	$calc ['days']=3;
-	//send_warning_telegram($weight.' - '.$volume.' - '.$calc ['price']);
 	return($calc);
 
 

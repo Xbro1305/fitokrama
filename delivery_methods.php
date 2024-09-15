@@ -43,6 +43,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 	if ($lat==NULL OR $lng==NULL) return NULL;
 	
 	$methods ['address'] = $address;
+	
 	$methods ['lat'] = $lat;
 	$methods ['lng'] = $lng;
 	$methods ['methods'] = ExecSQL($link,'SELECT id AS method_id, name, logo, prefix, gratis_delivery_by_sum FROM `delivery_partners` WHERE `available`=TRUE ORDER by `priority`;');
@@ -139,7 +140,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 			}
 			if ($method_id==3)	//	это Европочта - пункт выдачи
 			{
-					$eur_res = eur_calculator($city,$weight,$volume,true);
+					$eur_res = eur_calculator($city,$weight,$volume,true,$address);
 					$method['price'] = $eur_res['price'];			//	тут заложена логика, что цена не зависит от пункта доставки
 					$method['price_rub'] = f2_rub($method['price']);
 					$method['price_kop'] = f2_kop($method['price']);
@@ -195,6 +196,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 					
 					$method['note'] = 'Время доставки указано ориентировочно';
 
+					$point = array();
 					$point['point_id'] = $method['prefix'].'-'.str_pad(base_convert(crc32($client_id), 10, 36), 9, '0', STR_PAD_LEFT); // уникальный хэш от $client_id
 					$point['address'] = $address;
 					$point['name'] = 'Доставка - курьер Европочты';
@@ -206,10 +208,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 					
 					$method['points'][] = $point;
 					
-					$method['duration_text'] = "Через ".round(111)." дн. после заказа";
 					$method['note'] = 'Дата прибытия указана ориентировочно';
-				
-				$method['points'] = ExecSQL($link,$que);
 			}
 			if ($method_id==4)	//	это DPD-доставка до дверей
 			{
