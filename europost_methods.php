@@ -66,7 +66,7 @@ function europochta_post($method, $data, $test = false)
 			europost_get_jwt();			//	 надо получить заново токен
 			europochta_post($method, $data);	// и повторить
 		}
-		else send_warning_telegram('Europost. Ошибка запроса. '.json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		else return NULL; //send_warning_telegram('Europost. Ошибка запроса. '.json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 			
 	
 	if (json_last_error() !== JSON_ERROR_NONE) {
@@ -183,7 +183,7 @@ function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$client_add
 	$res = europochta_post('Postal.CalculationTariff', $data,false);
 	if (!isset($res['Table'][0]['PriceWithTax']))
 	{
-		send_warning_telegram('Ошибка тарификации Евроопт');
+		//send_warning_telegram('Ошибка тарификации Евроопт');
 		return NULL;
 	}
 	$calc ['price']=$res['Table'][0]['PriceWithTax'];

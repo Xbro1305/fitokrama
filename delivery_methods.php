@@ -189,6 +189,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 			if ($method_id==7)	//	это Европочта - доставка до дверей!
 			{
 					$eur_res = eur_calculator($city,$weight,$volume,false,$address); // false - это не самовзятие, а доставка до дверей
+					if (!isset($eur_res['price'])) continue;	//	нет смысла продолжать метод, если нет тарификации
 					$method['price'] = $eur_res['price'];			//	тут заложена логика, что цена не зависит от пункта доставки
 					$method['price_rub'] = f2_rub($method['price']);
 					$method['price_kop'] = f2_kop($method['price']);
