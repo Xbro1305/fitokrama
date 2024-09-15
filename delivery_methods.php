@@ -185,6 +185,32 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 				
 				$method['points'] = ExecSQL($link,$que);
 			}
+			if ($method_id==7)	//	это Европочта - доставка до дверей!
+			{
+					$eur_res = eur_calculator($city,$weight,$volume,false,$address); // false - это не самовзятие, а доставка до дверей
+					$method['price'] = $eur_res['price'];			//	тут заложена логика, что цена не зависит от пункта доставки
+					$method['price_rub'] = f2_rub($method['price']);
+					$method['price_kop'] = f2_kop($method['price']);
+					$method['duration_text'] = "Через ".$eur_res['days']." дн. после заказа";
+					
+					$method['note'] = 'Время доставки указано ориентировочно';
+
+					$point['point_id'] = $method['prefix'].'-'.str_pad(base_convert(crc32($client_id), 10, 36), 9, '0', STR_PAD_LEFT); // уникальный хэш от $client_id
+					$point['address'] = $address;
+					$point['name'] = 'Доставка - курьер Европочты';
+					$point['comment'] = '';
+					$point['lat'] = $lat;
+					$point['lng'] = $lng;
+					$point['distance'] = 0;
+					$point['walking_time'] = 0;
+					
+					$method['points'][] = $point;
+					
+					$method['duration_text'] = "Через ".round(111)." дн. после заказа";
+					$method['note'] = 'Дата прибытия указана ориентировочно';
+				
+				$method['points'] = ExecSQL($link,$que);
+			}
 			if ($method_id==4)	//	это DPD-доставка до дверей
 			{
 				$dpd_res = dpd_calculator($city,0.5,0.4*0.2*0.1,false,$postindex);

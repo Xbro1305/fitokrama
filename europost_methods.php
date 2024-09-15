@@ -147,11 +147,9 @@ function refresh_europochta_data() 			//обновление базы пункт
 	exit (json_encode(['status'=>'ok', 'message'=> "Activated $activated points, Deactivated $deactivated points"])); 
 }
 
-function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL) 		//	произвести расчет стоимости доставки
+function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$client_address=NULL) 		//	произвести расчет стоимости доставки
 {
 	GLOBAL $link;
-	$PostalWeightId = europost_weight_id($weight);
-	
 	
 	$que = "SELECT * FROM `delivery_points` WHERE partner_id=3 AND address LIKE '%$delivery_city%' LIMIT 1;";
 	$eur_points = ExecSQL($link,$que);
@@ -160,10 +158,18 @@ function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL
 		
 	$data=array();
 	$data['GoodsId'] = 836884;						// код отправления - посылка
-	$data['PostDeliveryTypeId'] = 1; 				// от отделения до отделения
-	$data['PostalWeightId'] = $PostalWeightId;		// дип диапазона веса
-	$data['WarehouseIdFinish'] = $WarehouseIdFinish;	// ID пункта выдачи
-	//$data['Adress1IdReciever'] = ; 				//  ID адреса выдачи
+	if ($selfdelivery)
+	{
+		$data['PostDeliveryTypeId'] = 1; 				// от отделения до отделения
+		$data['WarehouseIdFinish'] = $WarehouseIdFinish;	// ID пункта выдачи
+	}
+	else 
+	{
+		$data['PostDeliveryTypeId'] = 2; 				// от отделения до дверей
+		$data['Adress1IdReciever'] = europost_address_to_id($client_address); 				//  ID адреса выдачи (именно адреса, а не пункта!)
+	}
+	
+	$data['PostalWeightId'] = $europost_weight_id($weight);		// дип диапазона веса
 	$data['IsJuristic'] = 1; 				// 1 - юрлицо
 	$data['isOversize'] = 0; 				// 
 	$data['IsRelabeling'] = 0; 				// 
@@ -261,33 +267,38 @@ function europost_get_lable($order_number,$track_number)	// получить н�
 }
 	
 
-function europost_send($order) 
+function europost_send($order,$selfdelivery=true) 	//	selfpickup=true - до отделения, selfpickup=false - до дверей
 {
 	
 	[$qty, $weight, $volume] = qty_weight_volume_by_goods($order['goods']);
 	
-	$PostalWeightId = europost_weight_id($weight);
+	$PostalWeightId = europost_weight_id($weight);				//	взять ID веса
 	$WarehouseIdFinish = preg_replace('/\D/', '', $order['delivery_submethod']);
 	
 	$order_number = $order['number'];
+	$client_address = $order['client_address'];
 	$sum = $order['sum'];
 	$request_id = 'FTKR_'.$order_number.'_'.strtoupper(substr(md5(rand(1,1000)), 0, 4));
 	
 	$data = array();
 	$data['GoodsId'] = 836884;						// код отправления - посылка
-	$data['PostDeliveryTypeId'] = 1; 				// от отделения до отделения
 	$data['PostalWeightId'] = $PostalWeightId;		// дип диапазона веса
 	$data['WarehouseIdStart'] = 70130012 ;			// ID пункта выдачи - Жебрака
-	$data['WarehouseIdFinish'] = $WarehouseIdFinish;	// ID пункта выдачи
-	//$data['Adress1IdReciever'] = ; 				//  ID адреса выдачи
+	if ($selfdelivery)			// вариант выдачи - до отделения
+	{
+		$data['PostDeliveryTypeId'] = 1;		// от отделения до отделения (1) или до дверей (2)
+		$data['WarehouseIdFinish'] = $WarehouseIdFinish;	// ID пункта выдачи
+	}
+	else			// вариант до дверей
+	{
+		$data['PostDeliveryTypeId'] = 2;		// от отделения до отделения (1) или до дверей (2)
+		$data['Adress1IdReciever'] = europost_address_to_id($client_address); 				//  ID адреса выдачи (именно адреса, а не пункта!)
+	}
 	
 	$data['CashOnDeliveryDeclareValueSum'] = $sum;
-	
 	$data['PhoneNumberReciever'] = $order['client_phone'];	// телефон клиента
 	
-	
 	$name_parts = explode(' ', $order['client_name'], 3);
-	
 	$client_surname = $name_parts[0]; // Все, что до первого пробела
 	$client_name_1 = isset($name_parts[1]) ? $name_parts[1] : ' '; // 2-я часть
 	$client_name_2 = isset($name_parts[2]) ? $name_parts[2] : ' '; // 3-я часть
