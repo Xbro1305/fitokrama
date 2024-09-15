@@ -1,6 +1,6 @@
 <?php
+include '../varsse.php';
 
-include __DIR__ . '/../varsse.php';
 
 function ExecSQL($link,$query)
 {
