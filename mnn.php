@@ -1,5 +1,7 @@
 <?php
 include '../varsse.php';
+	use PHPMailer\PHPMailer\PHPMailer;
+	use PHPMailer\PHPMailer\Exception;
 
 
 function ExecSQL($link,$query)       
@@ -30,8 +32,8 @@ function firstconnect ()
 function enterregistration ()
 {
 	GLOBAL $link;
-	$backtrace = debug_backtrace();
-    $callerFile = basename($backtrace[0]['file']);
+	//$backtrace = debug_backtrace();
+    //$callerFile = basename($backtrace[0]['file']);
 	
 	$username = jwt_check($_COOKIE['jwt']);
 	$session_id =  ($_COOKIE['session_id']); // если нет JWT-токена, то надо брать session_id
@@ -221,6 +223,35 @@ function cut_fragment($text, $begin, $end, $replacement, &$cut_fragment = null) 
     return $cutt;
 }
 
+
+function send_sms_mysim ($phone_number, $message)	//	отправить SMS на шлюз
+{
+	global $sim_gateway_ip; 
+	global $sim_gateway_username; 
+	global $sim_gateway_password;
+	global $sim_gateway_port;
+	
+	$url = "http://$sim_gateway_ip/cgi/WebCGI?1500101=account=$sim_gateway_username&password=$sim_gateway_password&port=$sim_gateway_port&destination=$phone_number&content=$message";
+
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+	$response = curl_exec($ch);
+	curl_close($ch);
+
+	echo 'Ответ шлюза: ' . $response;
+	send_warning_telegram($url);
+	send_warning_telegram($response);
+	return $response;
+/*
+
+	$response_arr = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
+	if ($response_arr->result=='OK') $response_arr->success ='true';
+	
+	return json_encode($response_arr);
+*/	
+}
 
 function send_sms_smstrafficby ($phone, $text)	//	отправить SMS на smstrafficby
 {
@@ -618,6 +649,41 @@ function qty_weight_volume_by_goods($goods)			// количество, вес, �
 	
 }	
 	
+function mail_sender($email, $subject, $text)
+{
+	GLOBAL $noreply_email;
+	GLOBAL $noreply_host;
+	GLOBAL $noreply_password;
+    require '../vendor/autoload.php';
+	
+    $mail = new PHPMailer(true);
 
+    try {
+        // Настройка сервера
+        $mail->isSMTP();
+        $mail->Host = $noreply_host;
+        $mail->SMTPAuth = true;
+        $mail->Username = $noreply_email;
+        $mail->Password = $noreply_password;
+		$mail->SMTPSecure = 'tls';
+		$mail->Port = 587;
+        $mail->CharSet = 'UTF-8';
+
+        $mail->setFrom($noreply_email, 'Fitokrama.by');
+        $mail->addAddress($email);
+
+        
+        $mail->isHTML(true); 
+        $mail->Subject = $subject; 
+        $mail->Body    = $text;
+
+		$mail->send();
+		
+        return 'Письмо отправлено mail_sender';
+    } catch (Exception $e) {
+        send_warning_telegram("Ошибка при отправке e-mail: {$mail->ErrorInfo}");
+		return null;
+    }
+}
 
 

@@ -13,7 +13,11 @@
 	$link = firstconnect ();
 	
 	$json_in = json_decode(file_get_contents("php://input"),TRUE);
-	[$staff_id,$staff_name,$staff_role] = staff_auth($json_in['staff_login'],$json_in['staff_password']);
+	
+	
+	if ($test)  
+			[$staff_id,$staff_name,$staff_role] = [1,'Emil Kenherli','main']; 								//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! временная заглушка для 
+	else 	[$staff_id,$staff_name,$staff_role] = staff_auth($json_in['staff_login'],$json_in['staff_password']);
 	
 	if ($staff_role!='store' && $staff_role!='main') die (json_encode(['error'=>'No rights']));
 	
@@ -95,6 +99,8 @@
 
 	if ($delivery_method==6)	// Белпочта-пункт выдачи
 		[$track_number,$post_code,$label_filename] = belpost_send ($address, $qty, $weight, $order_number);		
+	
+	
 	
 	$que = "UPDATE `orders` SET track_number='$track_number', post_code='$post_code' WHERE id=$order_id";	
 	//send_warning_telegram($que);

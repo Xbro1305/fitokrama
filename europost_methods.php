@@ -150,19 +150,7 @@ function refresh_europochta_data() 			//обновление базы пункт
 function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL) 		//	произвести расчет стоимости доставки
 {
 	GLOBAL $link;
-	$PostalWeights = file_get_contents('europochta_PostalWeights.json');
-	foreach (json_decode($PostalWeights,TRUE) as $weights)
-		if ($weight>=$weights['PostalWeightMin'] && $weight<=$weights['PostalWeightMax'])
-		{
-			$PostalWeightId = $weights['PostalWeightTypeId'];
-			break;
-		}
-	if (!isset($PostalWeightId)) 
-	{
-		send_warning_telegram("Европочта. Не выбран идентификатор веса! для веса $weight в $delivery_city");
-		die ();
-	}
-	
+	$PostalWeightId = europost_weight_id($weight);
 	
 	
 	$que = "SELECT * FROM `delivery_points` WHERE partner_id=3 AND address LIKE '%$delivery_city%' LIMIT 1;";
@@ -277,19 +265,8 @@ function europost_send($order)
 {
 	
 	[$qty, $weight, $volume] = qty_weight_volume_by_goods($order['goods']);
-	$PostalWeights = file_get_contents('europochta_PostalWeights.json');
-	foreach (json_decode($PostalWeights,TRUE) as $weights)
-		if ($weight>=$weights['PostalWeightMin'] && $weight<=$weights['PostalWeightMax'])
-		{
-			$PostalWeightId = $weights['PostalWeightTypeId'];
-			break;
-		}
-	if (!isset($PostalWeightId)) 
-	{
-		send_warning_telegram("Европочта. Не выбран идентификатор веса! для веса $weight в $delivery_city");
-		die ();
-	}
 	
+	$PostalWeightId = europost_weight_id($weight);
 	$WarehouseIdFinish = preg_replace('/\D/', '', $order['delivery_submethod']);
 	
 	$order_number = $order['number'];
@@ -319,7 +296,7 @@ function europost_send($order)
 	$data['Name2Reciever'] = $client_name_1;		// имя клиента 1
 	$data['Name2Reciever'] = $client_name_2;		// имя клиента 2
 	$data['CashOnDeliveryMoneyBackId'] = 1;			// оплачивает отправитель
-	$data['InfoSender'] = "fitokrama.by. Заказ № order_number.";	// текстовый комментарий
+	$data['InfoSender'] = "fitokrama.by. Заказ № $order_number.";	// текстовый комментарий
 	$data['PostalItemExternalId'] = $request_id;
 	$data['IsRecieverShipping'] = 1;
 	
@@ -328,7 +305,7 @@ function europost_send($order)
 	if (!isset($res['Table'][0]['Number']))
 	{
 		send_warning_telegram('Европочта. Ошибка формирования заказа на отправку.'.$order_number.'  - '.json_encode($res));
-		return (json_encode(['status'=>'error', 'message'=> 'DPD refresh calcelled']));
+		return (json_encode(['status'=>'error', 'message'=> 'EUR refresh calcelled']));
 	}
 	$track_number = $res['Table'][0]['Number'];
 	
@@ -337,24 +314,57 @@ function europost_send($order)
 	[$label_filename,$post_code] = europost_get_lable($order_number,$track_number);
 	return [$track_number,$track_number,$label_filename];
 }
+
+function europost_tracker($track_number,$post_code)
+{
+	$data = array();
+
+	$data['Number'] = $track_number;
+	$res = europochta_post('Postal.Tracking', $data);
+	file_put_contents('europost_tracker.txt', date('[Y-m-d H:i:s] ') . $track_number. PHP_EOL .' '.json_encode($res,JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND | LOCK_EX);
+	
+	/*if (!isset($res['Table'][0]['Number']))
+	{
+		send_warning_telegram('Европочта. Ошибка формирования заказа на отправку.'.$order_number.'  - '.json_encode($res));
+		return (json_encode(['status'=>'error', 'message'=> 'DPD refresh calcelled']));
+	}
+	*/
+	//die (json_encode($res,JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL . PHP_EOL);
+	$parcel_status = 'не выяснен; сохранен в _tracker.txt';
+	return $parcel_status;
+}
+
+function europost_weight_id($weight)		// преобразование веса в ID
+{
+		$PostalWeights = file_get_contents('europochta_PostalWeights.json');
 		
-
-$link = firstconnect ();
-$method = explode("/", $_SERVER ["SCRIPT_URL"])[2];	
-
-if ($method=='home') // вариант определения цены доставки до дома
+		foreach (json_decode($PostalWeights,TRUE) as $weights)
+			if ($weight>=$weights['PostalWeightMin'] && $weight<=$weights['PostalWeightMax'])
+			{
+				$PostalWeightId = $weights['PostalWeightTypeId'];
+				break;
+			}
+		if (!isset($PostalWeightId)) 
 		{
-			
+			send_warning_telegram("Европочта. Не выбран идентификатор веса! для веса $weight в $delivery_city");
+			die ();
+		}
+		return $PostalWeightId;
+}
+		
+		
+function europost_address_to_id ($address)	// преобразование адреса в Adress1IdReciever методами Евроопта
+{
 		$data=array();
-		$data['Text'] = $_GET['address'];						
+		$data['Text'] = $address;
 		$res = europochta_post('Addresses.Search4', $data,false);
 		if (!isset($res['Table'][0]['Address4Id']))	die ('Ошибка определения адреса');
 		$Address4Id = $res['Table'][0]['Address4Id'];
 
-		$addr = json_decode(autocomplete_dadata($_GET['address']),TRUE);
+		$addr = json_decode(autocomplete_dadata($address),TRUE);
 		if (isset($addr['suggestions'][0]['data']['house'])) $house = $addr['suggestions'][0]['data']['house'];
 														else $house = 0;
-		echo ($house);
+		//echo ($house);
 
 		$data=array();
 		$data['Address4Id'] = $Address4Id;
@@ -362,15 +372,26 @@ if ($method=='home') // вариант определения цены дост�
 		$res = europochta_post('Addresses.GetAddressId', $data,false);
 		
 		if (!isset($res['Table'][0]['Address1Id'])) return NULL;
-			
-		$Adress1IdReciever	=$res['Table'][0]['Address1Id'];
+		return $res['Table'][0]['Address1Id'];
 
+}	
+
+$link = firstconnect ();
+$method = explode("/", $_SERVER ["SCRIPT_URL"])[2];	
+
+if ($method=='home') // вариант определения цены доставки до дома
+		{
+			
+		
+		$Adress1IdReciever	= europost_address_to_id($_GET['address']);
+		
 		//$WarehouseIdFinish = 72130020; 
 		$PostalWeightId = 20;
-			
+		
+		
 		$data=array();
 		$data['GoodsId'] = 836884;						// код отправления - посылка
-		$data['PostDeliveryTypeId'] = 2; 				// от отделения до отделения
+		$data['PostDeliveryTypeId'] = 2; 				// от отделения до двери!
 		$data['PostalWeightId'] = $PostalWeightId;		// дип диапазона веса
 		//$data['WarehouseIdFinish'] = $WarehouseIdFinish;	// ID пункта выдачи
 		$data['Adress1IdReciever'] = $Adress1IdReciever; 				//  ID адреса выдачи
@@ -379,20 +400,72 @@ if ($method=='home') // вариант определения цены дост�
 		$data['IsRelabeling'] = 0; 				// 
 		$data['IsRecieverShipping'] = 0; 				// оплата за счет отправителя
 		
-		
+		echo(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL . PHP_EOL);
+
 		
 		$res = europochta_post('Postal.CalculationTariff', $data);
-		//exit($city.'  '.json_encode($re,JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL . PHP_EOL);
+		echo(json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL . PHP_EOL);
+
 	}
 	
-if ($method=='test') // тестирование функций
+if ($method=='test_send_home') // тестирование функций
 	{
-		$order_number = 883440;
+		$order_number = $_GET['order_number'];
 		$order = all_about_order($order_number);
+		[$qty, $weight, $volume] = qty_weight_volume_by_goods($order['goods']);
 		
-		$res = europost_send($order) ;
+		$PostalWeightId = europost_weight_id($weight);
+		$Adress1IdReciever	= europost_address_to_id($_GET['address']);
+		
+		$order_number = $order['number'];
+		$sum = $order['sum'];
+		$request_id = 'FTKR_'.$order_number.'_'.strtoupper(substr(md5(rand(1,1000)), 0, 4));
+		
+		$data = array();
+		$data['GoodsId'] = 836884;						// код отправления - посылка
+		$data['PostDeliveryTypeId'] = 2; 				// от отделения до двери!!!!!!!!!!!!!!!!
+		$data['PostalWeightId'] = $PostalWeightId;		// дип диапазона веса
+		$data['WarehouseIdStart'] = 70130012 ;			// ID пункта выдачи - Жебрака
+		//$data['WarehouseIdFinish'] = $WarehouseIdFinish;	// ID пункта выдачи
+		$data['Adress1IdReciever'] = $Adress1IdReciever; 				//  ID адреса выдачи (именно адреса, а не пункта!)
+		
+		$data['CashOnDeliveryDeclareValueSum'] = $sum;
+		
+		$data['PhoneNumberReciever'] = $order['client_phone'];	// телефон клиента
+		
+		
+		$name_parts = explode(' ', $order['client_name'], 3);
+		
+		$client_surname = $name_parts[0]; // Все, что до первого пробела
+		$client_name_1 = isset($name_parts[1]) ? $name_parts[1] : ' '; // 2-я часть
+		$client_name_2 = isset($name_parts[2]) ? $name_parts[2] : ' '; // 3-я часть
+		
+		$data['Name1Reciever'] = $client_surname;		// имя клиента 1
+		$data['Name2Reciever'] = $client_name_1;		// имя клиента 1
+		$data['Name2Reciever'] = $client_name_2;		// имя клиента 2
+		$data['CashOnDeliveryMoneyBackId'] = 1;			// оплачивает отправитель
+		$data['InfoSender'] = "fitokrama.by. Заказ № $order_number.";	// текстовый комментарий
+		$data['PostalItemExternalId'] = $request_id;
+		$data['IsRecieverShipping'] = 1;
+		
+		$res = europochta_post('Postal.PutOrder', $data);
+		echo(json_encode($res,JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL . PHP_EOL);
+		
+		if (!isset($res['Table'][0]['Number']))
+		{
+			send_warning_telegram('Европочта. Ошибка формирования заказа на отправку.'.$order_number.'  - '.json_encode($res));
+			return (json_encode(['status'=>'error', 'message'=> 'DPD refresh calcelled']));
+		}
+		$track_number = $res['Table'][0]['Number'];
+		$post_code = $res['Table'][0]['PostalItemId'];	// пока непонятно, что с ним делать
+		
+		[$label_filename,$post_code] = europost_get_lable($order_number,$track_number);
+	echo $label_filename.' '.$post_code;
+	die;
 		exit(json_encode($res,JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL . PHP_EOL);
 	}
+
+
 	
 if ($method=='sticker') // тестирование функций
 	{
@@ -415,6 +488,11 @@ if ($method=='refresh_europochta_data') // тестирование функци
 		exit;
 	}
 
+if ($method=='europost_tracker') // тестирование функций
+	{
+		echo europost_tracker('BY080038634561',''); 
+		exit;
+	}
 
 
 

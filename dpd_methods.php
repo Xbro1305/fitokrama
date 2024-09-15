@@ -15,7 +15,7 @@ function dpd_request($method, $operation, $data,$tag,$test=false) {
         'clientKey' => $dpd_clientKey
     );
     $request[$tag] = $data;
-
+	if ($test) send_warning_telegram(json_encode($request));
 	
 	try 
 	{
@@ -354,7 +354,7 @@ function dpd_send($order,$service_code,$service_variant) {
 	if (!isset($response['orderNum']))
 	{
 		send_warning_telegram('DPD_send error. '.json_encode($data).json_encode($response));
-		return NULL;
+		exit(json_encode(['status'=>'error', 'error'=>'Ошибка формирования отправления']));
 	}
 	
 	$track_number = $response['orderNum'];
@@ -402,7 +402,7 @@ if ($method=='test') // тестирование функций
 	//echo "city = $city".PHP_EOL;
 	//echo "lat,lng = $lat,$lng".PHP_EOL;
 	//echo "index = $index".PHP_EOL;
-	$res = dpd_calculator($city,0.5,round(0.4*0.2*0.1,4),true,$index/*,null*//*,true*/);
+	$res = dpd_calculator($city,0.5,round(0.4*0.2*0.1,4),true,$index/*,null*/,true);
 	echo 'dpd_calculator'.PHP_EOL.json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
 	
 	
@@ -417,11 +417,107 @@ if ($method=='test') // тестирование функций
 	}
 	
 	
-if ($method=='testaddress') // тестирование функций
+if ($method=='test_send') // тестирование функций
 	{
+	$order = all_about_order(765865);
 	
-	//$order['order_point_address'] = $_GET['address'];
-	//dpd_send($order,'gg','ff');
+	$service_code = 'NDY';
+	$service_variant = 'ТД';
+	
+	[$qty, $weight, $volume] = qty_weight_volume_by_goods($order['goods']);
+	
+	$sending_point_address_detailed = ['name'=>'ООО Фитомагазин', 'terminalCode'=>'MSQ', 'countryName'=> 'Беларусь', 'contactFio'=>'Шиханцова Людмила Ивановна', 'contactPhone'=>'+375445975005', 'contactEmail'=>'info@fitokrama.by'];
+	/*
+	$from_dadata = json_decode(autocomplete_dadata($client_address),TRUE);
+	if (isset($from_dadata['suggestions'][0]['data']))
+		$address_detailed_dadata = $from_dadata['suggestions'][0]['data'];
+	else
+	{
+		die(json_encode($from_dadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		send_warning_telegram("DPD. {$order['number']} Ошибка расшифровки адреса $client_address. dpd_send не выполнен");
+		die("DPD. {$order['number']} Ошибка расшифровки адреса $client_address. dpd_send не выполнен");
+	}
+	
+	//$address_detailed['aaa'] = $address_detailed_dadata;
+	$address_detailed['name'] = $order['client_name'];
+	$address_detailed['countryName'] = $address_detailed_dadata['country'];
+	$address_detailed['index'] = $address_detailed_dadata['postal_code'];
+	
+	$address_detailed['city'] = $address_detailed_dadata['city_with_type'].', '.$address_detailed_dadata['settlement_with_type'];
+	$address_detailed['city'] = 'Минск' ;
+	$address_detailed['street'] = $address_detailed_dadata['street'];
+	$address_detailed['streetAbbr'] = $address_detailed_dadata['street_type'];
+	$address_detailed['house'] = $address_detailed_dadata['house'];
+	$address_detailed['houseKorpus'] = $address_detailed_dadata['block_type_full'].' '.$address_detailed_dadata['block'];
+	$address_detailed['instructions'] = '!!! ПРОБНЫЙ ЗАКАЗ !!! '.$client_address;
+	$address_detailed['flat'] = $address_detailed_dadata['flat'];
+	
+	$address_detailed['contactFio']=$order['client_name'];
+	$address_detailed['contactPhone']=$order['client_phone'];
+	$address_detailed['contactEmail']='';
+	*/
+	
+
+	
+	$return_address_detailed = ['name'=>'ООО Фитомагазин', 'countryName'=> 'Беларусь', 'index' => '220040', 'city' => 'Минск', 'street' => 'Беды Леонида', 'streetAbbr' => 'ул', 'house' => '2Б', 'office' => '316', 
+	'instructions' => 'Склад/офис ООО Фитокрама', 	'contactFio'=>'Шиханцова Людмила Ивановна', 'contactPhone'=>'+375445975005', 'contactEmail'=>'info@fitokrama.by'];
+	
+
+	
+	$order_number = $order['number'];
+	$sum = $order['sum'];
+	$request_id = 'FTKR_'.$order_number.'_'.strtoupper(substr(md5(rand(1,1000)), 0, 4));
+	
+	
+	$data = array();
+	$data['header']['datePickup'] = date('Y-m-d');
+	$data['header']['senderAddress'] = $sending_point_address_detailed;
+	$data['header']['pickupTimePeriod'] = '9-18';
+	$data['order']['orderNumberInternal'] = $request_id;
+	$data['order']['serviceCode'] = $service_code;			// PUP (доставка до почтомата или доставка до дверей) / NDY (передать в пункт выдачи)
+	$data['order']['serviceVariant'] = $service_variant;	// ТД (до двери)/ ТТ (до терминала)
+	$data['order']['cargoNumPack'] = 1;
+	$data['order']['cargoWeight'] = $weight;
+	$data['order']['cargoVolume'] = $volume;
+	$data['order']['cargoValue'] = $sum;
+	$data['order']['cargoCategory'] = 'косметические средства';
+	$data['order']['returnAddress'] = $return_address_detailed;
+	$data['order']['cargoRegistered'] = false;
+	$data['order']['parcel'] = [['number'=>$request_id]];
+	
+	
+	//$client_address = $order['order_point_address'];
+	$client_address = $_GET['client_address'];
+	$address_detailed['name'] = $order['client_name'];
+	$address_detailed['countryName'] = 'Беларусь';
+	$address_detailed['contactFio']=$order['client_name'];
+	$address_detailed['contactPhone']=$order['client_phone'];
+	$address_detailed['contactEmail']='';
+
+
+
+	
+	$from_dadata = json_decode(autocomplete_dadata($client_address),TRUE);
+	if (!isset($from_dadata['suggestions'][0]['data']))
+		die(json_encode($from_dadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+	
+	$address_detailed_dadata = $from_dadata['suggestions'][0]['data'];
+	
+	$address_detailed['street']=$client_address;
+	$address_detailed['cityName']=$address_detailed_dadata['settlement_with_type'];
+	$address_detailed['index']=$address_detailed_dadata['postal_code'];
+	
+	
+	
+	$data['order']['receiverAddress'] = $address_detailed;
+	
+	
+	$response = dpd_request ('order2?wsdl','createOrder',$data,'orders',false);
+	echo 'order[receiverAddress]   '.json_encode($data['order']['receiverAddress'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
+	echo 'dpd_send'.PHP_EOL.json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL.PHP_EOL;
+	
+	
+	
 	
 	
 	exit;
