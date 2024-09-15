@@ -276,7 +276,7 @@ function europost_send($order,$selfdelivery) 	//	selfpickup=true - до отде
 	$WarehouseIdFinish = preg_replace('/\D/', '', $order['delivery_submethod']);
 	
 	$order_number = $order['number'];
-	$client_address = $order['client_address'];
+	$client_address = $order['order_point_address'];
 	$sum = $order['sum'];
 	$request_id = 'FTKR_'.$order_number.'_'.strtoupper(substr(md5(rand(1,1000)), 0, 4));
 	
@@ -367,22 +367,31 @@ function europost_weight_id($weight)		// преобразование веса �
 function europost_address_to_id ($address)	// преобразование адреса в Adress1IdReciever методами Евроопта
 {
 		$data=array();
+//echo $address.PHP_EOL;
 		$data['Text'] = $address;
-		$res = europochta_post('Addresses.Search4', $data,false);
+//echo ('data_1   '.json_encode($data, FILE_APPEND | LOCK_EX).PHP_EOL.PHP_EOL );
+		$res = europochta_post('Addresses.Search4', $data,false);				// Получение адреса до улицы по строке
 		if (!isset($res['Table'][0]['Address4Id']))	die ('Ошибка определения адреса');
 		$Address4Id = $res['Table'][0]['Address4Id'];
+//echo ('res_1   '.json_encode($res, FILE_APPEND | LOCK_EX).PHP_EOL.PHP_EOL );
 
 		$addr = json_decode(autocomplete_dadata($address),TRUE);
-		if (isset($addr['suggestions'][0]['data']['house'])) $house = $addr['suggestions'][0]['data']['house'];
-														else $house = 0;
-		//echo ($house);
+//echo ('addr   '.json_encode($addr, FILE_APPEND | LOCK_EX).PHP_EOL.PHP_EOL );		
 
 		$data=array();
 		$data['Address4Id'] = $Address4Id;
-		$data['Address3Name'] = $house;
-		$res = europochta_post('Addresses.GetAddressId', $data,false);
+		$data['Address3Name'] = $addr['suggestions'][0]['data']['house'] ?? '';
+		$data['Address2Name'] = $addr['suggestions'][0]['data']['block'] ?? '';
+		$data['Address1Name'] = $addr['suggestions'][0]['data']['flat'] ?? '';
 		
+//echo ('data_2   '.json_encode($data, FILE_APPEND | LOCK_EX).PHP_EOL.PHP_EOL );
+		$res = europochta_post('Addresses.GetAddressId', $data,false);			// Получение адреса дома (Address1Id)
+//echo ('res_2   '.json_encode($res, FILE_APPEND | LOCK_EX).PHP_EOL.PHP_EOL );		
 		if (!isset($res['Table'][0]['Address1Id'])) return NULL;
+		
+		
+		die ('Ошибка определения адреса');
+		
 		return $res['Table'][0]['Address1Id'];
 
 }	
@@ -478,17 +487,11 @@ if ($method=='test_send_home') // тестирование функций
 
 
 	
-if ($method=='sticker') // тестирование функций
+if ($method=='europost_address_to_id') // тестирование функций
 	{
-		$order_number = $_GET['order_number'];
-		$order = all_about_order($order_number);
-		$track_number = $_GET['track_number'];
-		
-		$res = europost_get_lable($order_number,$track_number);
-		header('Content-Type: text/html; charset=UTF-8');
-		header("Access-Control-Allow-Origin: $http_origin");
-		if (isset($res[0])) header('Location: https://fitokrama.by/'.$res[0]);
-		else echo json_encode($res);
+		$address = $_GET['address'];
+		$res = europost_address_to_id($address);
+		echo ($res);
 		exit;
 		
 	}
