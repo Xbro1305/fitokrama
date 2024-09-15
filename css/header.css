@@ -1,366 +1,378 @@
 .top-bar {
-  background-color: rgb(97, 129, 98);
+    background-color: rgb(97, 129, 98);
 
-  color: white;
+    color: white;
 
-  display: flex;
+    display: flex;
 
-  justify-content: space-between;
+    justify-content: space-between;
 
-  align-items: center;
+    align-items: center;
 
-  padding: 10px 20px;
+    padding: 10px 20px;
 
-  width: 100%;
+    width: 100%;
 
-  box-sizing: border-box;
+    box-sizing: border-box;
 
-  position: fixed;
+    position: fixed;
 
-  top: 0;
+    top: 0;
 
-  left: 0;
+    left: 0;
 
-  z-index: 10;
+    z-index: 10;
 }
 
 .contact-info {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  margin-right: auto;
+    margin-right: auto;
 
-  padding-left: 160px; /* Сдвигаем от левого края, опираясь на левый край логотипа */
+    padding-left: 160px; /* Сдвигаем от левого края, опираясь на левый край логотипа */
 }
 
 .contact-info a {
-  color: white;
+    color: white;
 
-  text-decoration: none;
+    text-decoration: none;
 
-  font-size: 16px;
+    font-size: 16px;
 
-  margin-left: 10px;
+    margin-left: 10px;
 }
 
 .contact-info img {
-  width: 20px;
+    width: 20px;
 
-  height: 20px;
+    height: 20px;
 
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .menu-buttons {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  margin-left: auto;
+    margin-left: auto;
 
-  padding-right: 160px; /* Сдвигаем от правого края симметрично */
+    padding-right: 160px; /* Сдвигаем от правого края симметрично */
 }
 
 .menu-button {
-  color: white;
+    color: white;
 
-  font-size: 16px;
+    font-size: 16px;
 
-  margin-left: 20px;
+    margin-left: 20px;
 
-  padding: 10px 15px;
+    padding: 10px 15px;
 
-  background-color: rgb(97, 129, 98);
+    background-color: rgb(97, 129, 98);
 
-  border: none;
+    border: none;
 
-  border-radius: 0;
+    border-radius: 0;
 }
 
 .menu-button:hover {
-  background-color: rgb(158, 184, 158);
+    background-color: rgb(158, 184, 158);
 }
 
 .bottom-bar {
-  display: flex;
+    display: flex;
 
-  justify-content: center;
+    justify-content: center;
 
-  align-items: center;
+    align-items: center;
 
-  padding: 20px;
+    padding: 20px;
 
-  background-color: #f9f9f9;
+    background-color: #f9f9f9;
 
-  box-sizing: border-box;
+    box-sizing: border-box;
 
-  position: fixed;
+    position: fixed;
 
-  top: 60px; /* Отступ для второй шапки */
+    top: 60px; /* Отступ для второй шапки */
 
-  left: 0;
+    left: 0;
 
-  width: 100%;
+    width: 100%;
 
-  z-index: 1;
+    z-index: 1;
 }
 
 .bottom-bar-content {
-  display: flex;
+    display: flex;
 
-  justify-content: space-between;
+    justify-content: space-between;
 
-  align-items: center;
+    align-items: center;
 
-  width: 100%;
+    width: 100%;
 
-  max-width: 1000px;
+    max-width: 1000px;
 
-  padding: 0 20px; /* Сдвигаем элементы от краев */
+    padding: 0 20px; /* Сдвигаем элементы от краев */
 }
 
 .company-logo {
-  height: 80px; /* Используем такую же высоту, как в футере */
+    height: 80px; /* Используем такую же высоту, как в футере */
 
-  margin-right: 20px;
+    margin-right: 20px;
 }
 
 .search-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .search-container > section {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  width: 80%;
+    width: 80%;
 
-  background-color: #f0f0f0; /* Светло-серый фон */
+    background-color: #f0f0f0; /* Светло-серый фон */
 
-  border: 2px solid #666;
+    border: 2px solid #666;
 
-  border-radius: 25px;
+    border-radius: 25px;
 
-  padding: 5px;
+    padding: 5px;
 
-  margin: 0 auto; /* Центровка поисковой строки */
+    margin: 0 auto; /* Центровка поисковой строки */
 }
 
 .search-input {
-  width: calc(100% - 40px);
+    width: calc(100% - 40px);
 
-  padding: 10px;
+    padding: 10px;
 
-  border: none;
+    border: none;
 
-  border-radius: 25px 0 0 25px;
+    border-radius: 25px 0 0 25px;
 
-  font-size: 16px;
+    font-size: 16px;
 
-  flex: 1;
+    flex: 1;
 
-  background-color: #f0f0f0; /* Светло-серый фон */
+    background-color: #f0f0f0; /* Светло-серый фон */
 
-  outline: none; /* Убираем внутреннюю рамку */
+    outline: none; /* Убираем внутреннюю рамку */
 }
 
 .search-input:focus {
-  outline: none; /* Убираем внутреннюю рамку при фокусе */
+    outline: none; /* Убираем внутреннюю рамку при фокусе */
 }
 
 .search-button {
-  padding: 10px;
+    padding: 10px;
 
-  border: none;
+    border: none;
 
-  background: none;
+    background: none;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .search-button img {
-  width: 20px;
+    width: 20px;
 
-  height: 20px;
+    height: 20px;
 }
 
 .account-buttons {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  margin-left: auto;
+    margin-left: auto;
 }
 
 .account-buttons a {
-  margin-left: 20px;
-  position: relative;
+    margin-left: 20px;
+    position: relative;
 }
 
 .account-buttons img {
-  width: 30px; /* Задаем высоту значков */
+    width: 30px; /* Задаем высоту значков */
 
-  height: 30px; /* Задаем высоту значков */
+    height: 30px; /* Задаем высоту значков */
 }
 
 /* Адаптивные стили */
 
 @media (max-width: 1200px) {
-  .contact-info {
-    padding-left: 40px; /* Уменьшаем отступ для меньших экранов */
-  }
+    .contact-info {
+        padding-left: 40px; /* Уменьшаем отступ для меньших экранов */
+    }
 
-  .menu-buttons {
-    padding-right: 40px; /* Уменьшаем отступ для меньших экранов */
-  }
+    .menu-buttons {
+        padding-right: 40px; /* Уменьшаем отступ для меньших экранов */
+    }
 
-  header {
-    position: fixed;
+    header {
+        position: fixed;
 
-    top: 0;
+        top: 0;
 
-    width: 100%;
+        width: 100%;
 
-    z-index: 100;
+        z-index: 100;
 
-    background-color: white;
+        background-color: white;
 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-  /* Стили для хедера на странице корзины */
+    /* Стили для хедера на странице корзины */
 
-  .cart-page header {
-    position: relative;
+    .cart-page header {
+        position: relative;
 
-    box-shadow: none;
-  }
+        box-shadow: none;
+    }
 }
 
 @media (max-width: 768px) {
-  .top-bar,
-  .bottom-bar {
-    position: static; /* Снимаем фиксированное позиционирование для маленьких экранов */
-  }
+    .top-bar,
+    .bottom-bar {
+        position: static; /* Снимаем фиксированное позиционирование для маленьких экранов */
+    }
 
-  .top-bar {
-    flex-direction: column;
+    .top-bar {
+        flex-direction: column;
 
-    align-items: flex-start;
-  }
+        align-items: flex-start;
+    }
 
-  .contact-info,
-  .menu-buttons {
-    padding: 0;
-  }
+    .contact-info,
+    .menu-buttons {
+        padding: 0;
+    }
 
-  .menu-buttons {
-    margin-top: 10px;
-    border-top: 1px solid #ccc;
-  }
+    .menu-buttons {
+        margin-top: 10px;
+        border-top: 1px solid #ccc;
+    }
 
-  .bottom-bar-content {
-    flex-wrap: wrap;
-    align-items: center;
-  }
+    .bottom-bar-content {
+        flex-wrap: wrap;
+        align-items: center;
+    }
 
-  .search-container {
-    margin-top: 10px;
+    .search-container {
+        margin-top: 10px;
 
-    width: 70%;
-  }
+        width: 70%;
+    }
 
-  .account-buttons {
-    margin-top: 10px;
+    .account-buttons {
+        margin-top: 10px;
 
-    justify-content: flex-start;
-    width: auto;
-  }
+        justify-content: flex-start;
+        width: auto;
+    }
 
-  .company-logo {
-    width: 100%;
-    height: auto;
-  }
+    .company-logo {
+        width: 100%;
+        height: auto;
+    }
 }
 
 .search-container {
-  position: relative;
+    position: relative;
 }
 .search-results {
-  display: none;
-  position: absolute;
-  top: 58px;
-  background: white;
-  width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 1000;
-  border-top: none;
+    display: none;
+    position: absolute;
+    top: 58px;
+    background: white;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    border-top: none;
 }
 .search-result-item {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #ccc;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
 }
 .search-result-item:hover {
-  background: #f0f0f0;
+    background: #f0f0f0;
 }
 
 .cart-float {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: rgb(158, 184, 158);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  top: -5px;
-  right: -5px;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: rgb(158, 184, 158);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    top: -5px;
+    right: -5px;
 }
 
 .cart-float p {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .profileButton {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .profileButton .account_actions {
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 40px;
-  background: white;
-  border: 1px solid #ccc;
-  z-index: 1000;
-  width: 150px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 40px;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    width: 150px;
 }
 
 .account_actions button {
-  background: rgb(158, 184, 158);
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  width: 150px;
-  margin: 10px 0;
-  border-radius: 25px;
+    background: rgb(158, 184, 158);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    width: 150px;
+    margin: 10px 0;
+    border-radius: 25px;
 }
 
 .account_actions.show {
-  display: flex;
+    display: flex;
+}
+
+@media (max-width: 375px) {
+    .top-bar {
+        padding: 5px;
+        overflow: hidden;
+    }
+
+    .menu-button {
+        padding: 7px;
+        margin: 0;
+    }
 }
