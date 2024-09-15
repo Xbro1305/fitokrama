@@ -89,7 +89,7 @@
 		[$track_number,$post_code,$label_filename] = dpd_send ($order,'PUP','ТТ');
 	
 	if ($delivery_method==3)	// Евроопт, пункт выдачи
-		[$track_number,$post_code,$label_filename] = europost_send ($order);
+		[$track_number,$post_code,$label_filename] = europost_send ($order,true); // selfdelivery=true, т.е. клиент заберет сам
 	
 	if ($delivery_method==4)	// DPD-доставка до двери
 		[$track_number,$post_code,$label_filename] = dpd_send ($order,'NDY','ТД');
@@ -100,6 +100,8 @@
 	if ($delivery_method==6)	// Белпочта-пункт выдачи
 		[$track_number,$post_code,$label_filename] = belpost_send ($address, $qty, $weight, $order_number);		
 	
+	if ($delivery_method==7)	// Евроопт, курьер до двери
+		[$track_number,$post_code,$label_filename] = europost_send ($order,false); // selfdelivery=false, т.е. доставка до двери
 	
 	
 	$que = "UPDATE `orders` SET track_number='$track_number', post_code='$post_code' WHERE id=$order_id";	

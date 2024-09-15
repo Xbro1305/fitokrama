@@ -267,7 +267,7 @@ function europost_get_lable($order_number,$track_number)	// получить н�
 }
 	
 
-function europost_send($order,$selfdelivery=true) 	//	selfpickup=true - до отделения, selfpickup=false - до дверей
+function europost_send($order,$selfdelivery) 	//	selfpickup=true - до отделения, selfpickup=false - до дверей
 {
 	
 	[$qty, $weight, $volume] = qty_weight_volume_by_goods($order['goods']);
