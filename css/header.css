@@ -365,7 +365,7 @@
     display: flex;
 }
 
-@media (max-width: 375px) {
+@media (max-width: 475px) {
     .top-bar {
         padding: 5px;
         overflow: hidden;
