@@ -251,10 +251,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   window.openConfirmPhone = openConfirmPhone;
 
-  window.sortbyprice = sortbyprice;
-
-  window.sortbyfar = sortbyfar;
-
   window.inc = inc;
 
   window.dec = dec;
