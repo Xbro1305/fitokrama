@@ -1,19 +1,53 @@
 <script setup lang="ts">
+import { useAuthStore } from '~/store/auth'
+
 useHead({ title: 'Автопечать' })
+
+const { email, password } = useAuthStore()
+
+const config = useRuntimeConfig()
+
+const backendUrl = config.public.backendUrl
 
 const isUseragentCorrect = ref(false)
 
-// if (window.navigator.userAgent === 'adminpage configuration') {
-if (true) {
+let intervalId
+const forPrint = ref([])
+
+if (window.navigator.userAgent === 'adminpage configuration') {
   isUseragentCorrect.value = true
 
-  const { data: html_print } = await useFetch('https://fitokrama.by/admin/index.php?method=order_print_for_assembly')
+  intervalId = setInterval(() => {
+    const { data } = useFetch(`${backendUrl}/order_print_for_assembly.php`, {
+      method: 'POST',
+      body: {
+        staff_login: email,
+        staff_password: password,
+      },
+    })
 
-  console.log(html_print)
+    if (data.value && data.value.html_print) {
+      forPrint.value.push(data.value.html_print)
+    }
+  }, 1000)
+}
 
-  setInterval(() => {
+onUnmounted(() => clearInterval(intervalId))
 
-  }, 5000)
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+const printClick = () => {
+  const html = forPrint.value.pop()
+
+  if (html) {
+    const printWindow = window.open('', '_blank')
+    printWindow?.document.write(html)
+    sleep(200).then(() => {
+      printWindow?.document.close()
+      printWindow?.focus()
+      printWindow?.print()
+    })
+  }
 }
 </script>
 
@@ -41,6 +75,15 @@ if (true) {
           indeterminate
         />
       </v-alert>
+
+      <v-btn
+        v-if="forPrint.length > 0"
+        color="primary"
+        class="mt-2"
+        @click="printClick"
+      >
+        Печать ({{ forPrint.length }})
+      </v-btn>
     </v-card-text>
   </v-card>
 </template>
