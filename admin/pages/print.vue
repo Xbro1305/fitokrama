@@ -34,7 +34,7 @@ if (window.navigator.userAgent === 'adminpage configuration') {
 
 onUnmounted(() => clearInterval(intervalId))
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+const sleep = (ms: number) => new Promise((r: never) => setTimeout(r, ms))
 
 const printClick = () => {
   const html = forPrint.value.pop()
