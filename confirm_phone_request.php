@@ -18,11 +18,13 @@
 	
 	$code = random_int(10001,99999);
 	
-	$text = 'Ваш код [code]';					// !!!!!!!!!!!!!!! взять из шаблона
+	$text = '🌿 Ваш код [code] 🌿';					// !!!!!!!!!!!!!!! взять из шаблона
 	
 	$text = str_replace('[code]', $code, $text);
 	
-	$rep = send_sms_smstrafficby ($phone, $text);
+	if (substr($phone,0,4)=='+375 УДАЛИТЬ' || substr($phone,0,3)=='375 УДАЛИТЬ') 
+			$rep = send_sms_smstrafficby ($phone, $text);
+			else $rep = send_sms_mysim ($phone, $text);
 	
 	$que = "INSERT INTO phone_confirm (client_id,phone,code,datetime,report) VALUES ($client_id,'$phone',$code,CURRENT_TIMESTAMP(),'$rep');";
 	ExecSQL($link,$que);

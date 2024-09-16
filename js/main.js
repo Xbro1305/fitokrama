@@ -355,10 +355,10 @@ document.querySelectorAll(".sendinginfo").forEach((i) => {
             .then((response) => response.json())
             .then((res) => {
               checkPhoneAndEmail(res);
-              document.querySelector(`.price-small-total`).innerHTML =
-                res.delivery_price_kop;
-              document.querySelector(`.price-full-total`).innerHTML =
+              document.querySelector(".totalPriceRub").innerHTML =
                 res.delivery_price_rub;
+              document.querySelector(".totalPriceKop").innerHTML =
+                res.delivery_price_kop;
             })
             .catch((error) => console.error(error));
         }

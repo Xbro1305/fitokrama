@@ -190,7 +190,7 @@ body {
   font-size: 24px;
   font-weight: bold;
   margin-top: 10px;
-  width: 150px;
+  width: 130px;
   display: flex;
   justify-content: flex-end;
 }
@@ -404,7 +404,7 @@ body {
 
   .cart-item-info {
     display: grid;
-    grid-template-columns: 1fr 120px;
+    grid-template-columns: 1fr 130px;
   }
 }
 

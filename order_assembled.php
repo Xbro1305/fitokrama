@@ -13,7 +13,11 @@
 	$link = firstconnect ();
 	
 	$json_in = json_decode(file_get_contents("php://input"),TRUE);
-	[$staff_id,$staff_name,$staff_role] = staff_auth($json_in['staff_login'],$json_in['staff_password']);
+	
+	
+	if ($test)  
+			[$staff_id,$staff_name,$staff_role] = [1,'Emil Kenherli','main']; 								//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! временная заглушка для 
+	else 	[$staff_id,$staff_name,$staff_role] = staff_auth($json_in['staff_login'],$json_in['staff_password']);
 	
 	if ($staff_role!='store' && $staff_role!='main') die (json_encode(['error'=>'No rights']));
 	
@@ -22,7 +26,7 @@
 	$goods = $json_in['goods']; 
 
 	if ($test) $order_number = $_GET['order_number']; //$json_in['order_number'];		// !!!!!!!!!!!!!!!!!!!!!!
-	if ($test) $goods = json_decode('[{"good_art":"54985","qty_as":"3"}]',TRUE); //$json_in['goods']; // !!!!!!!!!!!!!!!!!!!!!!
+	if ($test) $goods = json_decode('[{"good_art":"54985","qty_as":"1"}]',TRUE); //$json_in['goods']; // !!!!!!!!!!!!!!!!!!!!!!
 	
 	$order = all_about_order($order_number,'all_info');
 	$order_id=$order['id'];
@@ -85,7 +89,7 @@
 		[$track_number,$post_code,$label_filename] = dpd_send ($order,'PUP','ТТ');
 	
 	if ($delivery_method==3)	// Евроопт, пункт выдачи
-		[$track_number,$post_code,$label_filename] = europost_send ($order);
+		[$track_number,$post_code,$label_filename] = europost_send ($order,true); // selfdelivery=true, т.е. клиент заберет сам
 	
 	if ($delivery_method==4)	// DPD-доставка до двери
 		[$track_number,$post_code,$label_filename] = dpd_send ($order,'NDY','ТД');
@@ -95,6 +99,10 @@
 
 	if ($delivery_method==6)	// Белпочта-пункт выдачи
 		[$track_number,$post_code,$label_filename] = belpost_send ($address, $qty, $weight, $order_number);		
+	
+	if ($delivery_method==7)	// Евроопт, курьер до двери
+		[$track_number,$post_code,$label_filename] = europost_send ($order,false); // selfdelivery=false, т.е. доставка до двери
+	
 	
 	$que = "UPDATE `orders` SET track_number='$track_number', post_code='$post_code' WHERE id=$order_id";	
 	//send_warning_telegram($que);
