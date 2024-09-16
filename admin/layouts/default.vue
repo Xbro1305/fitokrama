@@ -30,5 +30,7 @@ const appName = config.public.appName
         </v-row>
       </v-container>
     </v-main>
+
+    <notification-component />
   </v-app>
 </template>
