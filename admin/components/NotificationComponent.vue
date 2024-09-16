@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useNotificationStore } from '~/store/notification'
+
 const notificationStore = useNotificationStore()
 
 const color = ref<string>('')

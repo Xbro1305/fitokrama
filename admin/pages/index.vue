@@ -26,10 +26,10 @@ const { data } = await useFetch(`${backendUrl}/admin/orders.php`, {
   },
 })
 
-const date = new Date().toISOString().substring(0, 10)
+// const date = new Date().toISOString().substring(0, 10)
 
-const startDate = ref(date)
-const endDate = ref(date)
+// const startDate = ref(date)
+// const endDate = ref(date)
 
 const orders = reactive([])
 
