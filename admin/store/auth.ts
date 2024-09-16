@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
   })
 
   const login = async ({ mail, pass }: UserPayloadInterface) => {
-    const { data } = await useFetch(`${backendUrl}?method=login`, {
+    const { data } = await useFetch(`${backendUrl}/admin/login.php`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: {
