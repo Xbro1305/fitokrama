@@ -31,6 +31,8 @@ const headers = [
   { title: 'Заказы', key: 'orders', value: item => item.orders.map(order => order.number).join(', ') },
 ]
 
+const sleep = (ms: number) => new Promise((r: never) => setTimeout(r, ms))
+
 const printList = async () => {
   const { data } = await useFetch(`${backendUrl}/orders_list_to_send.php`, {
     method: 'POST',
@@ -46,6 +48,17 @@ const printList = async () => {
   }
   else if (data.value.error) {
     showError(data.value.error)
+  }
+
+  if (data.value.for_print) {
+    const printWindow = window.open('', '_blank')
+    printWindow?.document.write(data.value.for_print)
+
+    sleep(200).then(() => {
+      printWindow?.document.close()
+      printWindow?.focus()
+      printWindow?.print()
+    })
   }
 }
 </script>
