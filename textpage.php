@@ -14,7 +14,6 @@
 	
 	
 	
-	$pagetext = $pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext.$pagetext;
 
 	$cart_count = $cart ['cart_count'];
 	

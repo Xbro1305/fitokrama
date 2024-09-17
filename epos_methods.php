@@ -150,7 +150,7 @@ if ($method=='epos_incoming') // вызванный webhook при соверш�
 		$payload = file_get_contents("php://input");
 		if ($payload==NULL) exit ('no data');
 		$data = json_decode($payload,TRUE);
-		file_put_contents('epos_log.txt', json_encode($data).PHP_EOL.PHP_EOL , FILE_APPEND | LOCK_EX);
+		file_put_contents('epos_log.txt', json_encode($data, FILE_APPEND | LOCK_EX).PHP_EOL.PHP_EOL );
 		
 		$invoice_number = $data['claimId'];
 		$payment_id = $data['id'];
