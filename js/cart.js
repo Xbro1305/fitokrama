@@ -96,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
       deletingItem.id = id;
       deletingItem.price = price;
       deletingItem.qty = 0;
+      return
     }
 
     fetch("https://fitokrama.by/cart_correct.php", {

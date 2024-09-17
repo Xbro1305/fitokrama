@@ -1,5 +1,5 @@
 <?php
-	include 'mnn.php';
+	require_once __DIR__ . '/../mnn.php';
 
     if (isset($_SERVER['HTTP_ORIGIN'])) {
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -19,11 +19,19 @@
         exit(0);
     }
 
-	header('Content-Type: application/json; charset=UTF-8');
-	$link = firstconnect ();
-	//[$session_id, $username] = enterregistration ();
+	header('Content-Type: application/json');
 
-	$search = mb_substr($_GET['search'], 0, 7);
-	$res = ExecSQL($link,"SELECT name, CONCAT('https://fitokrama.by/art_page.php?art=',art) as art FROM goods WHERE name like '%$search%' or art='$search' or barcode='$search' LIMIT 20;");
+    $link = firstconnect();
+	tst();
 
-	exit( json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    function tst()
+    {
+        $json_in = json_decode(file_get_contents('php://input'),TRUE);
+        [$staff_id,$staff_name,$staff_role] = staff_auth($json_in['email'], $json_in['password']);
+
+        exit(json_encode([
+            'id' => $staff_id,
+            'name' => $staff_name,
+            'role' => $staff_role,
+        ]));
+    }
