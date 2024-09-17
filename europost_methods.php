@@ -388,7 +388,7 @@ function europost_address_to_id ($address)	// преобразование ад�
 		$res = europochta_post('Addresses.GetAddressId', $data,false);			// Получение адреса дома (Address1Id)
 //echo ('res_2   '.json_encode($res, FILE_APPEND | LOCK_EX).PHP_EOL.PHP_EOL );		
 		if (!isset($res['Table'][0]['Address1Id'])) return NULL;
-		
+		return NULL;
 		
 		die ('Ошибка определения адреса');
 		
