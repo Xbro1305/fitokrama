@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { BrowserMultiFormatReader, Exception } from '@zxing/library'
+import { useNotificationStore } from '~/store/notification'
+
+const { showError, showSuccess } = useNotificationStore()
 
 const dialog = ref(false)
 const code = ref(null)
@@ -43,14 +46,14 @@ const sendCode = () => {
   })
     .then(({ data }) => {
       if (data.status === 'ok') {
-        this.$notifier.showSuccess(data.message)
+        showSuccess(data.message)
       }
       else {
-        this.$notifier.showError(data.message)
+        showError(data.message)
       }
     })
     .catch(() => {
-      this.$notifier.showError(this.$t('server_error').toString())
+      showError('Ошибка сервера')
     })
     .finally(() => {
       dialog.value = false
@@ -59,8 +62,10 @@ const sendCode = () => {
     })
 }
 
+const scanner = useTemplateRef('scanner')
+
 const start = () => {
-  codeReader.decodeFromVideoDevice(undefined, this.$refs.scanner, (result) => {
+  codeReader.decodeFromVideoDevice(undefined, scanner.value, (result) => {
     if (result) {
       code.value = result.getText()
       sendCode()
@@ -75,12 +80,11 @@ const start = () => {
     persistent
     max-width="600px"
   >
-    <template #activator="{ on, attrs }">
+    <template #activator="{ props: activatorProps }">
       <v-btn
         icon
         color="success"
-        v-bind="attrs"
-        v-on="on"
+        v-bind="activatorProps"
       >
         <v-icon>
           mdi-qrcode-scan
@@ -108,7 +112,7 @@ const start = () => {
           color="error"
           @click="dialog = false"
         >
-          {{ $t('cancel') }}
+          Отмена
         </v-btn>
       </v-card-actions>
     </v-card>

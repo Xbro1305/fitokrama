@@ -9,7 +9,7 @@ useHead({ title: 'Сборка заказа' })
     </v-card-title>
 
     <v-card-text>
-      Сборка заказа
+      <qrcode-scan />
     </v-card-text>
   </v-card>
 </template>
