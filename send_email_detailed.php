@@ -11,7 +11,7 @@ function insert_base64_encoded_image($img)
 {
 	$imageSize = getimagesize($img);
 	$imageData = base64_encode(file_get_contents($img));
-	$imageHTML = "<img src='data:{$imageSize['mime']};base64,{$imageData}' {$imageSize[3]} />";
+	$imageHTML = "<img src='data:{$imageSize['mime']};base64,{$imageData}' ";
 	return $imageHTML;
 }
 
@@ -22,7 +22,9 @@ function insert_base64_encoded_image($img)
 	
 	$order = all_about_order($_GET['order_number']);
 	$client_name = $order['client_name'];
-	$order_address_delivery = $order['order_address_delivery'];
+	$order_address_delivery = $order['order_point_address'];
+	
+	//die(json_encode($order));
 	
 	/*
 	$client_name = 'Иванов Иван Иванович' ;
@@ -51,6 +53,15 @@ function insert_base64_encoded_image($img)
 							$doc = str_replace('[img_6]', $img_not_ok, $doc);
 	$doc = str_replace('[img_finger]', $img_finger, $doc);
 							
+	$doc = str_replace('[stage_1]', 'stage succeeded', $doc);
+	$doc = str_replace('[stage_2]', 'stage succeeded', $doc);
+	$doc = str_replace('[stage_3]', 'stage succeeded', $doc);
+	$doc = str_replace('[stage_4]', 'stage', $doc);
+	$doc = str_replace('[stage_5]', 'stage', $doc);
+	$doc = str_replace('[stage_6]', 'stage', $doc);
+	
+	
+	
 	
 						
 	$doc = str_replace('[text_detailed]', 'Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. Детальное описание этапов заказа. ', $doc);

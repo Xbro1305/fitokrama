@@ -199,3 +199,11 @@
 
 	
 	exit ($doc);
+	
+	
+	
+/*
+	<button id="toggleOptionsBtn" onclick="toggleOptions()">
+	Больше вариантов ⋁
+	</button>
+*/
