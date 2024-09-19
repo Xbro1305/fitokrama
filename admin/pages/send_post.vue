@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { useNotificationStore } from '~/store/notification'
+import { useAuthStore } from '~/store/auth'
 
 useHead({ title: 'Отправка почты' })
-const { showError } = useNotificationStore()
+const { showError, showSuccess } = useNotificationStore()
+const { email, password } = useAuthStore()
+const config = useRuntimeConfig()
+const backendUrl = config.public.backendUrl
+
+const coordinates = reactive({
+  latitude: null,
+  longitude: null,
+})
 
 const success = (position) => {
-  const latitude = position.coords.latitude
-  const longitude = position.coords.longitude
-
-  console.log(latitude)
-  console.log(longitude)
+  coordinates.latitude = position.coords.latitude
+  coordinates.longitude = position.coords.longitude
 }
 
 const error = () => {
@@ -22,6 +28,26 @@ if (!navigator.geolocation) {
 else {
   navigator.geolocation.getCurrentPosition(success, error)
 }
+
+const sendCode = async (code: string) => {
+  const { data } = await useFetch(`${backendUrl}/order_sent.php`, {
+    method: 'POST',
+    body: {
+      staff_login: email,
+      staff_password: password,
+      qrcode: code,
+      lat: coordinates.latitude,
+      lng: coordinates.longitude,
+    },
+  })
+
+  if (data.value.message) {
+    showSuccess(data.value.message)
+  }
+  else if (data.value.error) {
+    showError(data.value.error)
+  }
+}
 </script>
 
 <template>
@@ -31,7 +57,10 @@ else {
     </v-card-title>
 
     <v-card-text>
-      Отправка почты
+      <qrcode-scan
+        v-if="coordinates.latitude"
+        @code-scanned="sendCode"
+      />
     </v-card-text>
   </v-card>
 </template>

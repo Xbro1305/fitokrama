@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { BrowserMultiFormatReader, Exception } from '@zxing/library'
-import { useNotificationStore } from '~/store/notification'
 
-const { showError, showSuccess } = useNotificationStore()
+const emit = defineEmits<{
+  (e: 'codeScanned', val: string): void
+}>()
 
 const dialog = ref(false)
-const code = ref(null)
-const sending = ref(false)
 const codeReader = new BrowserMultiFormatReader()
 const isMediaStreamAPISupported = navigator && navigator.mediaDevices && 'enumerateDevices' in navigator.mediaDevices
 
@@ -29,46 +28,14 @@ onMounted(() => {
   codeReader.reset()
 })
 
-const sendCode = () => {
-  if (sending.value || !code.value) {
-    return
-  }
-
-  sending.value = true
-
-  this.$axios.post('services_api.php/stores_qr', {
-    products_json: code.value,
-  }, {
-    auth: {
-      username: localStorage.getItem('login') ?? '',
-      password: localStorage.getItem('password') ?? '',
-    },
-  })
-    .then(({ data }) => {
-      if (data.status === 'ok') {
-        showSuccess(data.message)
-      }
-      else {
-        showError(data.message)
-      }
-    })
-    .catch(() => {
-      showError('Ошибка сервера')
-    })
-    .finally(() => {
-      dialog.value = false
-      sending.value = false
-      code.value = null
-    })
-}
-
 const scanner = useTemplateRef('scanner')
 
 const start = () => {
   codeReader.decodeFromVideoDevice(undefined, scanner.value, (result) => {
     if (result) {
-      code.value = result.getText()
-      sendCode()
+      emit('codeScanned', result.getText())
+
+      dialog.value = false
     }
   })
 }
