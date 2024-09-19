@@ -43,5 +43,5 @@ if (count($orders) === 0) {
 $order = all_about_order($orders[0]['number']);
 
 exit(json_encode([
-    'order' => $order,
+    'order' => $orders[0]['number'],
 ]));
