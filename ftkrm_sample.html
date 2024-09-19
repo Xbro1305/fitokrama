@@ -721,43 +721,83 @@
                         <!-- METHOD_1_BEGIN -->
 
                         <div class="[option_class]">
-                            <img
-                                src="../logos/[button_pic]"
-                                alt="Выбор"
-                                class="delivery-choosing-button"
-                                data-submethod-id="[method_id]"
-                                onclick="sendPostRequest(this)"
-                            />
+                            <section>
+                                <img
+                                    src="../logos/[button_pic]"
+                                    alt="Выбор"
+                                    class="delivery-choosing-button"
+                                    data-submethod-id="[method_id]"
+                                    onclick="sendPostRequest(this)"
+                                />
 
-                            <div class="delivery-info">
-                                <div class="method-info">
-                                    <h1 class="method-name">[method_name]</h1>
-                                    <section class="method-details">
-                                        <img
-                                            src="../logos/[method_pic]"
-                                            alt="Delivery"
-                                            class="delivery-image"
-                                        />
-                                        <div class="method-description">
-                                            <p>[method_address]</p>
-                                            <p>
-                                                [method_note] [method_distance]
-                                                [method_duration_text]
-                                            </p>
-                                        </div>
-                                    </section>
-                                    <section
-                                        class="delivery_note"
-                                        style="background: [plate_color]"
-                                    >
-                                        [plate_text]
-                                    </section>
+                                <div class="delivery-info">
+                                    <div class="method-info">
+                                        <h1 class="method-name">
+                                            [method_name]
+                                        </h1>
+                                        <section class="method-details">
+                                            <img
+                                                src="../logos/[method_pic]"
+                                                alt="Delivery"
+                                                class="delivery-image"
+                                            />
+                                            <div class="method-description">
+                                                <p>[method_address]</p>
+                                                <p>
+                                                    [method_note]
+                                                    [method_distance]
+                                                    [method_duration_text]
+                                                </p>
+                                            </div>
+                                        </section>
+                                        <section
+                                            class="delivery_note"
+                                            style="background: [plate_color]"
+                                        >
+                                            [plate_text]
+                                        </section>
+                                    </div>
+                                    <p class="delivery-price">
+                                        [method_price_rub],<sup
+                                            >[method_price_kop]</sup
+                                        ><span class="currency">руб.</span>
+                                    </p>
                                 </div>
-                                <p class="delivery-price">
-                                    [method_price_rub],<sup
-                                        >[method_price_kop]</sup
-                                    ><span class="currency">руб.</span>
-                                </p>
+                            </section>
+                            <div class="others">
+                                <button
+                                    onclick="submethodToggle([submethodId])"
+                                >
+                                    [mehtod_name]-
+                                    <p
+                                        class="submethodToggle-[submethodId] submethodToggle"
+                                    >
+                                        Больше вариантов ⋁
+                                    </p>
+                                </button>
+                                <div
+                                    class="submethods-[submethodId] submethods"
+                                >
+                                    <!-- Submethod_start -->
+                                    <div class="submethod">
+                                        <section class="method-details">
+                                            <div class="method-description">
+                                                <p>[submethod_address]</p>
+                                                <p>
+                                                    [submethod_note]
+                                                    [submethod_distance]
+                                                    [submethod_duration_text]
+                                                </p>
+                                            </div>
+                                        </section>
+                                        <p class="delivery-price">
+                                            [submethod_price_rub],<sup
+                                                >[submethod_price_kop]</sup
+                                            ><span class="currency">руб.</span>
+                                        </p>
+                                    </div>
+                                    <!-- Submethod_end -->
+                                </div>
                             </div>
                         </div>
                         <!-- METHOD_1_END -->
@@ -1390,7 +1430,22 @@
                 window.location.href = "/cart_page.php";
             };
 
-            const deliveryMethods = [deliveryMethods]
+            const submethodToggle = (id) => {
+                document
+                    .querySelector(".submethods-" + id)
+                    .classList.toggle("active");
+
+                const c = document
+                    .querySelector(".submethods-" + id)
+                    .classList.contains("active");
+
+                if (c)
+                    document.querySelector(".submethodToggle-" + id).innerHTML =
+                        "Меньше вариантов ⋀";
+                else
+                    document.querySelector(".submethodToggle-" + id).innerHTML =
+                        "Больше вариантов ⋁";
+            };
         </script>
 
         <script src="./js/main.js"></script>
