@@ -231,9 +231,14 @@ function send_sms_mysim ($phone_number, $message)	//	отправить SMS на
 	global $sim_gateway_username;
 	global $sim_gateway_password;
 	global $sim_gateway_port;
+	
+	$message_encoded = urlencode($message);
+	$phone_number_encoded = urlencode($phone_number);
 
-	$url = "http://$sim_gateway_ip/cgi/WebCGI?1500101=account=$sim_gateway_username&password=$sim_gateway_password&port=$sim_gateway_port&destination=$phone_number&content=$message";
+	$url = "http://$sim_gateway_ip/cgi/WebCGI?1500101=account=$sim_gateway_username&password=$sim_gateway_password&port=$sim_gateway_port&destination=$phone_number_encoded&content=$message_encoded";
 
+	
+	
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -241,17 +246,10 @@ function send_sms_mysim ($phone_number, $message)	//	отправить SMS на
 	$response = curl_exec($ch);
 	curl_close($ch);
 
-	echo 'Ответ шлюза: ' . $response;
-	send_warning_telegram($url);
-	send_warning_telegram($response);
+	if (strpos($response, 'successfully') === false) 
+		send_warning_telegram('Ошибка отправки SMS с собственного шлюза. '.$url.'   -  '.$response);
+	
 	return $response;
-/*
-
-	$response_arr = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
-	if ($response_arr->result=='OK') $response_arr->success ='true';
-
-	return json_encode($response_arr);
-*/
 }
 
 function send_sms_smstrafficby ($phone, $text)	//	отправить SMS на smstrafficby
