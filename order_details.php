@@ -40,7 +40,7 @@ if (count($orders) === 0) {
     ]));
 }
 
-$order = all_about_order($orders[0]['number']);
+$order = all_about_order($orders[0]['number'], 'all_info');
 
 exit(json_encode([
     'order' => $order,
