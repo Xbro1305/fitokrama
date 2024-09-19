@@ -32,7 +32,7 @@ if ($staff_role !== 'store' && $staff_role !== 'main') {
     ]));
 }
 
-$orders = ExecSQL($link, "SELECT * FROM `orders` WHERE `number`='{$json_in['number']}' `datetime_paid` IS NOT NULL AND `datetime_assembly` IS NULL AND `datetime_cancel` IS NULL LIMIT 1");
+$orders = ExecSQL($link, "SELECT * FROM `orders` WHERE `number`='{$json_in['number']}' AND `datetime_paid` IS NOT NULL AND `datetime_assembly` IS NULL AND `datetime_cancel` IS NULL LIMIT 1");
 
 if (count($orders) === 0) {
     die (json_encode([
@@ -40,12 +40,8 @@ if (count($orders) === 0) {
     ]));
 }
 
-die (json_encode([
-    'error' => $orders[0],
-]));
-
 $order = all_about_order($orders[0]['number']);
 
 exit(json_encode([
-    'order' => $orders[0]['number'],
+    'order' => $order,
 ]));
