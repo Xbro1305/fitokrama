@@ -18,6 +18,10 @@ body {
     margin: 5px 0;
 }
 
+.delivery-option > section {
+  display: flex;
+  gap: 5px;
+}
 .hidden_option {
     display: none;
 }
