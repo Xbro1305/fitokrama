@@ -60,6 +60,12 @@ function insert_base64_encoded_image($img)
 	$doc = str_replace('[stage_5]', 'stage', $doc);
 	$doc = str_replace('[stage_6]', 'stage', $doc);
 	
+	$doc = str_replace('[line_1]', 'line succeeded', $doc);
+	$doc = str_replace('[line_2]', 'line succeeded', $doc);
+	$doc = str_replace('[line_3]', 'line', $doc);
+	$doc = str_replace('[line_4]', 'line', $doc);
+	$doc = str_replace('[line_5]', 'line', $doc);
+	$doc = str_replace('[line_6]', 'line', $doc);
 	
 	
 	
@@ -75,7 +81,7 @@ function insert_base64_encoded_image($img)
 	
 	
 	echo $doc;
-	//mail_sender($email, $subject, $doc);					
+	mail_sender($email, $subject, $doc);					
 	
 	
 	exit ;
