@@ -40,6 +40,10 @@ if (count($orders) === 0) {
     ]));
 }
 
+die (json_encode([
+    'error' => $orders[0]['number'],
+]));
+
 $order = all_about_order($orders[0]['number']);
 
 exit(json_encode([
