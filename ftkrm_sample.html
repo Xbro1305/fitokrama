@@ -719,6 +719,11 @@
 
                     <section>
                         <!-- METHOD_1_BEGIN -->
+						
+						<!-- REPEAT_METHOD_1_BEGIN 
+						<a href="#" id="toggleButton_[prefix]" onclick="toggleVisibility('[prefix]')">[method_name] - Больше вариантов</a>
+						<div id="toggleContent_[prefix]" class="toggle_[prefix]">
+						REPEAT_METHOD_1_END -->
 
                         <div class="[option_class]">
                             <img
@@ -760,6 +765,9 @@
                                 </p>
                             </div>
                         </div>
+						<!-- REPEAT_METHOD_2_BEGIN 
+						</div>
+						REPEAT_METHOD_2_END -->
                         <!-- METHOD_1_END -->
                         <button id="toggleOptionsBtn" onclick="toggleOptions()">
                             Больше вариантов ⋁
@@ -1391,8 +1399,16 @@
             };
 
             const deliveryMethods = [deliveryMethods]
+			function toggleVisibility(category) 
+				{
+				const content = document.getElementById(`toggleContent_${category}`);
+				const button = document.getElementById(`toggleButton_${category}`);
+				if (content) { content.classList.remove(`toggle_${category}`); }
+				if (button) { button.style.display = 'none'; }
+				}			
         </script>
 
         <script src="./js/main.js"></script>
+		<!-- STYLES -->
     </body>
 </html>

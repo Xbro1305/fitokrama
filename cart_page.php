@@ -121,18 +121,41 @@
 	$doc = cut_fragment($doc,'<!-- METHOD_1_BEGIN -->','<!-- METHOD_1_END -->','[methods_table]',$html_methods_1);
 
 
+	
 	$html_methods = '';
 	$cou = 0;
 	$method_found=false;
+	$last_method='';
+	$script_add='';
+	$style_add='';
 	
 	if (isset($delivery_methods['methods']))
 	foreach ($delivery_methods['methods'] as $method_1)
 	{
+		
 		foreach ($method_1['points'] as $point_1)
 			{
+				$prefix = $method_1['prefix'];
 				$cou = $cou + 1;
 				$html_methods = $html_methods . $html_methods_1;
+				if ($last_method==$prefix)	//	повторение внутри одного метода, надо убрать комментарии
+				{
+					$html_methods = str_replace('<!-- REPEAT_METHOD_1_BEGIN', '', $html_methods);
+					$html_methods = str_replace('REPEAT_METHOD_1_END -->', '', $html_methods);
+					$html_methods = str_replace('<!-- REPEAT_METHOD_2_BEGIN', '', $html_methods);
+					$html_methods = str_replace('REPEAT_METHOD_2_END -->', '', $html_methods);
+				}
+				else	//	повторение внутри одного метода, надо убрать все, что находится внутри комментариев
+				{
+					$html_methods = cut_fragment($html_methods,'<!-- REPEAT_METHOD_1_BEGIN','REPEAT_METHOD_1_END -->','',$t);
+					$html_methods = cut_fragment($html_methods,'<!-- REPEAT_METHOD_2_BEGIN','REPEAT_METHOD_2_END -->','',$t);
+					$style_add .= '.toggle_[prefix] {display: none;}';
+					$style_add = str_replace('[prefix]', $prefix, $style_add);
+
+				}
 				
+				
+				$html_methods = str_replace('[prefix]', $prefix, $html_methods);
 				$html_methods = str_replace('[method_pic]'			, ''.$method_1['logo'], $html_methods);
 				$html_methods = str_replace('[method_name]'			, $method_1['name'], $html_methods);
 				$html_methods = str_replace('[method_duration_text]', $method_1['duration_text'], $html_methods);
@@ -183,7 +206,7 @@
 				$html_methods = str_replace('<!-- METHOD_1_BEGIN -->', '', $html_methods);
 				$html_methods = str_replace('<!-- METHOD_1_END -->', '', $html_methods);
 				//$html_methods = str_replace('<!-- checked-->', '', $html_methods); 
-				
+				$last_method=$prefix;
 				
 		}
 	}
@@ -191,8 +214,7 @@
 	if (!$method_found) 
 		$html_methods=str_replace('delivery_option hidden_option', 'delivery_option', $html_methods); 
 	
-	
-	
+	$doc = str_replace('<!-- STYLES -->', '<style> '.$style_add.' </style>', $doc);
 	$doc = str_replace('[methods_table]', $html_methods, $doc);
 	if (!$method_found || $cou==1) 
 	$doc=str_replace('Больше вариантов ⋁', '', $doc); 
