@@ -680,6 +680,8 @@ function mail_sender($email, $subject, $text)
         $mail->isHTML(true);
         $mail->Subject = $subject;
         $mail->Body    = $text;
+        $mail->AltBody = strip_tags($text);
+
 
 		$mail->send();
 
