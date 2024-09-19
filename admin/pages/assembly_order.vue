@@ -10,18 +10,21 @@ const config = useRuntimeConfig()
 const backendUrl = config.public.backendUrl
 
 const checkCode = async (code: string) => {
+  /*
   if (code.split('/')[0] !== '002-' || !code.split('/')[1] || code.split('/')[1].length !== 6) {
     showError('Введите QR-код с листа для сборки')
 
     return
   }
+  */
 
-  const { data } = await useFetch(`${backendUrl}/order_sent.php`, {
+  const { data } = await useFetch(`${backendUrl}/order_details.php`, {
     method: 'POST',
     body: {
       staff_login: email,
       staff_password: password,
-      number: code.split('/')[1],
+      // number: code.split('/')[1],
+      number: '883440',
     },
   })
 
