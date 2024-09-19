@@ -19,11 +19,14 @@
 	
 	$code = random_int(10001,99999);
 	$longcode = bin2hex(random_bytes(32));
+	$longlink = "https://fitokrama.by/confirm_email.php?longcode=$longcode";	
 	
-	$text = '🌿 Введите код [code] или пройдите по ссылке https://fitokrama.by/confirm_email.php?longcode=[longcode] !';					// !!!!!!!!!!!!!!! взять из шаблона
+	$text = file_get_contents("./pages/confirm_email.html");
+
+	
 	
 	$text = str_replace('[code]', $code, $text);
-	$text = str_replace('[longcode]', $longcode, $text);
+	$text = str_replace('[link]', $longlink, $text);
 		
 	$rep = mail_sender($email, '🌿 Код подтверждения Fitokrama - noreply', $text);
 	
