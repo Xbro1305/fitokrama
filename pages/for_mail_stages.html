@@ -1,23 +1,194 @@
-<link rel="stylesheet" href="./css/cart.css" />
+<!-- <link rel="stylesheet" href="./css/cart.css" />
 <div class="cart-content">
-Добрый день!
-Благодарим вас за заказ в интернет-магазине «Фитокрама».
+    Добрый день! Благодарим вас за заказ в интернет-магазине «Фитокрама».
 
-<img src="[img_1]" alt="" /> заказ принят
-<img src="./logos/finger.png" alt="" />
-<img src="[img_2]" alt="" />  заказ оплачен
-<img src="./logos/finger.png" alt="" />
-<img src="[img_3]" alt="" /> готовим Ваш заказ
-<img src="./logos/finger.png" alt="" />
-<img src="[img_4]" alt="" /> заказ выслан
-<img src="./logos/finger.png" alt="" />
-<img src="[img_5]" alt="" /> заказ готов к выдаче
-<img src="[img_6]" alt="" /> заказ получен
+    <img src="[img_1]" alt="" /> заказ принят
+    <img src="./logos/finger.png" alt="" />
+    <img src="[img_2]" alt="" /> заказ оплачен
+    <img src="./logos/finger.png" alt="" />
+    <img src="[img_3]" alt="" /> готовим Ваш заказ
+    <img src="./logos/finger.png" alt="" />
+    <img src="[img_4]" alt="" /> заказ выслан
+    <img src="./logos/finger.png" alt="" />
+    <img src="[img_5]" alt="" /> заказ готов к выдаче
+    <img src="[img_6]" alt="" /> заказ получен [text_detailed] Детали заказа:
+    Номер заказа [order_number]. Покупатель [client_name]. Адрес доставки:
+    [order_address_delivery]
+</div> -->
 
-[text_detailed]
-Детали заказа:
-Номер заказа [order_number].
-Покупатель [client_name].
-Адрес доставки: [order_address_delivery]
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Fitokrama</title>
 
-</div>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: sans-serif;
+            }
+
+            body {
+                padding: 10px;
+                display: flex;
+                justify-content: center;
+            }
+
+            .title {
+                padding: 10px 30px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: #767676;
+                font-weight: 500;
+                font-size: 18px;
+            }
+
+            .logo {
+                height: 80px;
+            }
+
+            main {
+                display: flex;
+                width: 100%;
+                max-width: 768px;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .content {
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                padding: 50px 30px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .subTitle h1 {
+                font-size: 24px;
+                color: #555555;
+                margin-bottom: 10px;
+            }
+
+            .subTitle p {
+                color: #555555;
+            }
+
+            .proccess {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .ok_logo {
+                width: 35px;
+            }
+
+            .proccess .stage {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: #474747;
+                font-weight: 500;
+                opacity: 0.7;
+            }
+
+            .proccess .line {
+                height: 30px;
+                width: 4px;
+                background: #518260;
+                margin-left: 15.5px;
+            }
+
+            .succeeded {
+                opacity: 1 !important;
+            }
+
+            .proccess >p{
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <div class="title">
+                <p>FitoKrama.by</p>
+                <img src="../logos/ftkrm_logo.png" alt="Logo" class="logo" />
+            </div>
+
+            <div class="content">
+                <div class="subTitle">
+                    <h1>Добрый день!</h1>
+                    <p>
+                        Благодарим вас за заказ в интернет-магазине «Фитокрама».
+                    </p>
+                </div>
+
+                <div class="proccess">
+                    <div class="[stage_1]">
+                        <img
+                            src="../logos/green_ok.png"
+                            class="ok_logo"
+                            alt=""
+                        />
+                        <p>заказ принят</p>
+                    </div>
+                    <span class="line"></span>
+                    <div class="[stage_2]">
+                        <img
+                            src="../logos/green_ok.png"
+                            class="ok_logo"
+                            alt=""
+                        />
+                        <p>заказ оплачен</p>
+                    </div>
+                    <span class="line"></span>
+                    <div class="[stage_3]">
+                        <img
+                            src="../logos/green_ok.png"
+                            class="ok_logo"
+                            alt=""
+                        />
+                        <p>готовим Ваш заказ</p>
+                    </div>
+                    <span class="line"></span>
+                    <div class="[stage_4]">
+                        <img
+                            src="../logos/green_ok.png"
+                            class="ok_logo"
+                            alt=""
+                        />
+                        <p>заказ выслан</p>
+                    </div>
+                    <span class="line"></span>
+                    <div class="[stage_5]">
+                        <img
+                            src="../logos/green_ok.png"
+                            class="ok_logo"
+                            alt=""
+                        />
+                        <p>заказ готов к выдаче</p>
+                    </div>
+                    <span class="line"></span>
+                    <div class="[stage_6]">
+                        <img
+                            src="../logos/green_ok.png"
+                            class="ok_logo"
+                            alt=""
+                        />
+                        <p>заказ получен</p>
+                    </div>
+                </div>
+                <p>[text_detailed]</p>
+                <p>
+                    <b>Детали заказа: </b><br />
+                    Номер заказа [order_number]. <br />
+                    Покупатель [client_name]. <br />
+                    Адрес доставки: [order_address_delivery]
+                </p>
+            </div>
+        </main>
+    </body>
+</html>
