@@ -76,6 +76,23 @@ function hutkigroshPOST($method, $dataJSON = null, $cookies = null) {
 
 $method = explode("/", $_SERVER["SCRIPT_URL"])[2];
 
+if ($method == 'test_sms') {
+//	$res = send_sms_mysim ('375296767861', 'tt1');
+	$url ='http://195.222.74.241:5038/cgi/WebCGI?1500101=account=apisms&password=2rGFHuuprBBN4563&port=1&destination=375296767861&content=t1fr';
+	
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+	$response = curl_exec($ch);
+	curl_close($ch);
+	echo $response;
+	die;
+	
+	
+	
+}
+
 
 if ($method == 'get_grosh_token') {
 
