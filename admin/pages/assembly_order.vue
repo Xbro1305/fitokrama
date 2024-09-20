@@ -141,7 +141,7 @@ const addItem = async () => {
 
     if (data.value.html_for_print) {
       const printWindow = window.open('', '_blank')
-      printWindow?.document.write(html)
+      printWindow?.document.write(data.value.html_for_print)
       sleep(200).then(() => {
         printWindow?.document.close()
         printWindow?.focus()
