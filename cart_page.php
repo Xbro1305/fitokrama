@@ -145,7 +145,7 @@
 			return $a['ez_distance'] <=> $b['ez_distance'];
 			});
 		//if ($method_1['prefix']=='EUR')		die(json_encode($method_1));
-		
+		unset($point_1);
 		
 		foreach ($method_1['points'] as $point_1)
 			{
@@ -240,6 +240,7 @@
 		$html_methods=str_replace('delivery_option hidden_option', 'delivery_option', $html_methods); 
 		$html_methods=str_replace('but_option hidden_option', 'but_option', $html_methods); 
 	}
+	
 	
 	$doc = str_replace('<!-- STYLES -->', '<style> '.$style_add.' </style>', $doc);
 	$doc = str_replace('[methods_table]', $html_methods, $doc);
