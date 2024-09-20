@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="ru">
@@ -120,25 +121,22 @@
                 </div>
 
                 <div class="account-buttons">
-                    <div class="profileButton" onclick="[account_action]">
-                        <a href="#" onclick="[account_action]">
+                    <div class="profileButton" onclick="showAccountActions()">
+                        <a href="#" onclick="showAccountActions()">
                             <img
-                                src="../logos/account_logo.png"
+                                src="../logos/account_logo_auth.png"
                                 alt="Аккаунт"
-                                onclick="[account_action]"
+                                onclick="showAccountActions()"
                             />
                         </a>
-                        <!-- RED_DOT_START -->
-                        <div class="redDot"></div>
-                        <div class="needAction">[reddottext]</div>
-                        <!-- RED_DOT_END -->
+                        
                     </div>
 
                     <a href="/cart_page.php">
                         <img src="../logos/wallet_logo.png" alt="Кошелек" />
                         <!-- CART_COUNT_START -->
                         <div class="cart-float">
-                            <p class="cart_count">[cart_count]</p>
+                            <p class="cart_count">1</p>
                         </div>
                         <!-- CART_COUNT_END -->
                     </a>
@@ -146,414 +144,13 @@
             </div>
         </div>
         <!-- MAIN_TEXT_BEGIN -->
-        <div class="maintext">[main_text]</div>
+        <div class="maintext">Добавь товар на 71.12 руб. для бесплатной доставки!</div>
         <!-- MAIN_TEXT_END -->
-        <!--ORDER_PAGE_BEGIN -->
-        <link rel="stylesheet" href="./css/product-in-cart.css" />
-        <link rel="stylesheet" href="./css/cart.css" />
-        <link rel="stylesheet" href="./css/cart_delivery.css" />
-        <link rel="stylesheet" href="./css/cart_payment.css" />
-        <div class="cart-content">
-            <h3>
-                ЗАКАЗ № [order_number] ОТ [order_date].
-                <p style="color: [order_color]">[order_status]</p>
-            </h3>
-            <!-- BUTTON_PAY_BEGIN -->
-            <div class="payment-options">
-                <div class="payment-option" onclick="openModal('qrModal')">
-                    <img
-                        src="data:image/jpeg;base64,[payqrpicture]"
-                        alt="QR Code"
-                    />
-                    <p>Оплатить по QR-коду</p>
-                </div>
-                <div
-                    class="payment-option"
-                    onclick="openCustomWindow('[paylink]')"
-                >
-                    <img src="../logos/cardpay.png" alt="Оплата картой" />
-                    <p>Оплатить картой</p>
-                </div>
-                <div
-                    class="payment-option"
-                    onclick="openTextModal('В дереве ЕРИП выберите услугу «E-POS - оплата товаров и услуг» и введите код: [paycode]')"
-                >
-                    <img src="../logos/epospay.png" alt="Оплата EPOS" />
-                    <p>Оплатить через EPOS</p>
-                </div>
-                <div
-                    class="payment-option"
-                    onclick="openTextModal('Метод в разработке')"
-                >
-                    <img src="../logos/alphapay.png" alt="Оплата Альфа" />
-                    <p>Оплатить Альфа</p>
-                </div>
-            </div>
-
-            <div class="checkout-button-row">
-                <button class="buy-button" onclick="location.reload();">
-                    ПРОВЕРИТЬ ОПЛАТУ
-                </button>
-            </div>
-
-            <div id="qrModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal('qrModal')"
-                        >&times;</span
-                    >
-                    <img
-                        src="data:image/jpeg;base64,[payqrpicture]"
-                        alt="QR Code"
-                        style="width: 300px; height: 300px"
-                    />
-                </div>
-            </div>
-            <div id="messageModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal('messageModal')"
-                        >&times;</span
-                    >
-                    <h3 id="modalMessageContent"></h3>
-                </div>
-            </div>
-            <link rel="stylesheet" href="./css/orderpage.css" />
-
-            <script src="./js/orderpage.js"></script>
-            <script>
-                window.addEventListener("focus", function () {
-                    location.reload();
-                });
-            </script>
-
-            <!-- BUTTON_PAY_END -->
-
-            <!-- ORDER_GOOD_1_BEGIN -->
-            <div class="cart-item">
-                <img
-                    onclick="navigateTo([goodart])"
-                    src="../goods_pics/[good_pic]"
-                    alt="Product"
-                    class="product-image"
-                />
-
-                <div class="product-info">
-                    <div class="cart-item-info">
-                        <h4
-                            class="product-name"
-                            onclick="navigateTo([goodart])"
-                        >
-                            [good_name]
-                        </h4>
-
-                        <div class="product-prices">
-                            <div class="new-price">
-                                [good_price_rub],<sup>[good_price_kop]</sup
-                                ><span class="currency">руб.</span>
-                            </div>
-                        </div>
-
-                        <div
-                            class="orderItemQty"
-                            id="total-price-item[good_count]"
-                            data-price="[good_price]"
-                        >
-                            <span class="price-full-[good_count]"
-                                >[good_qty] шт.
-                            </span>
-                        </div>
-
-                        <div
-                            class="total-price"
-                            id="total-price-item[good_count]"
-                            data-price="[good_price]"
-                        >
-                            <span class="price-full-[good_count]"
-                                >[good_sum_rub]</span
-                            >,
-                            <sup class="price-small-[good_count]"
-                                >[good_sum_kop]
-                            </sup>
-                            <span class="currency"> руб.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ORDER_GOOD_1_END -->
-
-            <div class="checkout-info authorized">
-                <div class="cart-summary">
-                    <div class="summary-label">СУММА ЗАКАЗА:</div>
-
-                    <div class="summary-total" id="summary-total">
-                        <span class="totalPriceRub">[sum_rub]</span>,<sup
-                            class="totalPriceKop"
-                            >[sum_kop]</sup
-                        >
-                        <span class="currency">руб.</span>
-                    </div>
-                </div>
-            </div>
-
-            <!--ORDER_PAGE_END -->
-            <!--PROFILE_PAGE_BEGIN -->
-            <link rel="stylesheet" href="./css/product-in-cart.css" />
-            <link rel="stylesheet" href="./css/cart.css" />
-            <link rel="stylesheet" href="./css/cart_delivery.css" />
-            <link rel="stylesheet" href="./css/cart_payment.css" />
-            <div class="cart-content">
-                <h3>Клиент: [client_email]</h3>
-
-                <!-- ORDER_1_BEGIN -->
-                <a href="[order_link]" class="cart-item">
-                    <div class="product-info">
-                        <div class="cart-item-info">
-                            <h4 class="product-name">[order_number]</h4>
-                            <!-- BUTTON_PAY_BEGIN -->
-                            <div class="checkout-button-row">
-                                <button class="buy-button" onclick="buyItem()">
-                                    ОПЛАТИТЬ
-                                </button>
-                            </div>
-                            <!-- BUTTON_PAY_END -->
-                            <!-- BUTTON_GET_BEGIN -->
-                            <div class="checkout-button-row">
-                                <button
-                                    class="buy-button"
-                                    onclick="goTo('fitokrama.by/order_page.php?order=[order_number]')"
-                                    style="background: #bf8424 !important"
-                                >
-                                    ИНСТРУКЦИЯ ПО ПОЛУЧЕНИЮ
-                                </button>
-                            </div>
-                            <!-- BUTTON_GET_END -->
-
-                            <div
-                                class="total-price"
-                                id="total-price-item[good_count]"
-                                data-price="[good_price]"
-                            >
-                                <span class="price-full-[good_count]"
-                                    >[order_sum_rub]</span
-                                >,
-                                <sup class="price-small-[good_count]"
-                                    >[order_sum_kop]
-                                </sup>
-                                <span class="currency"> руб.</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                <!-- ORDER_1_END -->
-                <button class="exitButton" onclick="exitaccount()">
-                    Выйти из профиля
-                </button>
-            </div>
-        </div>
-        <!--PROFILE_PAGE_END -->
-        <!-- BANNERS_PAGE_BEGIN -->
-        <link rel="stylesheet" href="./css/banner.css" />
-        <div class="banner">
-            <img src="" class="bannerimg" alt="" />
-            <div class="controls">
-                <button class="prevbutton" onclick="moveTo(-1)"><</button>
-                <button class="nextbutton" onclick="moveTo(1)">></button>
-            </div>
-            <div class="pagination"></div>
-        </div>
-        <script src="./js/banner.js"></script>
-
-        <!-- BANNERS_PAGE_END -->
-        <!-- GOOD_PAGE_BEGIN -->
-        <link rel="stylesheet" href="./css/product-card.css" />
-        <div class="content product-card">
-            <div class="product-without-description">
-                <img
-                    src="../goods_pics/[goodspics]"
-                    alt="Product"
-                    class="product-image"
-                />
-
-                <div class="product-info">
-                    <h1 class="product-title">[goodname]</h1>
-
-                    <p class="product-description">[gooddef1]</p>
-
-                    <div class="product-prices">
-                        <div class="old-price">[goodoldprice]</div>
-
-                        <div class="new-price">[goodactprice] руб.</div>
-
-                        <div class="product-actions">
-                            <div class="quantity-selector">
-                                <button
-                                    class="quantity-button"
-                                    onclick="dec(0)"
-                                >
-                                    -
-                                </button>
-
-                                <input
-                                    type="number"
-                                    class="quantity-input quantity-input-0"
-                                    value="1"
-                                />
-
-                                <button
-                                    class="quantity-button"
-                                    onclick="inc(0)"
-                                >
-                                    +
-                                </button>
-                            </div>
-
-                            <button
-                                class="add-to-cart"
-                                onclick="showAddedToCartModal([goodart],[goodactprice],document.querySelector('.quantity-input-0').value)"
-                            >
-                                В КОРЗИНУ
-                            </button>
-                        </div>
-                    </div>
-
-                    <p class="delivery-time">↯ доставка [timedelievery]</p>
-
-                    <div class="product-details">
-                        <p>Код: [goodbarcode]</p>
-
-                        <p>
-                            <a href="/catalog_page.php?cat=[goodcat]"
-                                >[goodcat]</a
-                            >
-                            /
-                            <a href="catalog_page.php?subcat=[goodsubcat]"
-                                >[goodsubcat]</a
-                            >
-                        </p>
-
-                        <p>[goodtegs]</p>
-
-                        <p>Производитель: [goodprod]</p>
-
-                        <p>Цена за 1 кг: [good1kg]</p>
-                    </div>
-                </div>
-            </div>
-            <p class="product-description">[gooddef2]</p>
-        </div>
-        <!-- GOOD_PAGE_END -->
-        <!-- SIMILAR_GOODS_BEGIN -->
-        <link rel="stylesheet" href="./css/product-card.css" />
-        <link rel="stylesheet" href="./css/similar-products.css" />
-        <div class="similar-products">
-            <h3>ПОХОЖИЕ ТОВАРЫ</h3>
-
-            <div class="products-container">
-                <!-- GOOD_1_BEGIN -->
-                <div class="product-item">
-                    <img
-                        src="./goods_pics/[goodspics]"
-                        alt="Product"
-                        onclick="navigateTo([goodart])"
-                    />
-
-                    <h4 class="product-name" onclick="navigateTo([goodart])">
-                        [goodname]
-                    </h4>
-
-                    <p
-                        class="product-description"
-                        onclick="navigateTo([goodart])"
-                    >
-                        [gooddef1]
-                    </p>
-
-                    <div class="product-prices">
-                        <div class="old-price">[goodoldprice]</div>
-
-                        <div class="new-price">[goodactprice] руб.</div>
-                    </div>
-
-                    <div class="quantity-selector">
-                        <section class="quantity-section">
-                            <button
-                                class="quantity-button-small"
-                                onclick="dec([goodart])"
-                            >
-                                -
-                            </button>
-
-                            <input
-                                type="number"
-                                class="quantity-input-small quantity-input-[goodart]"
-                                value="1"
-                            />
-
-                            <button
-                                class="quantity-button-small"
-                                onclick="inc([goodart])"
-                            >
-                                +
-                            </button>
-                        </section>
-
-                        <button
-                            class="add-to-cart-small"
-                            onclick="showAddedToCartModal([goodart], [goodactprice], document.querySelector('.quantity-input-[goodart]').value)"
-                        >
-                            В КОРЗИНУ
-                        </button>
-                    </div>
-                </div>
-                <!-- GOOD_1_END -->
-            </div>
-        </div>
-        <div class="modal" id="fail">
-            <div class="modal-content">
-                <span class="close" onclick="closeFailModal()">&times;</span>
-
-                <div class="modal-body">
-                    <div class="modal-text">
-                        <h2>Товар не добавлен в корзину</h2>
-                        <p>что-то пошло не так</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="addedToCartModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeAddedToCartModal()"
-                    >&times;</span
-                >
-
-                <div class="modal-body">
-                    <div class="modal-text">
-                        <h2>
-                            <img
-                                src="./logos/good_added.png"
-                                class="modal-image"
-                                alt=""
-                            />
-                            Товар добавлен в корзину!
-                        </h2>
-                        <div class="modal-buttons">
-                            <button
-                                class="continue-shopping"
-                                onclick="closeAddedToCartModal()"
-                            >
-                                Продолжить покупки
-                            </button>
-
-                            <button class="checkout" onclick="gotoCart()">
-                                Оформить заказ
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script src="./js/productpage.js"></script>
-        <!-- SIMILAR_GOODS_END -->
+        
+            
+        
+        
+        
 
         <!-- CART_BEGIN -->
         <link rel="stylesheet" href="./css/product-in-cart.css" />
@@ -565,8 +162,8 @@
             <!-- CART_GOOD_1_BEGIN -->
             <div class="cart-item">
                 <img
-                    onclick="navigateTo([goodart])"
-                    src="../goods_pics/[good_pic]"
+                    onclick="navigateTo(54985)"
+                    src="../goods_pics/./54985.png"
                     alt="Product"
                     class="product-image"
                 />
@@ -575,20 +172,20 @@
                     <div class="cart-item-info">
                         <h4
                             class="product-name"
-                            onclick="navigateTo([goodart])"
+                            onclick="navigateTo(54985)"
                         >
-                            [good_name]
+                            PlaPlamela Магний таблетки №120 по 600 мг
                         </h4>
 
                         <div class="product-prices">
                             <div class="old-price">
-                                [good_old_price_rub],<sup
-                                    >[good_old_price_kop]</sup
+                                31,<sup
+                                    >52</sup
                                 >
                             </div>
 
                             <div class="new-price">
-                                [good_price_rub],<sup>[good_price_kop]</sup>
+                                28,<sup>88</sup>
                                 <span class="currency">руб.</span>
                             </div>
                         </div>
@@ -596,7 +193,7 @@
                         <div class="quantity-selector">
                             <button
                                 class="quantity-button"
-                                onclick="changeQuantity(-1, 'item[good_count]', [good_art], [good_price])"
+                                onclick="changeQuantity(-1, 'item1', 54985, 28.88)"
                             >
                                 -
                             </button>
@@ -604,14 +201,14 @@
                             <input
                                 type="number"
                                 class="quantity-input"
-                                id="quantity-item[good_count]"
-                                value="[good_qty]"
+                                id="quantity-item1"
+                                value="1"
                                 readonly
                             />
 
                             <button
                                 class="quantity-button"
-                                onclick="changeQuantity(1, 'item[good_count]', [good_art], [good_price])"
+                                onclick="changeQuantity(1, 'item1', 54985, 28.88)"
                             >
                                 +
                             </button>
@@ -619,14 +216,14 @@
 
                         <div
                             class="total-price"
-                            id="total-price-item[good_count]"
-                            data-price="[good_price]"
+                            id="total-price-item1"
+                            data-price="28.88"
                         >
-                            <span class="price-full-[good_count]"
-                                >[good_sum_rub]</span
+                            <span class="price-full-1"
+                                >28</span
                             >,
-                            <sup class="price-small-[good_count]"
-                                >[good_sum_kop]
+                            <sup class="price-small-1"
+                                >88
                             </sup>
                             <span class="currency"> руб.</span>
                         </div>
@@ -635,13 +232,7 @@
             </div>
             <!-- CART_GOOD_1_END -->
 
-            <!-- NONAUTHORIZED_START -->
-            <div class="checkout-info nonauthorized checkout-button-row">
-                <button onclick="showAuthMetods()" class="buy-button">
-                    Оформить покупку
-                </button>
-            </div>
-            <!-- NONAUTHORIZED_END -->
+            
 
             <!-- AUTHORIZED_START -->
             <div class="checkout-info authorized">
@@ -652,7 +243,7 @@
                         type="text"
                         class="sendinginfo"
                         id="client_name"
-                        value="[client_name]"
+                        value="Петров Петр Петрович"
                     />
                 </div>
 
@@ -663,7 +254,7 @@
                         type="email"
                         class="sendinginfo"
                         id="client_email"
-                        value="[client_email]"
+                        value="kenherli@gmail.com"
                     />
 
                     <img
@@ -687,7 +278,7 @@
                         type="text"
                         id="client_phone"
                         class="sendinginfo"
-                        value="[client_phone]"
+                        value="+375296562441"
                     />
                     <img
                         src="./logos/green_ok.png"
@@ -710,7 +301,7 @@
                         type="text"
                         id="client_address"
                         class="addr suggestaddr"
-                        value="[client_address]"
+                        value=" Могилёвская обл, Чериковский р-н, г Чериков, ул Сурганова"
                     />
                     <div class="suggestionbox" id="suggestionBox"></div>
                 </div>
@@ -718,58 +309,219 @@
                     <label for="client_address">Доставка</label>
 
                     <section>
-                        <!-- METHOD_1_BEGIN -->
-						
-						<!-- REPEAT_METHOD_1_BEGIN 
-						<a href="#" id="toggleButton_[prefix]" onclick="toggleVisibility('[prefix]')">[method_name] - Больше вариантов</a> 
-						<!--HIDDEN
-						<div id="toggleContent_[prefix]" class="toggle_[prefix]">
-						REPEAT_METHOD_1_END -->
+                        
 
-                        <div class="[option_class]">
+                        <div class="delivery_option hidden_option">
                             <img
-                                src="../logos/[button_pic]"
+                                src="../logos/notenabled.png"
                                 alt="Выбор"
                                 class="delivery-choosing-button"
-                                data-submethod-id="[method_id]"
+                                data-submethod-id="EUR-EUR-62030010"
                                 onclick="sendPostRequest(this)"
                             />
 
                             <div class="delivery-info">
                                 <div class="method-info">
-                                    <h1 class="method-name">[method_name]</h1>
+                                    <h1 class="method-name">Европочта-пункт выдачи</h1>
                                     <section class="method-details">
                                         <img
-                                            src="../logos/[method_pic]"
+                                            src="../logos/evropochta.png"
                                             alt="Delivery"
                                             class="delivery-image"
                                         />
                                         <div class="method-description">
-                                            <p>[method_address]</p>
+                                            <p>Могилевская область,Чериков,ул. Ленинская, 178</p>
                                             <p>
-                                                [method_note] [method_distance]
-                                                [method_duration_text]
+                                                 1802м🚶 22мин🕕
+                                                Через 3 дн. после заказа
                                             </p>
                                         </div>
                                     </section>
                                     <section
                                         class="delivery_note"
-                                        style="background: [plate_color]"
+                                        style="background: "
                                     >
-                                        [plate_text]
+                                        
                                     </section>
                                 </div>
                                 <p class="delivery-price">
-                                    [method_price_rub],<sup
-                                        >[method_price_kop]</sup
+                                    4,<sup
+                                        >20</sup
                                     ><span class="currency">руб.</span>
                                 </p>
                             </div>
                         </div>
-						<!-- REPEAT_METHOD_2_BEGIN 
-						</div>
-						REPEAT_METHOD_2_END -->
-                        <!-- METHOD_1_END -->
+                        
+<a href="#" id="toggleButton_EUR" onclick="toggleVisibility('EUR')">Больше вариантов Европочты</a>
+<div id="toggleContent_EUR" class="toggle_EUR">
+
+                        <div class="delivery_option hidden_option">
+                            <img
+                                src="../logos/notenabled.png"
+                                alt="Выбор"
+                                class="delivery-choosing-button"
+                                data-submethod-id="EUR-EUR-61330020"
+                                onclick="sendPostRequest(this)"
+                            />
+
+                            <div class="delivery-info">
+                                <div class="method-info">
+                                    <h1 class="method-name">Европочта-пункт выдачи</h1>
+                                    <section class="method-details">
+                                        <img
+                                            src="../logos/evropochta.png"
+                                            alt="Delivery"
+                                            class="delivery-image"
+                                        />
+                                        <div class="method-description">
+                                            <p>Могилевская область,Кричев,мкр-н Сож, 11</p>
+                                            <p>
+                                                 28471м🚶 342мин🕕
+                                                Через 3 дн. после заказа
+                                            </p>
+                                        </div>
+                                    </section>
+                                    <section
+                                        class="delivery_note"
+                                        style="background: "
+                                    >
+                                        
+                                    </section>
+                                </div>
+                                <p class="delivery-price">
+                                    4,<sup
+                                        >20</sup
+                                    ><span class="currency">руб.</span>
+                                </p>
+                            </div>
+                        </div>
+</div>                        
+
+                        <div class="delivery_option hidden_option">
+                            <img
+                                src="../logos/notenabled.png"
+                                alt="Выбор"
+                                class="delivery-choosing-button"
+                                data-submethod-id="BPS-BPS-213533"
+                                onclick="sendPostRequest(this)"
+                            />
+
+                            <div class="delivery-info">
+                                <div class="method-info">
+                                    <h1 class="method-name">Белпочта-почтовое отделение</h1>
+                                    <section class="method-details">
+                                        <img
+                                            src="../logos/belpost.png"
+                                            alt="Delivery"
+                                            class="delivery-image"
+                                        />
+                                        <div class="method-description">
+                                            <p>213533, Могилевская обл., Чериковский р-н, г. Чериков, ул. Болдина 33</p>
+                                            <p>
+                                                 1380м🚶 17мин🕕
+                                                Через 3 дн. после заказа
+                                            </p>
+                                        </div>
+                                    </section>
+                                    <section
+                                        class="delivery_note"
+                                        style="background: "
+                                    >
+                                        
+                                    </section>
+                                </div>
+                                <p class="delivery-price">
+                                    4,<sup
+                                        >00</sup
+                                    ><span class="currency">руб.</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+
+                        <div class="delivery_option hidden_option">
+                            <img
+                                src="../logos/notenabled.png"
+                                alt="Выбор"
+                                class="delivery-choosing-button"
+                                data-submethod-id="BPS-BPS-213546"
+                                onclick="sendPostRequest(this)"
+                            />
+
+                            <div class="delivery-info">
+                                <div class="method-info">
+                                    <h1 class="method-name">Белпочта-почтовое отделение</h1>
+                                    <section class="method-details">
+                                        <img
+                                            src="../logos/belpost.png"
+                                            alt="Delivery"
+                                            class="delivery-image"
+                                        />
+                                        <div class="method-description">
+                                            <p>213546, Могилевская обл., Чериковский р-н, аг. Езеры, ул. Приозерная 2</p>
+                                            <p>
+                                                 7156м🚶 86мин🕕
+                                                Через 3 дн. после заказа
+                                            </p>
+                                        </div>
+                                    </section>
+                                    <section
+                                        class="delivery_note"
+                                        style="background: "
+                                    >
+                                        
+                                    </section>
+                                </div>
+                                <p class="delivery-price">
+                                    4,<sup
+                                        >00</sup
+                                    ><span class="currency">руб.</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+
+                        <div class="delivery_option">
+                            <img
+                                src="../logos/green_ok.png"
+                                alt="Выбор"
+                                class="delivery-choosing-button"
+                                data-submethod-id="BPS-BPS-213535"
+                                onclick="sendPostRequest(this)"
+                            />
+
+                            <div class="delivery-info">
+                                <div class="method-info">
+                                    <h1 class="method-name">Белпочта-почтовое отделение</h1>
+                                    <section class="method-details">
+                                        <img
+                                            src="../logos/belpost.png"
+                                            alt="Delivery"
+                                            class="delivery-image"
+                                        />
+                                        <div class="method-description">
+                                            <p>213535, Могилевская обл., Чериковский р-н, д. Зори, ул. Центральная 11</p>
+                                            <p>
+                                                 8373м🚶 100мин🕕
+                                                Через 3 дн. после заказа
+                                            </p>
+                                        </div>
+                                    </section>
+                                    <section
+                                        class="delivery_note"
+                                        style="background: "
+                                    >
+                                        
+                                    </section>
+                                </div>
+                                <p class="delivery-price">
+                                    4,<sup
+                                        >00</sup
+                                    ><span class="currency">руб.</span>
+                                </p>
+                            </div>
+                        </div>
+                        
                         <button id="toggleOptionsBtn" onclick="toggleOptions()">
                             Больше вариантов ⋁
                         </button>
@@ -780,9 +532,9 @@
                     <div class="summary-label">ИТОГО К ОПЛАТЕ:</div>
 
                     <div class="summary-total" id="summary-total">
-                        <span class="totalPriceRub">[sum_rub]</span>,<sup
+                        <span class="totalPriceRub">32</span>,<sup
                             class="totalPriceKop"
-                            >[sum_kop]</sup
+                            >88</sup
                         >
                         <span class="currency">руб.</span>
                     </div>
@@ -1340,7 +1092,7 @@
 
             document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector(".cart-float").style.display =
-                    [cart_count] != 0 ? "flex" : "none";
+                    1 != 0 ? "flex" : "none";
             });
             function goToPage(page) {
                 window.location.href =
@@ -1400,16 +1152,33 @@
             };
 
             const deliveryMethods = [deliveryMethods]
-			function toggleVisibility(category) 
-				{
-				const content = document.getElementById(`toggleContent_${category}`);
-				const button = document.getElementById(`toggleButton_${category}`);
-				if (content) { content.classList.remove(`toggle_${category}`); }
-				if (button) { button.style.display = 'none'; }
-				}			
+			
+  function toggleVisibility(category) {
+    const content = document.getElementById(`toggleContent_${category}`);
+    const button = document.getElementById(`toggleButton_${category}`);
+
+    // Скрываем блок и кнопку после нажатия
+    if (content) {
+      content.classList.remove(`toggle_${category}`);
+    }
+
+    if (button) {
+      button.style.display = 'none';
+    }
+  }
+</script>
+			
+			
+			
         </script>
 
         <script src="./js/main.js"></script>
-		<!-- STYLES -->
+		
+
+<style>
+  .toggle_EUR {
+    display: none;
+  }
+</style>		
     </body>
 </html>
