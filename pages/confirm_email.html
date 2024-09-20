@@ -3,101 +3,112 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Активация учетной записи`</title>
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: sans-serif;
-            }
-
-            body {
-                padding: 10px;
-                display: flex;
-                justify-content: center;
-            }
-
-            .title {
-                padding: 10px 30px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                color: #767676;
-                font-weight: 500;
-                font-size: 18px;
-            }
-
-            .logo {
-                height: 80px;
-            }
-
-            main {
-                display: flex;
-                width: 100%;
-                max-width: 768px;
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .content {
-                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-                padding: 50px 30px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 20px;
-            }
-
-            .subTitle {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-
-            .subTitle h2 {
-                font-size: 24px;
-                color: #555;
-            }
-
-            .subTitle p {
-                font-size: 18px;
-                color: #474747;
-            }
-
-            .content a {
-                color: #fff;
-                text-decoration: none;
-                background: #4f8261;
-                font-size: 14px;
-                font-weight: 500;
-                padding: 10px;
-                border-radius: 6    px;
-                text-transform: uppercase;
-            }
-        </style>
+        <title>Активация учетной записи</title>
     </head>
-    <body>
-        <main>
-            <div class="title">
-                <p>FitoKrama.by</p>
-                <img src="../logos/ftkrm_logo.png" alt="Logo" class="logo" />
-            </div>
-
-            <div class="content">
-                <div class="subTitle">
-                    <h2>Активация учетной записи</h2>
-                    <p>
+    <body
+        style="
+            background: #fff;
+            margin: 0;
+            padding: 10px;
+            font-family: 'PT Sans', Arial, sans-serif;
+        "
+    >
+        <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            style="width: 100%; max-width: 768px; margin: 0 auto"
+        >
+            <tr>
+                <td
+                    style="
+                        padding: 10px 30px;
+                        color: #767676;
+                        font-weight: 500;
+                        font-size: 18px;
+                    "
+                >
+                    <table
+                        role="presentation"
+                        cellspacing="0"
+                        cellpadding="0"
+                        border="0"
+                        width="100%"
+                    >
+                        <tr>
+                            <td>FitoKrama.by</td>
+                            <td align="right">
+                                <img
+                                    src="https://fitokrama.by/logos/ftkrm_logo.png"
+                                    alt="Logo"
+                                    style="height: 80px"
+                                />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td
+                    style="
+                        padding: 50px 30px;
+                        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                    "
+                >
+                    <h2
+                        style="
+                            font-size: 24px;
+                            color: #555555;
+                            margin-bottom: 10px;
+                            text-align: center;
+                        "
+                    >
+                        Активация учетной записи
+                    </h2>
+                    <p
+                        style="
+                            color: #555555;
+                            text-align: center;
+                            margin-bottom: 20px;
+                        "
+                    >
                         Добрый день! Для активации аккаунта введите код или
                         нажмите кнопку "Активировать"
                     </p>
-                </div>
-                <h1>[code]</h1>
-                <a href="[link]">Активировать</a>
-            </div>
-        </main>
+                    <h1 style="width: 100%; text-align: center">
+                        [code]
+                        <span
+                            ><img
+                                src="../logos/copy.png"
+                                alt="Copy"
+                                onclick="navigator.clipboard.writeText([code])"
+                                style="height: 25px; width: 25px"
+                        /></span>
+                    </h1>
+                    <div
+                        style="
+                            width: 100%;
+                            display: flex;
+                            justify-content: center;
+                            margin-top: 20px;
+                        "
+                    >
+                        <a
+                            href="[link]"
+                            style="
+                                padding: 10px;
+                                border-radius: 4px;
+                                text-decoration: none;
+                                color: #fff;
+                                background: #4f8261;
+                                text-transform: uppercase;
+                            "
+                            >Активировать</a
+                        >
+                    </div>
+                </td>
+            </tr>
+        </table>
     </body>
 </html>
