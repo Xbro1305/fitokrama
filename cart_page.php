@@ -126,6 +126,7 @@
 	$cou = 0;
 	$method_found=false;
 	$last_method='';
+	$last_hidden='';
 	$script_add='';
 	$style_add='';
 	
@@ -138,14 +139,7 @@
 				$prefix = $method_1['prefix'];
 				$cou = $cou + 1;
 				$html_methods = $html_methods . $html_methods_1;
-				if ($last_method==$prefix)	//	повторение внутри одного метода, надо убрать комментарии
-				{
-					$html_methods = str_replace('<!-- REPEAT_METHOD_1_BEGIN', '', $html_methods);
-					$html_methods = str_replace('REPEAT_METHOD_1_END -->', '', $html_methods);
-					$html_methods = str_replace('<!-- REPEAT_METHOD_2_BEGIN', '', $html_methods);
-					$html_methods = str_replace('REPEAT_METHOD_2_END -->', '', $html_methods);
-				}
-				else	//	повторение внутри одного метода, надо убрать все, что находится внутри комментариев
+				if ($last_method!=$prefix)	//	новый метод, надо всё показать, а закомментированную часть удалить
 				{
 					$html_methods = cut_fragment($html_methods,'<!-- REPEAT_METHOD_1_BEGIN','REPEAT_METHOD_1_END -->','',$t);
 					$html_methods = cut_fragment($html_methods,'<!-- REPEAT_METHOD_2_BEGIN','REPEAT_METHOD_2_END -->','',$t);
@@ -153,7 +147,24 @@
 					$style_add = str_replace('[prefix]', $prefix, $style_add);
 
 				}
-				
+				else	//	повторение внутри одного метода, надо прятать
+				if ($last_hidden!=$prefix)	// первое запрятывание
+				{
+					$html_methods = str_replace('<!-- REPEAT_METHOD_1_BEGIN', '', $html_methods);
+					$html_methods = str_replace('<!--HIDDEN', '', $html_methods);
+					$html_methods = str_replace('REPEAT_METHOD_1_END -->', '', $html_methods);
+					$html_methods = str_replace('<!-- REPEAT_METHOD_2_BEGIN', '', $html_methods);
+					$html_methods = str_replace('REPEAT_METHOD_2_END -->', '', $html_methods);
+					$last_hidden = $prefix;
+				}
+				else	// последующие запрятывания того же метода
+				{
+					$html_methods = cut_fragment($html_methods,'<!-- REPEAT_METHOD_1_BEGIN','<!--HIDDEN','',$t);	// кнопку удаляем
+					$html_methods = str_replace('REPEAT_METHOD_1_END -->', '', $html_methods);
+					$html_methods = str_replace('<!-- REPEAT_METHOD_2_BEGIN', '', $html_methods);
+					$html_methods = str_replace('REPEAT_METHOD_2_END -->', '', $html_methods);
+					$last_hidden = $prefix;
+				}
 				
 				$html_methods = str_replace('[prefix]', $prefix, $html_methods);
 				$html_methods = str_replace('[method_pic]'			, ''.$method_1['logo'], $html_methods);
