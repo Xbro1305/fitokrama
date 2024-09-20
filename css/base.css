@@ -89,6 +89,7 @@ body ::-webkit-scrollbar {
     justify-content: center !important;
     max-width: 300px;
     width: 100%;
+    z-index: 99999999999 !important;
 }
 
 .popup figure {

@@ -5,11 +5,9 @@
 
     display: flex;
 
-    justify-content: space-between;
-
-    align-items: center;
-
+    justify-content: center;
     padding: 10px 20px;
+    align-items: center;
 
     width: 100%;
 
@@ -24,14 +22,19 @@
     z-index: 10;
 }
 
+.top-bar > section {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    justify-content: space-between;
+}
+
 .contact-info {
     display: flex;
 
     align-items: center;
 
     margin-right: auto;
-
-    padding-left: 160px; /* Сдвигаем от левого края, опираясь на левый край логотипа */
 }
 
 .contact-info a {
@@ -66,8 +69,6 @@
     align-items: center;
 
     margin-left: auto;
-
-    padding-right: 160px; /* Сдвигаем от правого края симметрично */
 }
 
 .menu-button {
@@ -214,18 +215,19 @@
 
     height: 30px; /* Задаем высоту значков */
 }
+.menuButton {
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    display: none;
+}
 
-/* Адаптивные стили */
+.menuButton img {
+    width: 100%;
+}
 
 @media (max-width: 1200px) {
-    .contact-info {
-        padding-left: 40px; /* Уменьшаем отступ для меньших экранов */
-    }
-
-    .menu-buttons {
-        padding-right: 40px; /* Уменьшаем отступ для меньших экранов */
-    }
-
     header {
         position: fixed;
 
@@ -252,13 +254,13 @@
 @media (max-width: 768px) {
     .top-bar,
     .bottom-bar {
-        position: static; /* Снимаем фиксированное позиционирование для маленьких экранов */
+        position: static;
+        padding: 10px;
     }
 
     .top-bar {
-        flex-direction: column;
-
-        align-items: flex-start;
+        align-items: center;
+        position: relative;
     }
 
     .contact-info,
@@ -266,20 +268,39 @@
         padding: 0;
     }
 
+    .contact-info {
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
     .menu-buttons {
         margin-top: 10px;
         border-top: 1px solid #ccc;
+        display: none;
+    }
+
+    .contact-info > :last-child {
+        display: none;
     }
 
     .bottom-bar-content {
-        flex-wrap: wrap;
         align-items: center;
+        padding: 0;
     }
 
     .search-container {
-        margin-top: 10px;
-
         width: 70%;
+    }
+
+    .account-buttons a {
+        margin: 0 3px;
+    }
+
+    .search-container section {
+        margin: 0;
+        padding: 0;
+        width: 100%;
     }
 
     .account-buttons {
@@ -290,8 +311,14 @@
     }
 
     .company-logo {
-        width: 100%;
+        width: 70px;
         height: auto;
+    }
+
+    .menuButton {
+        display: flex;
+        position: absolute;
+        right: 10px;
     }
 }
 

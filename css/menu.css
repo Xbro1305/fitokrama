@@ -1,0 +1,36 @@
+.menu {
+    width: 100%;
+    position: fixed !important;
+    top: 1px;
+    transform: translateY(-100%);
+    z-index: 999999999999 !important;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(97, 129, 98);
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.menu.active {
+    transform: translateY(0);
+}
+
+@media (max-width: 475px) {
+    .menu {
+        flex-direction: column;
+        gap: 10px;
+        color: #fff;
+        text-align: center;
+        padding-right: 15px;
+    }
+
+    .menu button {
+        position: absolute;
+        right: 10px;
+        font-size: 30px;
+        color: #fff;
+        background: none;
+        border: none;
+        top: 0;
+    }
+}
