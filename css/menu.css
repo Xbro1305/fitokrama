@@ -14,8 +14,7 @@
 .menu.active {
     transform: translateY(0);
 }
-
-@media (max-width: 475px) {
+@media (max-width: 668px) {
     .menu {
         flex-direction: column;
         gap: 10px;
@@ -23,14 +22,14 @@
         text-align: center;
         padding-right: 15px;
     }
+}
 
-    .menu button {
-        position: absolute;
-        right: 10px;
-        font-size: 30px;
-        color: #fff;
-        background: none;
-        border: none;
-        top: 0;
-    }
+.menu button {
+    position: absolute;
+    right: 10px;
+    font-size: 30px;
+    color: #fff;
+    background: none;
+    border: none;
+    top: 0;
 }
