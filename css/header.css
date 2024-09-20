@@ -46,9 +46,13 @@
     opacity: 0.8;
 }
 
+.contact-info a:hover {
+    background: none !important;
+}
+
 .contact-info img {
     width: 20px;
-    height: 20px;
+    height: 18px;
     margin-left: 2px;
 }
 
