@@ -721,9 +721,9 @@
                         <!-- METHOD_1_BEGIN -->
 						
 						<!-- REPEAT_METHOD_1_BEGIN 
-						<a href="#" id="toggleButton_[prefix]" onclick="toggleVisibility('[prefix]')">[method_name] - Больше вариантов</a> 
-						<!--HIDDEN
-						<div id="toggleContent_[prefix]" class="toggle_[prefix]">
+						<a href="#" id="toggleButton_[prefix]" onclick="toggleVisibility(event, '[prefix]')">[method_name] - Больше вариантов</a> 
+						<!--HIDDEN 
+						<div class="toggleContent_[prefix] toggle_[prefix]">
 						REPEAT_METHOD_1_END -->
 
                         <div class="[option_class]">
@@ -1400,13 +1400,15 @@
             };
 
             const deliveryMethods = [deliveryMethods]
-			function toggleVisibility(category) 
+			function toggleVisibility(event, category) 
 				{
-				const content = document.getElementById(`toggleContent_${category}`);
+				event.preventDefault();
+				const contents = document.querySelectorAll(`.toggleContent_${category}`);
 				const button = document.getElementById(`toggleButton_${category}`);
-				if (content) { content.classList.remove(`toggle_${category}`); }
+				contents.forEach(content => {  content.classList.remove(`toggle_${category}`); });
 				if (button) { button.style.display = 'none'; }
 				}			
+				
         </script>
 
         <script src="./js/main.js"></script>

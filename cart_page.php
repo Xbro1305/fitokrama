@@ -151,6 +151,7 @@
 				if ($last_hidden!=$prefix)	// первое запрятывание
 				{
 					$html_methods = str_replace('<!-- REPEAT_METHOD_1_BEGIN', '', $html_methods);
+					$html_methods = str_replace('<!--HIDDEN', '', $html_methods);
 					$html_methods = str_replace('REPEAT_METHOD_1_END -->', '', $html_methods);
 					$html_methods = str_replace('<!-- REPEAT_METHOD_2_BEGIN', '', $html_methods);
 					$html_methods = str_replace('REPEAT_METHOD_2_END -->', '', $html_methods);
