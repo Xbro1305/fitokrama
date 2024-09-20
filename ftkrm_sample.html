@@ -12,6 +12,7 @@
         <link href="./css/font.css" rel="stylesheet" />
         <link rel="stylesheet" href="./css/suggestion.css" />
         <link rel="stylesheet" href="./css/loader.css" />
+        <link rel="stylesheet" href="./css/menu.css" />
         <link href="./css/font.css" rel="stylesheet" />
         <title>[pagename]</title>
         <style>
@@ -57,24 +58,8 @@
     </head>
 
     <body>
-        <div class="top-bar">
-            <div class="contact-info">
-                <a href="https://www.instagram.com/kovrochistka/"
-                    ><img src="../logos/instagram_icon.png" alt="Instagram"
-                /></a>
-
-                <a href="viber://chat?number=+375296562441"
-                    ><img src="../logos/viber_icon.png" alt="Viber"
-                /></a>
-
-                <a href="https://t.me/+375336150464"
-                    ><img src="../logos/telegram_icon.png" alt="Telegram"
-                /></a>
-
-                <a href="tel:+375172222222">+375 17 222-22-22</a>
-            </div>
-
-            <div class="menu-buttons">
+        <div class="menu">
+            <div>
                 <a
                     href="http://fitokrama.by/catalog_page.php"
                     class="menu-button"
@@ -91,6 +76,48 @@
                     >Контакты</a
                 >
             </div>
+            <a href="tel:+375445975005">+375 44 597-50-05</a>
+            <button onclick="toggleMenu()">&times;</button>
+        </div>
+        <div class="top-bar">
+            <section>
+                <button class="menuButton" onclick="toggleMenu()">
+                    <img src="./logos/manu.png" alt="" />
+                </button>
+                <div class="contact-info">
+                    <a href="https://www.instagram.com/kovrochistka/"
+                        ><img src="../logos/instagram_icon.png" alt="Instagram"
+                    /></a>
+
+                    <a href="viber://chat?number=+375296562441"
+                        ><img src="../logos/viber_icon.png" alt="Viber"
+                    /></a>
+
+                    <a href="https://t.me/+375336150464"
+                        ><img src="../logos/telegram_icon.png" alt="Telegram"
+                    /></a>
+
+                    <a href="tel:+375445975005">+375 44 597-50-05</a>
+                </div>
+
+                <div class="menu-buttons">
+                    <a
+                        href="http://fitokrama.by/catalog_page.php"
+                        class="menu-button"
+                        >Каталог</a
+                    >
+
+                    <a
+                        href="/textpage.php?page=payments_and_delivery"
+                        class="menu-button"
+                        >Оплата и доставка</a
+                    >
+
+                    <a href="textpage.php?page=contacts" class="menu-button"
+                        >Контакты</a
+                    >
+                </div>
+            </section>
         </div>
         <div class="bottom-bar">
             <div class="bottom-bar-content">
@@ -719,11 +746,9 @@
 
                     <section>
                         <!-- METHOD_1_BEGIN -->
-						
-						<!-- REPEAT_METHOD_1_BEGIN 
-						<div class="but_option hidden_option">
+
+                        <!-- REPEAT_METHOD_1_BEGIN 
 						<a href="#" id="toggleButton_[prefix]" onclick="toggleVisibility(event, '[prefix]')">[method_name] - Больше вариантов</a> 
-						</div>
 						<!--HIDDEN 
 						<div class="toggleContent_[prefix] toggle_[prefix]">
 						REPEAT_METHOD_1_END -->
@@ -768,7 +793,7 @@
                                 </p>
                             </div>
                         </div>
-						<!-- REPEAT_METHOD_2_BEGIN 
+                        <!-- REPEAT_METHOD_2_BEGIN 
 						</div>
 						REPEAT_METHOD_2_END -->
                         <!-- METHOD_1_END -->
@@ -1060,10 +1085,7 @@
                         class="custom-google-button appleID"
                         onclick="onGoogleSignIn()"
                     >
-                        <img
-                            src="https://cdn-teams-slug.flaticon.com/google.jpg"
-                            alt=""
-                        />
+                        <img src="./logos/google.webp" alt="" />
                         <p>Google</p>
                     </button>
                 </center>
@@ -1073,7 +1095,8 @@
                         id="custom-appleid-signin"
                     >
                         <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvpQr7jRfGRZXz54j5HdGf6MDP8w5l53a3UQ&s"
+                            style="transform: scale(1.2)"
+                            src="./logos/apple.svg"
                             alt=""
                         />
                         <p>Apple ID</p>
@@ -1084,7 +1107,7 @@
 
                     <section class="getEmailCode">
                         <label>
-                            <span>@</span>
+                            <span>E-mail</span>
                             <input
                                 type="email"
                                 name=""
@@ -1224,7 +1247,9 @@
 
         <div class="modal" id="waiting">
             <div class="loader">
-                <img src="./logos/waiting.gif" alt="" />
+                <div class="three col">
+                    <div class="loader" id="loader-3"></div>
+                </div>
             </div>
             <h1>Загрузка...</h1>
         </div>
@@ -1401,7 +1426,6 @@
                 window.location.href = "/cart_page.php";
             };
 
-            const deliveryMethods = [deliveryMethods]
             function toggleVisibility(event, category) {
                 event.preventDefault();
                 const contents = document.querySelectorAll(
@@ -1417,10 +1441,13 @@
                     button.style.display = "none";
                 }
             }
-				
+
+            const toggleMenu = () => {
+                document.querySelector(".menu").classList.toggle("active");
+            };
         </script>
 
         <script src="./js/main.js"></script>
-		<!-- STYLES -->
+        <!-- STYLES -->
     </body>
 </html>
