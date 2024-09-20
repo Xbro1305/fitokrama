@@ -133,6 +133,19 @@
 	if (isset($delivery_methods['methods']))
 	foreach ($delivery_methods['methods'] as $method_1)
 	{
+		// сначала сортировка внутри метода: создаем поле erz_distance, делаем туда копию distance, но если это выбранный пункт, ставим -1
+		// и потом сортируем по ez_distance
+		foreach ($method_1['points'] as &$point_1)
+		{
+			if ($cart['delivery_submethod']==$point_1['point_id'])	
+					 $point_1['ez_distance'] = -1;
+				else $point_1['ez_distance'] = $point_1['distance'];
+		}
+		usort($method_1['points'], function($a, $b) {
+			return $a['ez_distance'] <=> $b['ez_distance'];
+			});
+		//if ($method_1['prefix']=='EUR')		die(json_encode($method_1));
+		
 		
 		foreach ($method_1['points'] as $point_1)
 			{
@@ -223,7 +236,10 @@
 	}
 	
 	if (!$method_found) 
+	{
 		$html_methods=str_replace('delivery_option hidden_option', 'delivery_option', $html_methods); 
+		$html_methods=str_replace('but_option hidden_option', 'but_option', $html_methods); 
+	}
 	
 	$doc = str_replace('<!-- STYLES -->', '<style> '.$style_add.' </style>', $doc);
 	$doc = str_replace('[methods_table]', $html_methods, $doc);

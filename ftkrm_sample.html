@@ -721,7 +721,9 @@
                         <!-- METHOD_1_BEGIN -->
 						
 						<!-- REPEAT_METHOD_1_BEGIN 
+						<div class="but_option hidden_option">
 						<a href="#" id="toggleButton_[prefix]" onclick="toggleVisibility(event, '[prefix]')">[method_name] - Больше вариантов</a> 
+						</div>
 						<!--HIDDEN 
 						<div class="toggleContent_[prefix] toggle_[prefix]">
 						REPEAT_METHOD_1_END -->
@@ -1400,14 +1402,21 @@
             };
 
             const deliveryMethods = [deliveryMethods]
-			function toggleVisibility(event, category) 
-				{
-				event.preventDefault();
-				const contents = document.querySelectorAll(`.toggleContent_${category}`);
-				const button = document.getElementById(`toggleButton_${category}`);
-				contents.forEach(content => {  content.classList.remove(`toggle_${category}`); });
-				if (button) { button.style.display = 'none'; }
-				}			
+            function toggleVisibility(event, category) {
+                event.preventDefault();
+                const contents = document.querySelectorAll(
+                    `.toggleContent_${category}`
+                );
+                const button = document.getElementById(
+                    `toggleButton_${category}`
+                );
+                contents.forEach((content) => {
+                    content.classList.remove(`toggle_${category}`);
+                });
+                if (button) {
+                    button.style.display = "none";
+                }
+            }
 				
         </script>
 
