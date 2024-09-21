@@ -36,14 +36,14 @@ watch(search, async () => {
   products.value = data.value
 })
 
-const editItem = (item) => {
+const editItem = async (item) => {
   const art = item.art.split('=')[1]
 
   const { data } = await useFetch(`${backendUrl}/good_details.php`, {
     method: 'POST',
     body: {
-      email: email,
-      password: password,
+      staff_login: email,
+      staff_password: password,
       art: art,
     },
   })
@@ -51,6 +51,25 @@ const editItem = (item) => {
   if (data.value.good) {
     product.value = data.value.good
     dialog.value = true
+  }
+  else if (data.value.error) {
+    showError(data.value.error)
+  }
+}
+
+const saveProduct = async () => {
+  const { data } = await useFetch(`${backendUrl}/good_update.php`, {
+    method: 'POST',
+    body: {
+      staff_login: email,
+      staff_password: password,
+      product: product.value,
+    },
+  })
+
+  if (data.value.message) {
+    showSuccess(data.value.message)
+    dialog.value = false
   }
   else if (data.value.error) {
     showError(data.value.error)
@@ -81,7 +100,7 @@ const editItem = (item) => {
         :headers="headers"
         :items="products"
       >
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <v-btn
             color="warning"
             icon="mdi-pencil"
@@ -100,7 +119,86 @@ const editItem = (item) => {
         <v-card-text>
           <v-text-field
             v-model="product.art"
+            label="Артикул"
             disabled
+          />
+
+          <v-text-field
+            v-model="product.name"
+            label="Название"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.description_short"
+            label="Короткое описание"
+            density="compact"
+          />
+
+          <v-textarea
+            v-model="product.description_full"
+            label="Полное описание"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.price"
+            label="Цена"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.price_old"
+            label="Цена старая"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.qty"
+            label="Количество"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.barcode"
+            label="Баркод"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.producer"
+            label="Производитель"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.producer_country"
+            label="Страна"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.cat"
+            label="Категория"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.subcat"
+            label="Подкатегория"
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.koef_ed_izm"
+            label="Коэффициент ед. изм."
+            density="compact"
+          />
+
+          <v-text-field
+            v-model="product.ed_izm_name"
+            label="Название ед. изм."
+            density="compact"
           />
         </v-card-text>
         <v-card-actions>
@@ -110,6 +208,12 @@ const editItem = (item) => {
             @click="dialog = false"
           >
             Отмена
+          </v-btn>
+
+          <v-btn
+            @click="saveProduct"
+          >
+            Сохранить
           </v-btn>
         </v-card-actions>
       </v-card>
