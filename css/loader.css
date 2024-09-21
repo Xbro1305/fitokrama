@@ -18,7 +18,7 @@
     position: absolute;
     top: calc(50% - 150px);
     left: calc(50% - 10px);
-    background-color: #3498db;
+    background-color: rgb(97, 129, 98);
     animation: squaremove 1s ease-in-out infinite;
 }
 
