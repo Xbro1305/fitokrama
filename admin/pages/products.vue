@@ -1,6 +1,17 @@
 <script setup lang="ts">
+import { vMaska } from 'maska/vue'
+import type { MaskInputOptions } from 'maska'
 import { useAuthStore } from '~/store/auth'
 import { useNotificationStore } from '~/store/notification'
+
+const options = reactive<MaskInputOptions>({
+  mask: '0.99',
+  eager: true,
+  tokens: {
+    0: { pattern: /\d/, multiple: true },
+    9: { pattern: /\d/, optional: true },
+  },
+})
 
 useHead({ title: 'Товары' })
 
@@ -71,7 +82,7 @@ const saveProduct = async () => {
     showSuccess(data.value.message)
     dialog.value = false
 
-    refresh()
+    await refresh()
   }
   else if (data.value.error) {
     showError(data.value.error)
@@ -117,7 +128,7 @@ const refresh = async () => {
         :headers="headers"
         :items="products"
       >
-        <template #item.actions="{ item }">
+        <template #[`item.actions`]="{ item }">
           <v-btn
             color="warning"
             icon="mdi-pencil"
@@ -160,25 +171,29 @@ const refresh = async () => {
 
           <v-text-field
             v-model="product.price"
+            v-maska="options"
             label="Цена"
             density="compact"
           />
 
           <v-text-field
             v-model="product.price_old"
+            v-maska="options"
             label="Цена старая"
             density="compact"
           />
 
           <v-text-field
             v-model="product.qty"
+            v-maska="'#############'"
             label="Количество"
             density="compact"
           />
 
           <v-text-field
             v-model="product.barcode"
-            label="Баркод"
+            v-maska="'#############'"
+            label="Barcode"
             density="compact"
           />
 
@@ -208,6 +223,7 @@ const refresh = async () => {
 
           <v-text-field
             v-model="product.koef_ed_izm"
+            v-maska="options"
             label="Коэффициент ед. изм."
             density="compact"
           />
