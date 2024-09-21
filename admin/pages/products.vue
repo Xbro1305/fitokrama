@@ -70,10 +70,27 @@ const saveProduct = async () => {
   if (data.value.message) {
     showSuccess(data.value.message)
     dialog.value = false
+
+    refresh()
   }
   else if (data.value.error) {
     showError(data.value.error)
   }
+}
+
+const refresh = async () => {
+  const { data } = await useFetch(`${backendUrl}/search.php`, {
+    method: 'POST',
+    body: {
+      email: email,
+      password: password,
+    },
+    query: {
+      search: search.value,
+    },
+  })
+
+  products.value = data.value
 }
 </script>
 

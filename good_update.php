@@ -40,23 +40,19 @@ if (count($goods) === 0) {
     ]));
 }
 
-$name = mysqli_real_escape_string($link, $json_in['product']['name']);
-$description_short = mysqli_real_escape_string($link, $json_in['product']['description_short']);
-$description_full = mysqli_real_escape_string($link, $json_in['product']['description_full']);
-
 $sql = "UPDATE `goods` SET
-                `name`='$name'
-                `description_short`='$description_short'
-                `description_full`='$description_full'
-                `price`='{$json_in['product']['price']}'
-                `price_old`='{$json_in['product']['price_old']}'
-                `qty`='{$json_in['product']['qty']}'
-                `barcode`='{$json_in['product']['barcode']}'
-                `producer`='{$json_in['product']['producer']}'
-                `producer_country`='{$json_in['product']['producer_country']}'
-                `cat`='{$json_in['product']['cat']}'
-                `subcat`='{$json_in['product']['subcat']}'
-                `koef_ed_izm`='{$json_in['product']['koef_ed_izm']}'
+                `name`='{$json_in['product']['name']}',
+                `description_short`='{$json_in['product']['description_short']}',
+                `description_full`='{$json_in['product']['description_full']}',
+                `price`='{$json_in['product']['price']}',
+                `price_old`='{$json_in['product']['price_old']}',
+                `qty`='{$json_in['product']['qty']}',
+                `barcode`='{$json_in['product']['barcode']}',
+                `producer`='{$json_in['product']['producer']}',
+                `producer_country`='{$json_in['product']['producer_country']}',
+                `cat`='{$json_in['product']['cat']}',
+                `subcat`='{$json_in['product']['subcat']}',
+                `koef_ed_izm`='{$json_in['product']['koef_ed_izm']}',
                 `ed_izm_name`='{$json_in['product']['ed_izm_name']}'
                 WHERE `art`='{$json_in['product']['art']}' LIMIT 1";
 
