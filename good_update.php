@@ -40,10 +40,14 @@ if (count($goods) === 0) {
     ]));
 }
 
+$name = mysqli_real_escape_string($link, $json_in['product']['name']);
+$description_short = mysqli_real_escape_string($link, $json_in['product']['description_short']);
+$description_full = mysqli_real_escape_string($link, $json_in['product']['description_full']);
+
 $sql = "UPDATE `goods` SET
-                `name`='{$json_in['product']['name']}'
-                `description_short`='{$json_in['product']['description_short']}'
-                `description_full`='{$json_in['product']['description_full']}'
+                `name`='$name'
+                `description_short`='$description_short'
+                `description_full`='$description_full'
                 `price`='{$json_in['product']['price']}'
                 `price_old`='{$json_in['product']['price_old']}'
                 `qty`='{$json_in['product']['qty']}'
