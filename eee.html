@@ -1,5 +1,3 @@
-_DPP
-
 <!DOCTYPE html>
 
 <html lang="ru">
@@ -14,6 +12,7 @@ _DPP
         <link href="./css/font.css" rel="stylesheet" />
         <link rel="stylesheet" href="./css/suggestion.css" />
         <link rel="stylesheet" href="./css/loader.css" />
+        <link rel="stylesheet" href="./css/menu.css" />
         <link href="./css/font.css" rel="stylesheet" />
         <title>[pagename]</title>
         <style>
@@ -59,24 +58,8 @@ _DPP
     </head>
 
     <body>
-        <div class="top-bar">
-            <div class="contact-info">
-                <a href="https://www.instagram.com/kovrochistka/"
-                    ><img src="../logos/instagram_icon.png" alt="Instagram"
-                /></a>
-
-                <a href="viber://chat?number=+375296562441"
-                    ><img src="../logos/viber_icon.png" alt="Viber"
-                /></a>
-
-                <a href="https://t.me/+375336150464"
-                    ><img src="../logos/telegram_icon.png" alt="Telegram"
-                /></a>
-
-                <a href="tel:+375172222222">+375 17 222-22-22</a>
-            </div>
-
-            <div class="menu-buttons">
+        <div class="menu">
+            <div>
                 <a
                     href="http://fitokrama.by/catalog_page.php"
                     class="menu-button"
@@ -93,6 +76,48 @@ _DPP
                     >Контакты</a
                 >
             </div>
+            <a href="tel:+375445975005">+375 44 597-50-05</a>
+            <button onclick="toggleMenu()">&times;</button>
+        </div>
+        <div class="top-bar">
+            <section>
+                <button class="menuButton" onclick="toggleMenu()">
+                    <img src="./logos/manu.png" alt="" />
+                </button>
+                <div class="contact-info">
+                    <a href="https://www.instagram.com/kovrochistka/"
+                        ><img src="../logos/instagram_icon.png" alt="Instagram"
+                    /></a>
+
+                    <a href="viber://chat?number=+375296562441"
+                        ><img src="../logos/viber_icon.png" alt="Viber"
+                    /></a>
+
+                    <a href="https://t.me/+375336150464"
+                        ><img src="../logos/telegram_icon.png" alt="Telegram"
+                    /></a>
+
+                    <a href="tel:+375445975005">+375 44 597-50-05</a>
+                </div>
+
+                <div class="menu-buttons">
+                    <a
+                        href="http://fitokrama.by/catalog_page.php"
+                        class="menu-button"
+                        >Каталог</a
+                    >
+
+                    <a
+                        href="/textpage.php?page=payments_and_delivery"
+                        class="menu-button"
+                        >Оплата и доставка</a
+                    >
+
+                    <a href="textpage.php?page=contacts" class="menu-button"
+                        >Контакты</a
+                    >
+                </div>
+            </section>
         </div>
         <div class="bottom-bar">
             <div class="bottom-bar-content">
@@ -145,7 +170,7 @@ _DPP
             </div>
         </div>
         <!-- MAIN_TEXT_BEGIN -->
-        <div class="maintext">Добавь товар на 71.12 руб. для бесплатной доставки!</div>
+        <div class="maintext">Добавь товар на 16.04 руб. для бесплатной доставки!</div>
         <!-- MAIN_TEXT_END -->
         
             
@@ -163,8 +188,8 @@ _DPP
             <!-- CART_GOOD_1_BEGIN -->
             <div class="cart-item">
                 <img
-                    onclick="navigateTo(54985)"
-                    src="../goods_pics/./54985.png"
+                    onclick="navigateTo(94362)"
+                    src="../goods_pics/./94362.png"
                     alt="Product"
                     class="product-image"
                 />
@@ -173,20 +198,20 @@ _DPP
                     <div class="cart-item-info">
                         <h4
                             class="product-name"
-                            onclick="navigateTo(54985)"
+                            onclick="navigateTo(94362)"
                         >
-                            PlaPlamela Магний таблетки №120 по 600 мг
+                            Сусталь капсулы №10 по 0,5г в среде-активаторе.
                         </h4>
 
                         <div class="product-prices">
                             <div class="old-price">
-                                31,<sup
-                                    >52</sup
+                                24,<sup
+                                    >01</sup
                                 >
                             </div>
 
                             <div class="new-price">
-                                28,<sup>88</sup>
+                                20,<sup>99</sup>
                                 <span class="currency">руб.</span>
                             </div>
                         </div>
@@ -194,7 +219,7 @@ _DPP
                         <div class="quantity-selector">
                             <button
                                 class="quantity-button"
-                                onclick="changeQuantity(-1, 'item1', 54985, 28.88)"
+                                onclick="changeQuantity(-1, 'item1', 94362, 20.99)"
                             >
                                 -
                             </button>
@@ -203,13 +228,13 @@ _DPP
                                 type="number"
                                 class="quantity-input"
                                 id="quantity-item1"
-                                value="1"
+                                value="4"
                                 readonly
                             />
 
                             <button
                                 class="quantity-button"
-                                onclick="changeQuantity(1, 'item1', 54985, 28.88)"
+                                onclick="changeQuantity(1, 'item1', 94362, 20.99)"
                             >
                                 +
                             </button>
@@ -218,13 +243,13 @@ _DPP
                         <div
                             class="total-price"
                             id="total-price-item1"
-                            data-price="28.88"
+                            data-price="20.99"
                         >
                             <span class="price-full-1"
-                                >28</span
+                                >83</span
                             >,
                             <sup class="price-small-1"
-                                >88
+                                >96
                             </sup>
                             <span class="currency"> руб.</span>
                         </div>
@@ -279,7 +304,7 @@ _DPP
                         type="text"
                         id="client_phone"
                         class="sendinginfo"
-                        value="+375296562441"
+                        value="375296026544"
                     />
                     <img
                         src="./logos/green_ok.png"
@@ -311,55 +336,10 @@ _DPP
 
                     <section>
                         
-						
-						
 
-                        <div class="delivery_option">
-                            <img
-                                src="../logos/notenabled.png"
-                                alt="Выбор"
-                                class="delivery-choosing-button"
-                                data-submethod-id="YAN-000p5oxfy"
-                                onclick="sendPostRequest(this)"
-                            />
-
-                            <div class="delivery-info">
-                                <div class="method-info">
-                                    <h1 class="method-name">Яндекс-доставка</h1>
-                                    <section class="method-details">
-                                        <img
-                                            src="../logos/yandex-delivery.png"
-                                            alt="Delivery"
-                                            class="delivery-image"
-                                        />
-                                        <div class="method-description">
-                                            <p> г Минск, ул Надеждинская, д 2</p>
-                                            <p>
-                                                 🏠 к вашим дверям
-                                                Через 31 мин после заказа
-                                            </p>
-                                        </div>
-                                    </section>
-                                    <section
-                                        class="delivery_note"
-                                        style="background: #ffaaa6"
-                                    >
-                                        на дом!
-                                    </section>
-                                </div>
-                                <p class="delivery-price">
-                                    21,<sup
-                                        >00</sup
-                                    ><span class="currency">руб.</span>
-                                </p>
-                            </div>
-                        </div>
-						
                         
-						
-						
 
-                        <div class="delivery_option">
+                        <div class="delivery_option hidden_option">
                             <img
                                 src="../logos/notenabled.png"
                                 alt="Выбор"
@@ -393,22 +373,24 @@ _DPP
                                     </section>
                                 </div>
                                 <p class="delivery-price">
-                                    3,<sup
-                                        >90</sup
+                                    5,<sup
+                                        >10</sup
                                     ><span class="currency">руб.</span>
                                 </p>
                             </div>
                         </div>
-						
                         
-						
+                        
+
+                         
+						<div class="but_option hidden_option">
+							<a href="#" id="toggleButton_DPP" onclick="toggleVisibility(event, 'DPP')">DPD-почтомат - Больше вариантов</a> 
+						</div>
 						 
-						<a href="#" id="toggleButton_DPP" onclick="toggleVisibility('DPP')">DPD-почтомат - Больше вариантов</a> 
-						
 						<div class="toggleContent_DPP toggle_DPP">
 						
 
-                        <div class="delivery_option">
+                        <div class="delivery_option hidden_option">
                             <img
                                 src="../logos/notenabled.png"
                                 alt="Выбор"
@@ -442,22 +424,22 @@ _DPP
                                     </section>
                                 </div>
                                 <p class="delivery-price">
-                                    3,<sup
-                                        >90</sup
+                                    5,<sup
+                                        >10</sup
                                     ><span class="currency">руб.</span>
                                 </p>
                             </div>
                         </div>
-						 
+                         
 						</div>
 						
                         
-						
-						
+
+                         
 						<div class="toggleContent_DPP toggle_DPP">
 						
 
-                        <div class="delivery_option">
+                        <div class="delivery_option hidden_option">
                             <img
                                 src="../logos/notenabled.png"
                                 alt="Выбор"
@@ -491,20 +473,20 @@ _DPP
                                     </section>
                                 </div>
                                 <p class="delivery-price">
-                                    3,<sup
-                                        >90</sup
+                                    5,<sup
+                                        >10</sup
                                     ><span class="currency">руб.</span>
                                 </p>
                             </div>
                         </div>
-						 
+                         
 						</div>
 						
                         
-						
-						
 
-                        <div class="delivery_option">
+                        
+
+                        <div class="delivery_option hidden_option">
                             <img
                                 src="../logos/notenabled.png"
                                 alt="Выбор"
@@ -544,16 +526,18 @@ _DPP
                                 </p>
                             </div>
                         </div>
-						
                         
-						
+                        
+
+                         
+						<div class="but_option hidden_option">
+						<a href="#" id="toggleButton_EUR" onclick="toggleVisibility(event, 'EUR')">Европочта-пункт выдачи - Больше вариантов</a> 
+						</div>
 						 
-						<a href="#" id="toggleButton_EUR" onclick="toggleVisibility('EUR')">Европочта-пункт выдачи - Больше вариантов</a> 
-						
-						<div id="toggleContent_EUR" class="toggle_EUR">
+						<div class="toggleContent_EUR toggle_EUR">
 						
 
-                        <div class="delivery_option">
+                        <div class="delivery_option hidden_option">
                             <img
                                 src="../logos/notenabled.png"
                                 alt="Выбор"
@@ -593,16 +577,16 @@ _DPP
                                 </p>
                             </div>
                         </div>
-						 
+                         
 						</div>
 						
                         
-						
-						
-						<div id="toggleContent_EUR" class="toggle_EUR">
+
+                         
+						<div class="toggleContent_EUR toggle_EUR">
 						
 
-                        <div class="delivery_option">
+                        <div class="delivery_option hidden_option">
                             <img
                                 src="../logos/notenabled.png"
                                 alt="Выбор"
@@ -642,16 +626,16 @@ _DPP
                                 </p>
                             </div>
                         </div>
-						 
+                         
 						</div>
 						
                         
-						
-						
+
+                        
 
                         <div class="delivery_option">
                             <img
-                                src="../logos/notenabled.png"
+                                src="../logos/green_ok.png"
                                 alt="Выбор"
                                 class="delivery-choosing-button"
                                 data-submethod-id="BPS-BPS-220006"
@@ -689,16 +673,18 @@ _DPP
                                 </p>
                             </div>
                         </div>
-						
                         
-						
+                        
+
+                         
+						<div class="but_option hidden_option">
+						<a href="#" id="toggleButton_BPS" onclick="toggleVisibility(event, 'BPS')">Белпочта-почтовое отделение - Больше вариантов</a> 
+						</div>
 						 
-						<a href="#" id="toggleButton_BPS" onclick="toggleVisibility('BPS')">Белпочта-почтовое отделение - Больше вариантов</a> 
-						
-						<div id="toggleContent_BPS" class="toggle_BPS">
+						<div class="toggleContent_BPS toggle_BPS">
 						
 
-                        <div class="delivery_option">
+                        <div class="delivery_option hidden_option">
                             <img
                                 src="../logos/notenabled.png"
                                 alt="Выбор"
@@ -738,16 +724,16 @@ _DPP
                                 </p>
                             </div>
                         </div>
-						 
+                         
 						</div>
 						
                         
-						
-						
-						<div id="toggleContent_BPS" class="toggle_BPS">
+
+                         
+						<div class="toggleContent_BPS toggle_BPS">
 						
 
-                        <div class="delivery_option">
+                        <div class="delivery_option hidden_option">
                             <img
                                 src="../logos/notenabled.png"
                                 alt="Выбор"
@@ -787,12 +773,12 @@ _DPP
                                 </p>
                             </div>
                         </div>
-						 
+                         
 						</div>
 						
                         
                         <button id="toggleOptionsBtn" onclick="toggleOptions()">
-                            
+                            Больше вариантов ⋁
                         </button>
                     </section>
                 </div>
@@ -801,9 +787,9 @@ _DPP
                     <div class="summary-label">ИТОГО К ОПЛАТЕ:</div>
 
                     <div class="summary-total" id="summary-total">
-                        <span class="totalPriceRub">28</span>,<sup
+                        <span class="totalPriceRub">83</span>,<sup
                             class="totalPriceKop"
-                            >88</sup
+                            >96</sup
                         >
                         <span class="currency">руб.</span>
                     </div>
@@ -1079,10 +1065,7 @@ _DPP
                         class="custom-google-button appleID"
                         onclick="onGoogleSignIn()"
                     >
-                        <img
-                            src="https://cdn-teams-slug.flaticon.com/google.jpg"
-                            alt=""
-                        />
+                        <img src="./logos/google.webp" alt="" />
                         <p>Google</p>
                     </button>
                 </center>
@@ -1092,7 +1075,8 @@ _DPP
                         id="custom-appleid-signin"
                     >
                         <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvpQr7jRfGRZXz54j5HdGf6MDP8w5l53a3UQ&s"
+                            style="transform: scale(1.2)"
+                            src="./logos/apple.svg"
                             alt=""
                         />
                         <p>Apple ID</p>
@@ -1103,7 +1087,7 @@ _DPP
 
                     <section class="getEmailCode">
                         <label>
-                            <span>@</span>
+                            <span>E-mail</span>
                             <input
                                 type="email"
                                 name=""
@@ -1243,7 +1227,9 @@ _DPP
 
         <div class="modal" id="waiting">
             <div class="loader">
-                <img src="./logos/waiting.gif" alt="" />
+                <div class="three col">
+                    <div class="loader" id="loader-3"></div>
+                </div>
             </div>
             <h1>Загрузка...</h1>
         </div>
@@ -1404,13 +1390,13 @@ _DPP
                 const toggleBtn = document.getElementById("toggleOptionsBtn");
 
                 const showMore =
-                    toggleBtn.textContent.trim() === "";
+                    toggleBtn.textContent.trim() === "Больше вариантов ⋁";
 
                 if (showMore) {
                     toggleBtn.textContent = "Меньше вариантов ⋀";
                     options.forEach((opt) => opt.classList.add("dn"));
                 } else {
-                    toggleBtn.textContent = "";
+                    toggleBtn.textContent = "Больше вариантов ⋁";
                     options.forEach((opt) => opt.classList.remove("dn"));
                 }
             }
@@ -1420,28 +1406,28 @@ _DPP
                 window.location.href = "/cart_page.php";
             };
 
-            const deliveryMethods = [deliveryMethods]
-			    function toggleVisibility(event, category) {
-    // Предотвращаем стандартное поведение ссылки
-    event.preventDefault();
+            function toggleVisibility(event, category) {
+                event.preventDefault();
+                const contents = document.querySelectorAll(
+                    `.toggleContent_${category}`
+                );
+                const button = document.getElementById(
+                    `toggleButton_${category}`
+                );
+                contents.forEach((content) => {
+                    content.classList.remove(`toggle_${category}`);
+                });
+                if (button) {
+                    button.style.display = "none";
+                }
+            }
 
-    // Находим все элементы с классом для этой категории
-    const contents = document.querySelectorAll(`.toggleContent_${category}`);
-    const button = document.getElementById(`toggleButton_${category}`);
-
-    // Показываем все элементы с этим классом
-    contents.forEach(content => {
-      content.classList.remove(`toggle_${category}`);
-    });
-
-    // Скрываем кнопку
-    if (button) {
-      button.style.display = 'none';
-    }
-  }			
+            const toggleMenu = () => {
+                document.querySelector(".menu").classList.toggle("active");
+            };
         </script>
 
         <script src="./js/main.js"></script>
-		<style> .toggle_YAN {display: none;}.toggle_DPP {display: none;}.toggle_EUR {display: none;}.toggle_BPS {display: none;} </style>
+        <style> .toggle_DPP {display: none;}.toggle_EUR {display: none;}.toggle_BPS {display: none;} </style>
     </body>
 </html>

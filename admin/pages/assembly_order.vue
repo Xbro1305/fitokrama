@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vMaska } from 'maska/vue'
 import { useNotificationStore } from '~/store/notification'
 import { useAuthStore } from '~/store/auth'
 
@@ -39,19 +40,21 @@ const headers = [
 ]
 
 const checkCode = async (code: string) => {
+  /*
   if (code.split('/')[0] !== '002-' || !code.split('/')[1] || code.split('/')[1].length !== 6) {
     showError('Введите QR-код с листа для сборки')
 
     return
   }
+   */
 
   const { data } = await useFetch(`${backendUrl}/order_details.php`, {
     method: 'POST',
     body: {
       staff_login: email,
       staff_password: password,
-      number: code.split('/')[1],
-      // number: '883440',
+      // number: code.split('/')[1],
+      number: '883440',
     },
   })
 
@@ -156,6 +159,18 @@ const colorRowItem = (item) => {
     return { class: 'bg-green' }
   }
 }
+
+const plusQty = () => {
+  if (Number.parseInt(qty.value) < 999) {
+    qty.value = Number.parseInt(qty.value) + 1
+  }
+}
+
+const minusQty = () => {
+  if (Number.parseInt(qty.value) > 1) {
+    qty.value = Number.parseInt(qty.value) - 1
+  }
+}
 </script>
 
 <template>
@@ -200,6 +215,7 @@ const colorRowItem = (item) => {
         >
           <v-text-field
             v-model="qty"
+            v-maska="'###'"
             label="Количество"
             density="compact"
             variant="outlined"
@@ -207,8 +223,8 @@ const colorRowItem = (item) => {
             prepend-icon="mdi-minus"
             :error-messages="qtyErrors"
             @input="qtyErrors = []"
-            @click:prepend="qty--"
-            @click:append="qty++"
+            @click:prepend="minusQty"
+            @click:append="plusQty"
           />
         </v-col>
 
