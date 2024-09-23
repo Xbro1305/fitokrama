@@ -32,7 +32,7 @@ function get_epos_token() // получить новый токен
 	return $epos_token['access_token'];
 }
 	
-function new_epos_invoice($invoice_number,$epos_sum,$client_name)	//	создать новый инвойс epos
+function new_epos_invoice($invoice_number,$epos_sum,$cart)	//	создать новый инвойс epos
 {
 		GLOBAL $ssp_epos_client_id;
 		GLOBAL $ssp_epos_client_secret;
@@ -63,7 +63,7 @@ function new_epos_invoice($invoice_number,$epos_sum,$client_name)	//	созда�
 			"billingInfo" => [
 				"contact" => [
 					"firstName" => " ",
-					"lastName" => $client_name,
+					"lastName" => $cart['client_name'],
 					"middleName" => " "
 				]
 			],
@@ -143,8 +143,8 @@ function new_epos_invoice($invoice_number,$epos_sum,$client_name)	//	созда�
 }
 
 $method = explode("/", $_SERVER ["SCRIPT_URL"])[2];	
-
-if ($method=='epos_incoming') // вызванный webhook при совершенной оплате
+/*
+if ($method=='epos_incoming') // вызванный webhook при совершенной оплате	 - перенесен на payment_received.php 23/09/2024
 	{
 		$link = firstconnect ();
 		$payload = file_get_contents("php://input");
@@ -188,3 +188,4 @@ if ($method=='epos_incoming') // вызванный webhook при соверш�
 		
 		exit(json_encode(['status'=>'ok', 'message'=>'ok']));	
 	}
+*/

@@ -276,7 +276,7 @@ function dpd_send($order,$service_code,$service_variant) {
 	
 	[$qty, $weight, $volume] = qty_weight_volume_by_goods($order['goods']);
 	
-	$sending_point_address_detailed = ['name'=>'ООО Фитомагазин', 'terminalCode'=>'MSQ', 'countryName'=> 'Беларусь', 'contactFio'=>'Шиханцова Людмила Ивановна', 'contactPhone'=>'+375445975005', 'contactEmail'=>'info@fitokrama.by'];
+	$sending_point_address_detailed = ['name'=>'ООО Фитокрама', 'terminalCode'=>'MSQ', 'countryName'=> 'Беларусь', 'contactFio'=>'Шиханцова Людмила Ивановна', 'contactPhone'=>'+375445975005', 'contactEmail'=>'info@fitokrama.by'];
 	$client_address = $order['order_point_address'];
 	/*
 	$from_dadata = json_decode(autocomplete_dadata($client_address),TRUE);
@@ -318,7 +318,7 @@ function dpd_send($order,$service_code,$service_variant) {
 	
 	
 	
-	$return_address_detailed = ['name'=>'ООО Фитомагазин', 'countryName'=> 'Беларусь', 'index' => '220040', 'city' => 'Минск', 'street' => 'Беды Леонида', 'streetAbbr' => 'ул', 'house' => '2Б', 'office' => '316', 
+	$return_address_detailed = ['name'=>'ООО Фитокрама', 'countryName'=> 'Беларусь', 'index' => '220040', 'city' => 'Минск', 'street' => 'Беды Леонида', 'streetAbbr' => 'ул', 'house' => '2Б', 'office' => '316', 
 	'instructions' => 'Склад/офис ООО Фитокрама', 	'contactFio'=>'Шиханцова Людмила Ивановна', 'contactPhone'=>'+375445975005', 'contactEmail'=>'info@fitokrama.by'];
 	
 	//die(json_encode($address_detailed, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
@@ -426,7 +426,7 @@ if ($method=='test_send') // тестирование функций
 	
 	[$qty, $weight, $volume] = qty_weight_volume_by_goods($order['goods']);
 	
-	$sending_point_address_detailed = ['name'=>'ООО Фитомагазин', 'terminalCode'=>'MSQ', 'countryName'=> 'Беларусь', 'contactFio'=>'Шиханцова Людмила Ивановна', 'contactPhone'=>'+375445975005', 'contactEmail'=>'info@fitokrama.by'];
+	$sending_point_address_detailed = ['name'=>'ООО Фитокрама', 'terminalCode'=>'MSQ', 'countryName'=> 'Беларусь', 'contactFio'=>'Шиханцова Людмила Ивановна', 'contactPhone'=>'+375445975005', 'contactEmail'=>'info@fitokrama.by'];
 	/*
 	$from_dadata = json_decode(autocomplete_dadata($client_address),TRUE);
 	if (isset($from_dadata['suggestions'][0]['data']))
@@ -459,7 +459,7 @@ if ($method=='test_send') // тестирование функций
 	
 
 	
-	$return_address_detailed = ['name'=>'ООО Фитомагазин', 'countryName'=> 'Беларусь', 'index' => '220040', 'city' => 'Минск', 'street' => 'Беды Леонида', 'streetAbbr' => 'ул', 'house' => '2Б', 'office' => '316', 
+	$return_address_detailed = ['name'=>'ООО Фитокрама', 'countryName'=> 'Беларусь', 'index' => '220040', 'city' => 'Минск', 'street' => 'Беды Леонида', 'streetAbbr' => 'ул', 'house' => '2Б', 'office' => '316', 
 	'instructions' => 'Склад/офис ООО Фитокрама', 	'contactFio'=>'Шиханцова Людмила Ивановна', 'contactPhone'=>'+375445975005', 'contactEmail'=>'info@fitokrama.by'];
 	
 

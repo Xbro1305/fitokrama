@@ -23,7 +23,8 @@
 	$sum = $cart['sum'];
 	$sum = 0.01;			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	
-	[$epos_link,$epos_id] = new_epos_invoice($order_number,$sum,$cart['client_name']);
+	[$epos_link,$epos_id] = new_epos_invoice($order_number,$sum,$cart);
+	$hutki_billId = new_hutki_invoice($order_number,$sum,$cart);
 	
 	$order_point_address = NULL;
 	$delivery_partners = ExecSQL($link,"SELECT * FROM delivery_partners WHERE id={$cart['delivery_method']}");
@@ -56,7 +57,37 @@
 	
 	
 	
-	$que = "INSERT INTO `orders` (`number`, `client_id`, `datetime_create`, `client_phone`, `client_name`,`order_point_address`,`delivery_method`,`delivery_submethod`, `delivery_price`,`datetime_wait`,`sum`,`epos_link`, `epos_id`) VALUES ('$order_number', '{$cart['client_id']}', NOW(), '{$cart['client_phone']}', '{$cart['client_name']}','$order_point_address','{$cart['delivery_method']}', '{$cart['delivery_submethod']}', {$cart['delivery_price']},'{$cart['datetime_wait']}',$sum, '$epos_link', '$epos_id');";
+	$que = "INSERT INTO `orders` (
+	`number`, 
+	`client_id`, 
+	`datetime_create`, 
+	`client_phone`, 
+	`client_name`,
+	`order_point_address`,
+	`delivery_method`,
+	`delivery_submethod`, 
+	`delivery_price`,
+	`datetime_wait`,
+	`sum`,
+	`epos_link`, 
+	`epos_id`,
+	`hutki_billId`
+		) VALUES (
+	'$order_number', 
+	'{$cart['client_id']}', 
+	NOW(), 
+	'{$cart['client_phone']}', 
+	'{$cart['client_name']}',
+	'$order_point_address',
+	'{$cart['delivery_method']}', 
+	'{$cart['delivery_submethod']}', 
+	{$cart['delivery_price']},
+	'{$cart['datetime_wait']}',
+	$sum, 
+	'$epos_link', 
+	'$epos_id',
+	'$hutki_billId'
+	);";
 	
 	$order_id = ExecSQL($link,$que);
 	
