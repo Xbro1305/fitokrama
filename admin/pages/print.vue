@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/store/auth'
+import { useNotificationStore } from '~/store/notification'
 
 useHead({ title: 'Автопечать' })
 
 const { email, password } = useAuthStore()
-
+const { showError } = useNotificationStore()
 const config = useRuntimeConfig()
 
 const backendUrl = config.public.backendUrl
@@ -18,7 +19,7 @@ if (window.navigator.userAgent === 'adminpage configuration') {
   isUseragentCorrect.value = true
 
   intervalId = setInterval(() => {
-    const { data } = useFetch(`${backendUrl}/order_print_for_assembly.php`, {
+    const { data, error } = useFetch(`${backendUrl}/order_print_for_assembly.php`, {
       method: 'POST',
       body: {
         staff_login: email,
@@ -26,8 +27,11 @@ if (window.navigator.userAgent === 'adminpage configuration') {
       },
     })
 
-    if (data.value && data.value.html_print) {
+    if (data && data.value && data.value.html_print) {
       forPrint.value.push(data.value.html_print)
+    }
+    else if (error) {
+      showError('Ошибка соединения с сервером')
     }
   }, 1000)
 }

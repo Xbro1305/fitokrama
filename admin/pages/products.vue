@@ -33,7 +33,7 @@ const search = ref('')
 const dialog = ref(false)
 
 watch(search, async () => {
-  const { data } = await useFetch(`${backendUrl}/search.php`, {
+  const { data, error } = await useFetch(`${backendUrl}/search.php`, {
     method: 'POST',
     body: {
       email: email,
@@ -44,13 +44,20 @@ watch(search, async () => {
     },
   })
 
-  products.value = data.value
+  if (data && data.value) {
+    products.value = data.value
+  }
+  else if (error) {
+    const { showError } = useNotificationStore()
+
+    showError('Ошибка соединения с сервером')
+  }
 })
 
 const editItem = async (item) => {
   const art = item.art.split('=')[1]
 
-  const { data } = await useFetch(`${backendUrl}/good_details.php`, {
+  const { data, error } = await useFetch(`${backendUrl}/good_details.php`, {
     method: 'POST',
     body: {
       staff_login: email,
@@ -66,10 +73,13 @@ const editItem = async (item) => {
   else if (data.value.error) {
     showError(data.value.error)
   }
+  else if (error) {
+    showError('Ошибка соединения с сервером')
+  }
 }
 
 const saveProduct = async () => {
-  const { data } = await useFetch(`${backendUrl}/good_update.php`, {
+  const { data, error } = await useFetch(`${backendUrl}/good_update.php`, {
     method: 'POST',
     body: {
       staff_login: email,
@@ -86,6 +96,9 @@ const saveProduct = async () => {
   }
   else if (data.value.error) {
     showError(data.value.error)
+  }
+  else if (error) {
+    showError('Ошибка соединения с сервером')
   }
 }
 

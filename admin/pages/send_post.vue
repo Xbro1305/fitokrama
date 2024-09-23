@@ -30,7 +30,7 @@ else {
 }
 
 const sendCode = async (code: string) => {
-  const { data } = await useFetch(`${backendUrl}/order_sent.php`, {
+  const { data, error } = await useFetch(`${backendUrl}/order_sent.php`, {
     method: 'POST',
     body: {
       staff_login: email,
@@ -41,11 +41,14 @@ const sendCode = async (code: string) => {
     },
   })
 
-  if (data.value.message) {
+  if (data && data.value.message) {
     showSuccess(data.value.message)
   }
-  else if (data.value.error) {
+  else if (data && data.value.error) {
     showError(data.value.error)
+  }
+  else if (error) {
+    showError('Ошибка соединения с сервером')
   }
 }
 </script>

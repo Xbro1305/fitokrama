@@ -15,7 +15,7 @@ const products = ref([])
 
 const selected = ref([])
 
-const { data } = await useFetch(`${backendUrl}/orders_to_send.php`, {
+const { data, error } = await useFetch(`${backendUrl}/orders_to_send.php`, {
   method: 'POST',
   body: {
     staff_login: email,
@@ -23,7 +23,12 @@ const { data } = await useFetch(`${backendUrl}/orders_to_send.php`, {
   },
 })
 
-products.value = data.value
+if (data && data.value) {
+  products.value = data.value
+}
+else if (error) {
+  showError('Ошибка соединения с сервером')
+}
 
 const headers = [
   { title: 'Название', key: 'name' },
