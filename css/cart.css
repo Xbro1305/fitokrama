@@ -19,8 +19,8 @@ body {
 }
 
 .delivery-option > section {
-  display: flex;
-  gap: 5px;
+    display: flex;
+    gap: 5px;
 }
 .hidden_option {
     display: none;
@@ -464,4 +464,9 @@ body {
 
 .delivery_checkout section {
     width: 100%;
+}
+
+.but_option {
+    font-weight: 600;
+    font-size: 18px;
 }
