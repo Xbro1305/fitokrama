@@ -65,7 +65,8 @@ function new_epos_invoice($invoice_number,$epos_sum,$cart)	//	создать н�
 					"firstName" => " ",
 					"lastName" => $cart['client_name'],
 					"middleName" => " "
-				]
+				],
+			"email" => $cart['client_email']
 			],
 			"paymentRules" => [
 				"requestAmount" => false,

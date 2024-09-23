@@ -18,6 +18,8 @@
 	$doc = cut_fragment($doc, '<!--PROFILE_PAGE_BEGIN -->','<!--PROFILE_PAGE_END -->','');
 	$doc = cut_fragment($doc, '<!--PAYMENT_PAGE_BEGIN -->','<!--PAYMENT_PAGE_END -->','');
 	$doc = cut_fragment($doc, '<!-- BANNERS_PAGE_BEGIN -->','<!-- BANNERS_PAGE_END -->','');
+	$doc = str_replace('[pagename]', 'Корзина', $doc);
+	
 	
 
 	$doc = actual_by_auth($username,$reddottext,$doc,$cart['sum_goods']);

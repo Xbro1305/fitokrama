@@ -53,13 +53,24 @@ if ($method=='epos_incoming') // вызванный webhook при соверш�
 
 if ($method=='hutki_incoming_ok') // вызванный webhook при совершенной оплате
 {
-	send_warning_telegram('yes: '.json_encode($data));
+	$wsb_order_num = $_GET['wsb_order_num'];
+	$wsb_tid = $_GET['wsb_tid'];
+	
+	echo 'yes GET: '.json_encode($_GET).PHP_EOL;
+	echo 'yes POST: '.json_encode($_POST).PHP_EOL;
+	
+	
 	exit(json_encode(['status'=>'ok', 'message'=>'ok']));	
 	
 }
-if ($method=='hutki_incoming_ok') // вызванный webhook при несовершенной оплате
+if ($method=='hutki_incoming_no') // вызванный webhook при несовершенной оплате
 {
-	send_warning_telegram('no: '.json_encode($data));
+	$wsb_order_num = $_GET['wsb_order_num'];
+	$wsb_tid = $_GET['wsb_tid'];
+	
+	echo 'yes GET: '.json_encode($_GET).PHP_EOL;
+	echo 'yes POST: '.json_encode($_POST).PHP_EOL;
+
 	exit(json_encode(['status'=>'ok', 'message'=>'ok']));	
 	
 }

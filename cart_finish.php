@@ -1,6 +1,9 @@
 <?php
 	include_once  'mnn.php'; 
 	include_once  'epos_methods.php';
+	include_once  'grosh_methods.php';
+	
+	
 
 	header('Content-Type: application/json');
 
@@ -21,7 +24,7 @@
 		if ($test_order_number_unique==NULL) break;
 	}
 	$sum = $cart['sum'];
-	$sum = 0.01;			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	$sum = 1.11;			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	
 	[$epos_link,$epos_id] = new_epos_invoice($order_number,$sum,$cart);
 	$hutki_billId = new_hutki_invoice($order_number,$sum,$cart);

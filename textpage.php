@@ -19,6 +19,7 @@
 	
 	$doc = file_get_contents('ftkrm_sample.html');
 	$doc = actual_by_auth($username,$reddottext,$doc,$cart['sum_goods']);
+	$doc = str_replace('[pagename]', $page, $doc);
 
 	
 

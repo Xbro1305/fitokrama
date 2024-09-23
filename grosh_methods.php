@@ -95,7 +95,7 @@ function new_hutki_invoice($order_number,$sum,$cart)		// сформироват�
 	GLOBAL $grosh_login, $grosh_password, $grosh_eripId;
 
 	$billid = new_hutki_invoice('123456',1.10,['client_name'=>'Кенгерли Эмиль Рафикович','client_email'=>'kenherli@gmail.com','client_address'=>'Ратомка, ул. Корицкого, 30А','client_phone'=>'+375296767861']);
-	
+	send_warning_telegram($billid);
 	$responseLogin = hutkigroshPOST('Security/LogIn', json_encode(['user' => $grosh_login,'pwd' => $grosh_password]));
 	$cookies = $responseLogin['cookies'];
 
@@ -111,6 +111,7 @@ function new_hutki_invoice($order_number,$sum,$cart)		// сформироват�
 	}';
 
 	//echo PHP_EOL.$paydata.PHP_EOL;
+	
 
 	$payresponse = hutkigroshPOST('Pay/WebPay', $paydata, $cookies);
 	$html = json_decode($payresponse['body'], true)['form'];

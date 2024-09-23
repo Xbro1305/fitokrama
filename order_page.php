@@ -21,7 +21,10 @@
 	$doc = cut_fragment($doc, '<!-- BANNERS_PAGE_BEGIN -->','<!-- BANNERS_PAGE_END -->','');
 	
 	
+	
 	$order_number = $_GET['order'];
+	$doc = str_replace('[pagename]', 'Подробности заказа '.$order_number, $doc);
+	
 	$order = all_about_order($order_number);
 	if ($order['client_id']!=$client_id) die(json_encode(['status'=>'error', 'message'=>'Access error' ]));
 	
