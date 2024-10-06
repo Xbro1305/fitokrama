@@ -2,6 +2,7 @@
 	include_once  'mnn.php'; 
 	include_once  'epos_methods.php';
 	include_once  'grosh_methods.php';
+	include_once  'alfa_methods.php';
 	
 	
 
@@ -28,6 +29,8 @@
 	
 	[$epos_link,$epos_id] = new_epos_invoice($order_number,$sum,$cart);
 	$hutki_billId = new_hutki_invoice($order_number,$sum,$cart);
+	[$alfa_orderId,$alfa_url] = new_alfa_invoice($order_number,$sum,$cart);
+
 	
 	$order_point_address = NULL;
 	$delivery_partners = ExecSQL($link,"SELECT * FROM delivery_partners WHERE id={$cart['delivery_method']}");
@@ -74,7 +77,10 @@
 	`sum`,
 	`epos_link`, 
 	`epos_id`,
-	`hutki_billId`
+	`hutki_billId`,
+	`alfa_orderId`,
+	`alfa_url`
+	
 		) VALUES (
 	'$order_number', 
 	'{$cart['client_id']}', 
@@ -89,7 +95,9 @@
 	$sum, 
 	'$epos_link', 
 	'$epos_id',
-	'$hutki_billId'
+	'$hutki_billId',
+	'$alfa_orderId',
+	'$alfa_url'
 	);";
 	
 	$order_id = ExecSQL($link,$que);
