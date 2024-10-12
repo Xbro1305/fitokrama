@@ -16,7 +16,6 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 	GLOBAL $link;
 	GLOBAL $session_id, $username, $cart, $client_id, $reddottext;
 	GLOBAL $min_sum_gratis_delivery;
-
 	
 	if (is_null($address)) $address = $cart['client_address'];
 	
@@ -39,6 +38,8 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 	[$city, $lat, $lng, $postindex] = array_values(city_by_address_dadata($address));
 
 	[$qty, $weight, $volume] = qty_weight_volume_by_goods($cart['goods']);
+	if ($weight==0) $weight = 0.1;
+	if ($volume==0) $volume = 0.008;
 	
 	if ($lat==NULL OR $lng==NULL) return NULL;
 	
@@ -47,7 +48,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 	$methods ['lat'] = $lat;
 	$methods ['lng'] = $lng;
 	$methods ['methods'] = ExecSQL($link,'SELECT id AS method_id, name, logo, prefix, gratis_delivery_by_sum FROM `delivery_partners` WHERE `available`=TRUE ORDER by `priority`;');
-	
+
 	foreach ($methods['methods'] as &$method)
 	{
 
@@ -348,6 +349,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 				$method['price']=0; // бесплатная доставка
 		
 	}
+
 
 	foreach ($methods['methods'] as $key => &$method) 
 	{

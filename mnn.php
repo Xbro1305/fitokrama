@@ -562,9 +562,7 @@ function generateTable($headers, $data) {
 function staff_auth($login, $password)
 {
     GLOBAL $link;
-
     $que = "SELECT * FROM `staff` WHERE `staff_email`='$login' LIMIT 1;";
-
     $staffs = ExecSQL($link, $que);
 
     if (count($staffs) === 0) {

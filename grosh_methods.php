@@ -2,57 +2,6 @@
 	include_once  'mnn.php';
 	//header('Content-Type: application/json');
 
-function hutkigroshLogIn() {			// авторизация 
-	GLOBAL $grosh_login, $grosh_password, $grosh_eripId;
-	$responseLogin = hutkigroshPOST('Security/LogIn', json_encode(['user' => $grosh_login,'pwd' => $grosh_password]));
-	$cookies = $responseLogin['cookies'];
-	return $cookies;
-
-	
-}
-	
-function hutkigroshPOST($method, $dataJSON = null, $cookies = null) {
-    $url = 'https://www.hutkigrosh.by/API/v1/' . $method;
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $headers = [
-        "Content-Type: application/json",
-        "Accept: application/json"
-    ];
-    if (isset($dataJSON)) {
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataJSON);  // Устанавливаем тело запроса
-        $headers[] = "Content-Length: " . strlen($dataJSON);
-    }
-    if ($cookies) {
-        $cookieString = implode('; ', $cookies);
-        curl_setopt($ch, CURLOPT_COOKIE, $cookieString);  // Передаем куки напрямую
-    }
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);    // Устанавливаем заголовки
-    curl_setopt($ch, CURLOPT_HEADER, true);           // Возвращать заголовки ответа
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);            // Таймаут для выполнения запроса (30 секунд)
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);     // Таймаут для подключения (10 секунд)
-    $response = curl_exec($ch);
-    if (curl_errno($ch)) {
-        echo 'Ошибка cURL: '. curl_error($ch);
-        curl_close($ch);
-        return false;
-    }
-    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-    $headers = substr($response, 0, $header_size);    // Заголовки ответа
-    $body = substr($response, $header_size);          // Тело ответа (результат)
-    $responseCookies = [];
-    if ($method !== 'Security/LogOut') {
-        preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $headers, $matches);
-        foreach ($matches[1] as $item) {
-            $responseCookies[] = $item;  // Сохраняем куки как строки
-        }
-    }
-    curl_close($ch);  // Закрываем cURL
-    return ['headers' => $headers, 'body' => $body, 'cookies' => $responseCookies];
-}
-
 function hutkigrosh_new_POST($method, $dataJSON = null) {
     GLOBAL $grosh_apiKey;
   $url = 'https://api.hgrosh.by/'.$method;    
@@ -77,8 +26,6 @@ function hutkigrosh_new_POST($method, $dataJSON = null) {
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);     // Таймаут для подключения (10 секунд)
     $response = curl_exec($ch);
 	
-	die($response);
-	
     if (curl_errno($ch)) {
         echo 'Ошибка cURL: '. curl_error($ch);
         curl_close($ch);
@@ -91,76 +38,9 @@ function hutkigrosh_new_POST($method, $dataJSON = null) {
     return ['headers' => $headers, 'body' => $body];
 }
 
-function hutkigroshGET($method, $cookies = null) {
-    $url = 'https://www.hutkigrosh.by/API/v1/' . $method;
-
-    // Инициализация cURL
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_HTTPGET, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-    // Устанавливаем заголовки
-    $headers = [
-        "Content-Type: application/json",
-        "Accept: application/json"
-    ];
-
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-    // Передача куки, если они заданы
-    $cookieString = '';
-    if ($cookies) {
-        $cookieString = implode('; ', $cookies);
-        curl_setopt($ch, CURLOPT_COOKIE, $cookieString);
-    }
-
-    // Захватываем и заголовки, и тело ответа
-    curl_setopt($ch, CURLOPT_HEADER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-
-    // Выполняем запрос
-    $response = curl_exec($ch);
-
-    // Проверка на ошибки
-    if (curl_errno($ch)) {
-        echo 'Ошибка cURL: ' . curl_error($ch);
-        curl_close($ch);
-        return false;
-    }
-
-    // Получаем информацию о заголовках и теле ответа
-    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-    $headers_response = substr($response, 0, $header_size);
-    $body = substr($response, $header_size);
-
-    // Закрываем cURL
-    curl_close($ch);
-
-    // Формируем понятный вывод для разработчика
-    echo "=== Request Information ===\n";
-    echo "URL: $url\n";
-    echo "Method: GET\n";
-    echo "Headers Sent:\n";
-    foreach ($headers as $header) {
-        echo "  $header\n";
-    }
-    echo "\nCookies Sent: " . ($cookieString ?: 'None') . "\n";
-    
-    echo "\n=== Response Information ===\n";
-    echo "Status Code: " . curl_getinfo($ch, CURLINFO_HTTP_CODE) . "\n";
-    echo "Response Headers:\n$headers_response\n";
-    echo "Response Body:\n$body\n";
-    
-    // Возвращаем заголовки и тело в массиве, если нужно для дальнейшей обработки
-    return ['headers' => $headers_response, 'body' => $body];
-}
-
 function hutkigrosh_new_GET($method) {
     GLOBAL $grosh_apiKey;
     $url = 'https://api.hgrosh.by/'.$method;
-
     // Инициализация cURL
     $ch = curl_init();
 
@@ -181,6 +61,7 @@ function hutkigrosh_new_GET($method) {
 
     // Выполнение запроса
     $response = curl_exec($ch);
+	
     // Проверка на ошибки
     if (curl_errno($ch)) {
         echo 'Ошибка cURL: ' . curl_error($ch);
@@ -188,105 +69,60 @@ function hutkigrosh_new_GET($method) {
         return false;
     }
 
-    // Закрываем cURL
     curl_close($ch);
-
-    // Вывод ответа
-    echo $url.'</br>';
-
-    // Возвращаем ответ для дальнейшей обработки, если нужно
     return json_decode($response, true);
-}
-
-function convertToGuid($billid) {
-    // Преобразуем число в 16-ричную строку
-    $hex = base_convert($billid, 10, 16);
-    
-    // Приводим строку к нужной длине (если требуется дополнение)
-    $hex = str_pad($hex, 32, '0', STR_PAD_LEFT);
-    
-    // Форматируем строку как UUID
-    $uuid = substr($hex, 0, 8) . '-' .
-            substr($hex, 8, 4) . '-' .
-            substr($hex, 12, 4) . '-' .
-            substr($hex, 16, 4) . '-' .
-            substr($hex, 20);
-    
-    return $uuid;
 }
 
 function new_hutki_invoice($order_number,$sum,$cart)		// сформировать новый счет по заказу и вернуть его id
 {
 	
 	$invId = 'FTKRM-' . $order_number . '-' . strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 4));
-	$billData = json_encode([
+	$billData_arr = [
     'number' => $invId,  
     'currency' => 'BYN', 
     'serviceProviderInfo' => [
         'serviceProviderCode' => 10020002  
     ],
-    'paymentChannels' => [  // Указываем каналы оплаты
+    'paymentChannels' => [  // каналы оплаты
         'ERIP', 'WEBPAY'
-		// Канал оплаты, как в примере разработчика
     ],
-    'payerInfo' => [  // Структурированная информация о плательщике
+    'payerInfo' => [  // информация о плательщике
         'contact' => [
             'firstName' => $cart['client_name'],  // Имя клиента
-            'lastName' => '',  // Можно добавить поле, если нужно
-            'middleName' => ''  // Можно добавить поле, если нужно
-        ],
-        'phone' => [
-            'type' => 'string',
-            'countryCode' => '375',  // Код страны
-            'fullNumber' => $cart['client_phone'],  // Полный номер телефона
-            'isMain' => true  // Основной телефон
+            'lastName' => '',  
+            'middleName' => '' 
         ],
         'address' => [
-            'country' => 'Беларусь',  // Страна
-            'line1' => $cart['client_address'],  // Основной адрес
-            'line2' => '',  // Можно добавить поле, если нужно
-            'city' => '',  // Город, если доступен
-            'postalCode' => ''  // Индекс, если доступен
+            'country' => 'Беларусь',
+            'line1' => $cart['client_address'], 
         ],
-        'email' => $cart['client_email'],  // Электронная почта клиента
-        'note' => '',  // Дополнительные заметки, если есть
-        'notifyParams' => [  // Параметры уведомлений
+		
+        'email' => $cart['client_email'],
+        'notifyParams' => [  
             'eventTypes' => [
-                'INVOICE_CREATED'  // Уведомление при создании счета
+                'INVOICE_CREATED' 
             ],
-            'notifyByEMail' => false,  // Уведомление по email
-            'notifyBySMS' => false  // Уведомление по SMS
+            'notifyByEMail' => false, 
+            'notifyBySMS' => false  
         ]
     ],
     'items' => [  // Продукты в счете
         [
-            'code' => 'Артикул 123',  // Код товара
-            'name' => 'Товар',  // Наименование товара
-            'description' => 'Описание товара',  // Описание товара
+            'code' => '',  // Код товара
+            'name' => 'Заказ '.$order_number,  // Наименование товара
+            'description' => '',  // Описание товара
             'quantity' => 1,  // Количество товаров
             'measure' => 'шт.',  // Единица измерения (например, штуки)
-            'unitPrice' => $sum,  // Цена за единицу товара
-            'discount' => [  // Скидка
-                'percent' => 0,  // Процент скидки
-                'label' => ''  // Описание скидки
+            'unitPrice' => $sum
             ]
-        ]
-    ],
-    'discount' => [  // Общая скидка
-        'percent' => 0,  // Процент скидки
-        'amount' => 0,  // Сумма скидки
-        'label' => ''  // Описание скидки
-    ],
-    'penalty' => [  // Штрафы
-        'percent' => 0,  // Процент штрафа
-        'amount' => 0,  // Сумма штрафа
-        'label' => ''  // Описание штрафа
-    ],
-    'note' => 'Et vitae praesentium eius temporibus nemo est molestiae beatae.',  // Примечание к счету
-    'amount' => $sum,  // Общая сумма счета
-    'transactions' => []  // Транзакции (может быть пустым)
-	]);
-
+        ],
+    'note' => 'Заказ № '.$order_number,
+    'amount' => $sum,  
+    'transactions' => []  
+	];
+	//foreach $cart['items'] as $item1
+	
+	$billData = json_encode($billData_arr);
 
 	$responseBill = hutkigrosh_new_POST('invoicing/invoice?api-version=2.0', $billData);  
 	
@@ -306,45 +142,41 @@ if ($method == 'new_invoice')
 
 	$invoiceid = new_hutki_invoice('123456',1.10,['client_name'=>'Кенгерли Эмиль Рафикович','client_email'=>'kenherli@gmail.com','client_address'=>'Ратомка, ул. Корицкого, 30А','client_phone'=>'+375296767861']);
 	die($invoiceid);
-	$paydata = '{
-	"billId":'.$billid.',
-	"returnUrl":		"https://fitokrama.by/payment_received.php/hutki_incoming_ok",
-	"cancelReturnUrl":	"https://fitokrama.by/payment_received.php/hutki_incoming_no",
-	"submitValue":"Оплатить картой",
-	}';
+}
+
+if ($method == 'linkbyid') 
+{
+	$invoiceid = $_GET['invoiceid'];
+	$paymentChannel = 'ERIP'; // Enum: "ERIP" "EPOS" "WEBPAY"
+	$returnUrl = "https://fitokrama.by/payment_received.php/hutki_incoming_ok";
+	$cancelReturnUrl = "https://fitokrama.by/payment_received.php/hutki_incoming_no";
+	$submitValue = '%3Cstring%3E';
+	$url = "invoicing/invoice/$invoiceid/webpay?paymentChannel=$paymentChannel&returnUrl=%3Cstring%3E&cancelReturnUrl=%3Cstring%3E&submitValue=$submitValue&api-version=2.0";
+	$response = hutkigrosh_new_GET($url);
 	
-	$payresponse = hutkigroshPOST('Pay/WebPay', $paydata, $cookies);
-	$html = json_decode($payresponse['body'], true)['form'];
+// Выводим HTML форму
+echo $response['form'];
+die;
 
-	$htmlWithModal = '
-	<div id="paymentModal" style="display:block; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.5);">
-		<div style="width: 400px; margin: 100px auto; padding: 20px; background-color: white;">
-			<h2>Оплата</h2>
-			' . $html . '
-			<button onclick="document.getElementById(\'paymentModal\').style.display = \'none\';">Закрыть</button>
-		</div>
-	</div>
+// Добавляем JavaScript для автоматического отправления формы
+echo '
+<script type="text/javascript">
+    window.onload = function() {
+        document.forms[0].submit(); // Автоматически отправляем первую форму на странице
+    };
+</script>';
 
-	<script>
-		// Дождаться загрузки документа и автоматической отправки формы
-		window.onload = function() {
-			var form = document.forms[0]; // Находим первую форму в модальном окне
-			if (form) {
-				form.submit(); // Автоматически отправляем форму
-			}
-		};
-	</script>';
+die;
 
-	// Выводим HTML с модальным окном
-	echo $htmlWithModal;
+
+die;
 }
 
 
 
 if ($method == 'check') 
 {
-	$invoiceid = '00000000-0000-0000-6d47-cd108ee1dc08';
-	//$invoiceid = '6bece491-12ff-43ca-b0fe-5b99a1b48217';
+	$invoiceid = $_GET['invoiceid'];
 	$response = hutkigrosh_new_GET("invoicing/invoice/$invoiceid?api-version=2.0");
 	echo json_encode($response).PHP_EOL.PHP_EOL;
 	die;

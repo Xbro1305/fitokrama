@@ -4,6 +4,10 @@
 	header('Content-Type: application/json');
 
 function dpd_request($method, $operation, $data,$tag,$test=false) {
+	
+	
+	//send_warning_telegram(json_encode([$method, $operation, $data,$tag,$test]));	
+	
 	GLOBAL $dpd_clientNumber;	
 	GLOBAL $dpd_clientKey;	
     
@@ -15,19 +19,19 @@ function dpd_request($method, $operation, $data,$tag,$test=false) {
         'clientKey' => $dpd_clientKey
     );
     $request[$tag] = $data;
-	if ($test) send_warning_telegram(json_encode($request));
+	if ($test) send_warning_telegram('dpd18 '.json_encode($request));
 	
 	try 
 	{
 		$ret = $client->__soapCall($operation, array($request));	
 		$ret = json_decode(json_encode($ret),TRUE);
 		if (isset($ret['return'])) return  $ret['return'];
-		send_warning_telegram(json_encode($ret));
+		send_warning_telegram('dpd25   '.json_encode($ret));
 		return $ret;
 	}
 	catch (SoapFault $fault) 
 	{
-		send_warning_telegram(json_encode($request));
+		send_warning_telegram('dpd30  error '.json_encode($request).'    '.$fault);
 		file_put_contents('dpd_errors_log.txt', json_encode($request).PHP_EOL , FILE_APPEND | LOCK_EX);
 		file_put_contents('dpd_errors_log.txt', ($fault).PHP_EOL.PHP_EOL , FILE_APPEND | LOCK_EX);
 		return NULL;
@@ -80,7 +84,7 @@ function refresh_dpd_data() { //обновление базы пунктов в�
 	$all_dpd_points = dpd_request('geography2?wsdl','getParcelShops',$data,'request');	//	получить список объектов
 	if (count($all_dpd_points['parcelShop'])<5)
 	{
-		send_warning_telegram('Внимание! Количество полученных пунктов DPD <5. Обновление аварийно завершено!');
+		send_warning_telegram('dpd83   '.'Внимание! Количество полученных пунктов DPD <5. Обновление аварийно завершено!');
 		echo (json_encode(['status'=>'error', 'message'=> 'DPD refresh calcelled']));
 	}
 	
@@ -144,7 +148,6 @@ function refresh_dpd_data() { //обновление базы пунктов в�
 
 function dpd_calculator($delivery_city,$weight,$volume,$selfDelivery,$index=NULL,$test=NULL) 		//	произвести расчет стоимости доставки
 { 	
-		
 	//send_warning_telegram(json_encode($index));
 	//$data['pickup']['cityId']		='196058326';
 	//$data['pickup']['index']		='200400';
@@ -389,6 +392,11 @@ if ($method=='test_label') // тестирование функций
 
 if ($method=='test') // тестирование функций
 	{
+	$res = dpd_calculator('Минск',0.5,round(0.4*0.2*0.1,4),true,null,false);
+	echo json_encode($res);
+	die;
+	
+	
 	$address = $_GET['address'];
 	//$adr_apidq = autocomplete_ApiDQ($address);
 	

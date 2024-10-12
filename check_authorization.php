@@ -262,13 +262,13 @@ function checkAppleAuthorization($postparams) {
   $que = "UPDATE clients SET client_email='$username', datetime_email_confirmed=CURRENT_TIMESTAMP(), email_confirm_detailed = '$email_confirm_detailed' WHERE id=$client_id";
   ExecSQL($link,$que);
   
-  $que = "SELECT * FROM staff WHERE staff_email='$username' AND staff_level IS NOT NULL LIMIT 1";
+  $que = "SELECT * FROM staff WHERE staff_email='$username' AND role IS NOT NULL LIMIT 1";
   $staffs = ExecSQL($link,$que);
   if (count($staffs)>0)	// видим сотрудника компании
   {
 	$que = "UPDATE staff SET datetime_last=CURRENT_TIMESTAMP() WHERE id=".$staffs[0]['id'];
 	ExecSQL($link,$que);
-	$staff_level = $staffs[0]['staff_level'];
+	$staff_level = $staffs[0]['role'];
     $jwt_staff = jwt_create_staff($username,$staff_level);
 	setcookie('jwt_staff', $jwt_staff, time() + (30 * 24 * 60 * 60), '/');
   } 
