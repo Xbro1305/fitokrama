@@ -23,7 +23,7 @@
 	//	подкорректировать настройки баннеров
 
 	
-	$que = "SELECT * FROM goods LIMIT 12 ";
+	$que = "SELECT * FROM goods WHERE goods_groups_id IS NOT NULL LIMIT 12;";
 	$goods = ExecSQL($link,$que);
 	$list_goods = array_column($goods, 'art');
 

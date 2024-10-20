@@ -24,7 +24,7 @@
 	$cat = $_GET['cat'];
 	if ($cat==NULL) $subcat = $_GET['subcat'];
 	
-	$que = "SELECT * FROM goods  ";
+	$que = "SELECT * FROM goods  WHERE goods_groups_id IS NOT NULL;";
 	if ($cat!=NULL) $que = $que . "WHERE cat='$cat'";
 	if ($subcat!=NULL) $que = $que . "WHERE subcat='$subcat'";
 	$goods = ExecSQL($link,$que);
@@ -42,7 +42,7 @@
 	
 	foreach ($list_goods as $similar_good_art_1)
 	{
-		$sgood = ExecSQL($link,"SELECT * FROM goods WHERE art=$similar_good_art_1")[0];
+		$sgood = ExecSQL($link,"SELECT * FROM goods WHERE art=$similar_good_art_1 AND  goods_groups_id IS NOT NULL")[0];
 		$similargood_1 = $similargood_1.$tmpts_similargoods;
 		$similargood_1 = str_replace('[goodart]', $sgood['art'], $similargood_1);
 		$similargood_1 = str_replace('[goodname]', $sgood['name'], $similargood_1);

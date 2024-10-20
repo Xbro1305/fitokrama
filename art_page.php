@@ -20,11 +20,15 @@
 	$doc = cut_fragment($doc, '<!-- BANNERS_PAGE_BEGIN -->','<!-- BANNERS_PAGE_END -->','');
 	
 	$art = $_GET['art'];
-	$good = ExecSQL($link,"SELECT * FROM goods WHERE art=$art")[0];
-	$emptypage = preg_replace('/<!\s*--\s*\[CHANGE_FROM\]\s*--\s*>.*?<!\s*--\s*\[CHANGE_TO\]\s*--\s*>/s', "\n"."\n".'<h2>oops... Товар отсутствует... </h2>', $doc);
+	$good = ExecSQL($link,"SELECT * FROM goods WHERE goods_groups_id IS NOT NULL AND art=$art")[0];
 	
-	if ($good==NULL)
-		die($emptypage);
+	
+	if (($good==NULL) or count($good)==0)
+	{
+		$doc = cut_fragment($doc, '<!-- GOOD_PAGE_BEGIN -->', '<!-- GOOD_PAGE_END -->','oops... Товар отсутствует... ');
+		$doc = cut_fragment($doc, '<!-- SIMILAR_GOODS_BEGIN -->', '<!-- SIMILAR_GOODS_END -->','');
+		die($doc);
+	}
 
 	$cart_count = $cart ['cart_count'];
 	if ($cart_count>0) $doc = str_replace('[cart_count]', $cart_count, $doc); else $doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
@@ -42,13 +46,20 @@
 	$doc = str_replace('[goodbarcode]', $good['barcode'], $doc);
 	$doc = str_replace('[goodcat]', $good['cat'], $doc);
 	$doc = str_replace('[goodsubcat]',$good['subcat'], $doc);
-	$doc = str_replace('[goodtegs]','Теги', $doc);						// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику
+	$doc = str_replace('[goodtegs]','', $doc);						// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику
+	
+	$nolek = '';
+	if ($good['goods_groups_id']!=99) 	$nolek.='Не является лекарственным средством. ';
+	if ($good['goods_groups_id']!=3) 	$nolek.='Не является биологически активной добавкой к пище.';
+	
+	
+	$doc = str_replace('[nolek]',$nolek, $doc);						// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику
 	$doc = str_replace('[goodprod]', $good['producer'], $doc);
 	$doc = str_replace('[good1kg]', $good['koef_ed_ism']*$good['price'], $doc);
 	
 	
 	$similargood_1 ='';
-	$que = $que = "SELECT * FROM goods ORDER BY RAND () LIMIT 3 ";
+	$que = "SELECT * FROM goods WHERE goods_groups_id IS NOT NULL ORDER BY RAND () LIMIT 3 ";
 	$similar_goods = array_column(ExecSQL($link,$que), 'art');
 
 	foreach ($similar_goods as $similar_good_art_1)
