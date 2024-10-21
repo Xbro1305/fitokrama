@@ -1,0 +1,1 @@
+import{b7 as n,r as t}from"./bgoYWPAe.js";const i=n("notification",()=>{const o=t(""),e=t("");function s(r){o.value="error",e.value=r}function c(r){o.value="success",e.value=r}return{color:o,text:e,showError:s,showSuccess:c}});export{i as u};
