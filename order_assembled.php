@@ -44,7 +44,7 @@
 	$goods = $json_in['goods'];
 
 	if ($test) $order_number = $_GET['order_number']; //$json_in['order_number'];		// !!!!!!!!!!!!!!!!!!!!!!
-	if ($test) $goods = json_decode('[{"good_art":"54985","qty_as":"1"}]',TRUE); //$json_in['goods']; // !!!!!!!!!!!!!!!!!!!!!!
+	if ($test) $goods = json_decode('[{"good_art":"94362","qty_as":"1"}]',TRUE); //$json_in['goods']; // !!!!!!!!!!!!!!!!!!!!!!
 
 	$order = all_about_order($order_number,'all_info');
 	$order_id=$order['id'];

@@ -20,7 +20,7 @@
 	$doc = cut_fragment($doc, '<!-- BANNERS_PAGE_BEGIN -->','<!-- BANNERS_PAGE_END -->','');
 	
 	$art = $_GET['art'];
-	$good = ExecSQL($link,"SELECT * FROM goods WHERE goods_groups_id IS NOT NULL AND art=$art")[0];
+	$good = ExecSQL($link,"SELECT * FROM goods WHERE goods_groups_id IS NOT NULL AND art='$art'")[0];
 	
 	
 	if (($good==NULL) or count($good)==0)

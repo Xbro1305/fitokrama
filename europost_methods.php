@@ -311,7 +311,8 @@ function europost_send($order,$selfdelivery) 	//	selfpickup=true - до отде
 	$data['PostalItemExternalId'] = $request_id;
 	$data['IsRecieverShipping'] = 1;
 	
-	$res = europochta_post('Postal.PutOrder', $data);
+	
+	$res = europochta_post('Postal.PutOrder', $data, true);
 	
 	if (!isset($res['Table'][0]['Number']))
 	{

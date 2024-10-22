@@ -4,13 +4,9 @@
 	header('Content-Type: application/json');
 
 function dpd_request($method, $operation, $data,$tag,$test=false) {
-	
-	
 	//send_warning_telegram(json_encode([$method, $operation, $data,$tag,$test]));	
-	
 	GLOBAL $dpd_clientNumber;	
 	GLOBAL $dpd_clientKey;	
-    
 	$url = 'https://ws.dpd.ru/services/' . $method; 
 
     $client = new SoapClient($url);
@@ -311,6 +307,14 @@ function dpd_send($order,$service_code,$service_variant) {
 	$address_detailed['contactEmail']='';
 	*/
 	
+	if ($service_code=='PUP' || $service_code=='NDY') 	// метод доставки требует указания кода пункта на стороне клиента
+	{
+		$submethod_parts = explode('-', $order['delivery_submethod']);
+		$address_detailed['terminalCode'] = $submethod_parts[2];
+	}
+
+		
+	
 	$address_detailed['name'] = $order['client_name'];
 	$address_detailed['countryName'] = 'Беларусь';
 	$address_detailed['contactFio']=$order['client_name'];
@@ -352,7 +356,6 @@ function dpd_send($order,$service_code,$service_variant) {
 	
 	
 //	echo 'create data: ' . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL . PHP_EOL;
-	
 	$response = dpd_request ('order2?wsdl','createOrder',$data,'orders',false);
 	if (!isset($response['orderNum']))
 	{
@@ -427,7 +430,7 @@ if ($method=='test') // тестирование функций
 	
 if ($method=='test_send') // тестирование функций
 	{
-	$order = all_about_order(765865);
+	$order = all_about_order(807120);
 	
 	$service_code = 'NDY';
 	$service_variant = 'ТД';
