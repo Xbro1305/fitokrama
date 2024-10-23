@@ -382,8 +382,10 @@
         <div class="banner">
             <img src="" class="bannerimg" alt="" />
             <div class="controls">
-                <button class="prevbutton" onclick="moveTo(-1)"></button>
-                <button class="nextbutton" onclick="moveTo(1)"></button>
+                <button class="prevbutton" onclick="moveTo(-1)">
+                    &lsaquo;
+                </button>
+                <button class="nextbutton" onclick="moveTo(1)">&rsaquo;</button>
             </div>
             <div class="pagination"></div>
         </div>
@@ -458,7 +460,7 @@
                         </p>
 
                         <p>[goodtegs]</p>
-						<p>[nolek]</p>
+                        <p>[nolek]</p>
                         <p>Производитель: [goodprod]</p>
 
                         <p>Цена за 1 кг: [good1kg]</p>
@@ -746,8 +748,8 @@
 
                     <section>
                         <!-- METHOD_1_BEGIN -->
-						
-						<!-- REPEAT_METHOD_1_BEGIN 
+
+                        <!-- REPEAT_METHOD_1_BEGIN 
 						<div class="but_option hidden_option">
 						<a href="#" id="toggleButton_[prefix]" onclick="toggleVisibility(event, '[prefix]')">[method_name] - Больше вариантов ⋁</a> 
 						</div>
@@ -1280,7 +1282,9 @@
 
                     <p>Телефон +375 44 5975005. info@fitokrama.by</p>
 
-                    <p>Регистрация в торговом реестре № 726568 от 05.09.2024.</p>
+                    <p>
+                        Регистрация в торговом реестре № 726568 от 05.09.2024.
+                    </p>
 
                     <p></p>
                 </div>
@@ -1408,7 +1412,7 @@
                     .finally(() => window.location.reload());
             }
 
-             function toggleOptions() {
+            function toggleOptions() {
                 const options = document.querySelectorAll(".hidden_option");
                 const toggleBtn = document.getElementById("toggleOptionsBtn");
 
@@ -1423,7 +1427,6 @@
                     options.forEach((opt) => opt.classList.remove("dn"));
                 }
             }
-
 
             const gotoCart = () => {
                 document.querySelector("#waiting").style.display = "flex";

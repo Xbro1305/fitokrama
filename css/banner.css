@@ -22,7 +22,7 @@
 .banner .controls button {
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
-  border: none;
+  border: none; font-size: 24px;
   padding: 10px 20px;
   cursor: pointer;
 }
