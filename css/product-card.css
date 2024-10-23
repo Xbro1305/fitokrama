@@ -1,438 +1,438 @@
 .product-card {
-  display: flex;
+    display: flex;
 
-  flex-direction: column;
+    flex-direction: column;
 
-  justify-content: flex-start;
+    justify-content: flex-start;
 
-  padding: 20px;
+    padding: 20px;
 
-  background-color: #fff;
+    background-color: #fff;
 
-  max-width: 1000px;
+    max-width: 1000px;
 
-  margin: 20px auto;
+    margin: 20px auto;
 
-  width: 100%;
+    width: 100%;
 
-  box-sizing: border-box;
+    box-sizing: border-box;
 
-  position: relative;
+    position: relative;
 }
 
 .product-without-description {
-  display: flex;
+    display: flex;
 }
 
 .product-image {
-  width: 300px;
+    width: 300px;
+    cursor: pointer;
+    height: 300px;
 
-  height: 300px;
+    background-color: #f0f0f0;
 
-  background-color: #f0f0f0;
+    display: flex;
 
-  display: flex;
+    align-items: center;
 
-  align-items: center;
+    justify-content: center;
 
-  justify-content: center;
+    font-size: 24px;
 
-  font-size: 24px;
+    color: #aaa;
 
-  color: #aaa;
+    margin-right: 20px;
 
-  margin-right: 20px;
-
-  border-radius: 10px;
+    border-radius: 10px;
 }
 
 .product-info {
-  flex: 1;
+    flex: 1;
 
-  display: flex;
+    display: flex;
 
-  flex-direction: column;
+    flex-direction: column;
 
-  align-items: flex-start;
+    align-items: flex-start;
 
-  position: relative;
+    position: relative;
 }
 
 .product-title {
-  font-size: 18px;
+    font-size: 18px;
 
-  margin: 0 0 10px;
+    margin: 0 0 10px;
 }
 
 .product-description {
-  font-size: 14px;
+    font-size: 14px;
 
-  color: #666;
+    color: #666;
 
-  margin: 0 0 20px;
+    margin: 0 0 20px;
 
-  text-align: left !important;
+    text-align: left !important;
 
-  width: 100%;
+    width: 100%;
 }
 
 .product-prices {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 
-  flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .old-price {
-  font-size: 24px;
+    font-size: 24px;
 
-  color: red;
+    color: red;
 
-  margin-right: 10px;
+    margin-right: 10px;
 
-  position: relative;
+    position: relative;
 }
 
 .old-price::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 100%;
-  height: 1px;
-  background-color: red;
-  transform: rotate(-45deg); /* Диагональное зачеркивание */
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background-color: red;
+    transform: rotate(-45deg); /* Диагональное зачеркивание */
 }
 
 .old-price sup {
-  font-size: 16px;
+    font-size: 16px;
 
-  vertical-align: super;
+    vertical-align: super;
 }
 
 .new-price {
-  font-size: 36px;
+    font-size: 36px;
 
-  color: rgb(97, 129, 98);
+    color: rgb(97, 129, 98);
 
-  font-weight: bold;
+    font-weight: bold;
 
-  position: relative;
+    position: relative;
 
-  margin-right: 20px;
+    margin-right: 20px;
 
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 }
 
 .new-price sup {
-  font-size: 24px;
+    font-size: 24px;
 
-  vertical-align: super;
+    vertical-align: super;
 }
 
 .new-price .currency {
-  font-size: 24px;
+    font-size: 24px;
 
-  color: rgb(97, 129, 98);
+    color: rgb(97, 129, 98);
 }
 
 .product-actions {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  margin-left: 20px;
+    margin-left: 20px;
 
-  flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .quantity-selector {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .quantity-button {
-  width: 30px;
+    width: 30px;
 
-  height: 30px;
+    height: 30px;
 
-  background-color: #ddd;
+    background-color: #ddd;
 
-  border: none;
+    border: none;
 
-  border-radius: 5px;
+    border-radius: 5px;
 
-  font-size: 18px;
+    font-size: 18px;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .quantity-input {
-  width: 50px;
+    width: 50px;
 
-  text-align: center;
+    text-align: center;
 
-  border: 1px solid #ddd;
+    border: 1px solid #ddd;
 
-  border-radius: 5px;
+    border-radius: 5px;
 
-  font-size: 16px;
+    font-size: 16px;
 
-  margin: 0 5px;
+    margin: 0 5px;
 
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 .quantity-input::-webkit-outer-spin-button,
 .quantity-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+    -webkit-appearance: none;
 
-  margin: 0;
+    margin: 0;
 }
 
 .add-to-cart {
-  background-color: rgb(97, 129, 98);
+    background-color: rgb(97, 129, 98);
 
-  color: white;
+    color: white;
 
-  border: none;
+    border: none;
 
-  border-radius: 25px;
+    border-radius: 25px;
 
-  padding: 10px 20px;
+    padding: 10px 20px;
 
-  font-size: 16px;
+    font-size: 16px;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .add-to-cart:hover {
-  background-color: rgb(158, 184, 158);
+    background-color: rgb(158, 184, 158);
 }
 
 .delivery-time {
-  font-size: 12px;
+    font-size: 12px;
 
-  color: red;
+    color: red;
 
-  text-align: left;
+    text-align: left;
 
-  margin-top: 10px;
+    margin-top: 10px;
 
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .info-icon {
-  width: 15px;
+    width: 15px;
 
-  height: 15px;
+    height: 15px;
 
-  cursor: pointer;
+    cursor: pointer;
 
-  margin-left: 5px;
+    margin-left: 5px;
 }
 
 .product-details {
-  font-size: 12px;
+    font-size: 12px;
 
-  color: #666;
+    color: #666;
 
-  line-height: 1.2;
+    line-height: 1.2;
 
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 
-  padding-left: 0;
+    padding-left: 0;
 
-  width: 100%;
+    width: 100%;
 }
 
 .product-details p {
-  margin: 0;
+    margin: 0;
 }
 
 .product-full-description {
-  max-width: 1000px;
+    max-width: 1000px;
 
-  margin: 20px auto;
+    margin: 20px auto;
 
-  font-size: 14px;
+    font-size: 14px;
 
-  color: #666;
+    color: #666;
 
-  text-align: left;
+    text-align: left;
 
-  padding: 0 20px;
+    padding: 0 20px;
 }
 
 /* Модальное окно */
 
 .modal {
-  display: none;
+    display: none;
 
-  position: fixed;
+    position: fixed;
 
-  z-index: 100;
+    z-index: 100;
 
-  left: 0;
+    left: 0;
 
-  top: 0;
+    top: 0;
 
-  width: 100%;
+    width: 100%;
 
-  height: 100%;
+    height: 100%;
 
-  overflow: auto;
+    overflow: auto;
 
-  background-color: rgb(0, 0, 0);
+    background-color: rgb(0, 0, 0);
 
-  background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 
-  padding-top: 60px;
+    padding-top: 60px;
 }
 
 .modal-content {
-  background-color: #fefefe;
+    background-color: #fefefe;
 
-  margin: 5% auto;
+    margin: 5% auto;
 
-  padding: 20px;
+    padding: 20px;
 
-  border: 1px solid #888;
+    border: 1px solid #888;
 
-  width: 80%;
+    width: 80%;
 
-  max-width: 500px;
+    max-width: 500px;
 
-  text-align: center;
+    text-align: center;
 
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 
-  border-radius: 10px;
+    border-radius: 10px;
 }
 
 .modal-body {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  justify-content: center;
+    justify-content: center;
 }
 
 .modal-image {
-  width: 25px;
+    width: 25px;
 
-  margin-right: 20px;
+    margin-right: 20px;
 }
 
 .modal-text {
-  text-align: left;
+    text-align: left;
 }
 
 .modal-text h2 {
-  font-size: 24px;
+    font-size: 24px;
 
-  color: rgb(97, 129, 98); /* Зеленый цвет */
+    color: rgb(97, 129, 98); /* Зеленый цвет */
 
-  margin: 0 0 20px;
-  display: flex;
-  align-items: center;
+    margin: 0 0 20px;
+    display: flex;
+    align-items: center;
 }
 
 .modal-buttons {
-  display: flex;
+    display: flex;
 
-  justify-content: space-between;
+    justify-content: space-between;
 }
 
 .continue-shopping,
 .checkout {
-  background-color: rgb(97, 129, 98);
+    background-color: rgb(97, 129, 98);
 
-  color: white;
+    color: white;
 
-  border: none;
+    border: none;
 
-  border-radius: 25px;
+    border-radius: 25px;
 
-  padding: 10px 20px;
+    padding: 10px 20px;
 
-  font-size: 16px;
+    font-size: 16px;
 
-  cursor: pointer;
+    cursor: pointer;
 
-  margin: 10px;
+    margin: 10px;
 }
 
 .continue-shopping:hover,
 .checkout:hover {
-  background-color: rgb(158, 184, 158);
+    background-color: rgb(158, 184, 158);
 }
 
 .close {
-  color: #aaa;
+    color: #aaa;
 
-  float: right;
+    float: right;
 
-  font-size: 28px;
+    font-size: 28px;
 
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color: black;
+    color: black;
 
-  text-decoration: none;
+    text-decoration: none;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 @media (max-width: 421px) {
-  .product-without-description {
-    width: 100%;
-    display: flex;
-    flex-direction: column !important;
-  }
+    .product-without-description {
+        width: 100%;
+        display: flex;
+        flex-direction: column !important;
+    }
 
-  .product-image {
-    width: 100%;
-    margin-right: 0;
-  }
+    .product-image {
+        width: 100%;
+        margin-right: 0;
+    }
 
-  .product-info {
-    width: 100%;
-    margin-top: 20px;
-    text-align: left;
-  }
+    .product-info {
+        width: 100%;
+        margin-top: 20px;
+        text-align: left;
+    }
 
-  .product-actions {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    margin: 10px 0;
-    align-items: center;
-    gap: 10px;
-  }
+    .product-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        margin: 10px 0;
+        align-items: center;
+        gap: 10px;
+    }
 
-  .quantity-selector {
-    margin: 0 !important;
-  }
+    .quantity-selector {
+        margin: 0 !important;
+    }
 }
 
 @media (max-width: 421px) {
-  .modal-image {
-    display: none;
-  }
+    .modal-image {
+        display: none;
+    }
 }

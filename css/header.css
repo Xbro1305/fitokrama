@@ -134,6 +134,7 @@
     height: 80px; /* Используем такую же высоту, как в футере */
 
     margin-right: 20px;
+    cursor: pointer;
 }
 
 .search-container {

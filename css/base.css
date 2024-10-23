@@ -33,6 +33,11 @@ button:hover {
     cursor: pointer;
 }
 
+a,
+button {
+    cursor: pointer !important;
+}
+
 input {
     font-family: "PT Sans", sans-serif;
     outline: none;
