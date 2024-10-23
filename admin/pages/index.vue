@@ -30,6 +30,8 @@ const endDate = ref(adapter.parseISO(date))
 const orders = ref([])
 const order = ref({})
 const showOrder = ref(false)
+const statuses = ref([])
+const status = ref(null)
 
 const { data, error } = await useFetch(`${backendUrl}/admin/orders.php`, {
   method: 'POST',
@@ -43,6 +45,12 @@ const { data, error } = await useFetch(`${backendUrl}/admin/orders.php`, {
 
 if (data.value && data.value.orders) {
   orders.value = data.value.orders
+
+  data.value.orders.forEach((order1) => {
+    if (!statuses.value.includes(order1.status_text_admin)) {
+      statuses.value.push(order1.status_text_admin)
+    }
+  })
 }
 else if (error) {
   showError('Ошибка соединения с сервером')
@@ -90,6 +98,17 @@ const showItem = (item) => {
   order.value = item
   showOrder.value = true
 }
+
+const statusFilter = (value, query, item) => {
+  return query === null || item.columns.status_text_admin === query
+
+  /*
+  return value != null &&
+    query != null &&
+    typeof value === 'string' &&
+    value.toString().toLocaleUpperCase().indexOf(query) !== -1
+  */
+}
 </script>
 
 <template>
@@ -102,7 +121,7 @@ const showItem = (item) => {
       <v-row>
         <v-col
           cols="12"
-          md="6"
+          md="4"
         >
           <v-date-input
             v-model="startDate"
@@ -112,18 +131,32 @@ const showItem = (item) => {
 
         <v-col
           cols="12"
-          md="6"
+          md="4"
         >
           <v-date-input
             v-model="endDate"
             label="Дата, до"
           />
         </v-col>
+
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <v-select
+            v-model="status"
+            label="Статус"
+            :items="statuses"
+            clearable
+          />
+        </v-col>
       </v-row>
 
       <v-data-table
+        :custom-filter="statusFilter"
         :headers="headers"
         :items="orders"
+        :search="status"
       >
         <template #[`item.actions`]="{ item }">
           <v-btn
