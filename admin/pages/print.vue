@@ -28,7 +28,18 @@ if (window.navigator.userAgent === 'adminpage configuration') {
     })
 
     if (data && data.value && data.value.html_print) {
-      forPrint.value.push(data.value.html_print)
+      // forPrint.value.push(data.value.html_print)
+      const html = data.value.html_print
+
+      if (html) {
+        const printWindow = window.open('', '_blank')
+        printWindow?.document.write(html)
+        sleep(200).then(() => {
+          printWindow?.document.close()
+          printWindow?.focus()
+          printWindow?.print()
+        })
+      }
     }
     else if (error) {
       showError('Ошибка соединения с сервером')
@@ -40,6 +51,7 @@ onUnmounted(() => clearInterval(intervalId))
 
 const sleep = (ms: number) => new Promise((r: never) => setTimeout(r, ms))
 
+/*
 const printClick = () => {
   const html = forPrint.value.pop()
 
@@ -53,6 +65,7 @@ const printClick = () => {
     })
   }
 }
+*/
 </script>
 
 <template>
@@ -80,6 +93,7 @@ const printClick = () => {
         />
       </v-alert>
 
+      <!--
       <v-btn
         v-if="forPrint.length > 0"
         color="primary"
@@ -88,6 +102,7 @@ const printClick = () => {
       >
         Печать ({{ forPrint.length }})
       </v-btn>
+      -->
     </v-card-text>
   </v-card>
 </template>

@@ -170,7 +170,7 @@ const refresh = async () => {
             density="compact"
           />
 
-          <v-text-field
+          <v-textarea
             v-model="product.description_short"
             label="Короткое описание"
             density="compact"

@@ -19,6 +19,8 @@ const headers = [
   { title: 'Номер', key: 'number' },
   { title: 'Дата', key: 'datetime_create' },
   { title: 'Сумма', key: 'sum' },
+  { title: 'Статус', key: 'status_text_admin' },
+  { title: '', key: 'actions', sortable: false },
 ]
 
 const date = new Date().toISOString().substring(0, 10)
@@ -26,6 +28,8 @@ const startDate = ref(adapter.parseISO(date))
 const endDate = ref(adapter.parseISO(date))
 
 const orders = ref([])
+const order = ref({})
+const showOrder = ref(false)
 
 const { data, error } = await useFetch(`${backendUrl}/admin/orders.php`, {
   method: 'POST',
@@ -81,6 +85,11 @@ watch(endDate, async () => {
     showError('Ошибка соединения с сервером')
   }
 })
+
+const showItem = (item) => {
+  order.value = item
+  showOrder.value = true
+}
 </script>
 
 <template>
@@ -115,7 +124,79 @@ watch(endDate, async () => {
       <v-data-table
         :headers="headers"
         :items="orders"
-      />
+      >
+        <template #[`item.actions`]="{ item }">
+          <v-btn
+            color="primary"
+            icon="mdi-eye"
+            density="compact"
+            @click="showItem(item)"
+          />
+        </template>
+      </v-data-table>
     </v-card-text>
+
+    <v-dialog
+      v-model="showOrder"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          Детали заказа
+        </v-card-title>
+        <v-card-text>
+          alfa_orderId: {{ order.alfa_orderId }}<br>
+          alfa_url: {{ order.alfa_url }}<br>
+          assembly_staff_id: {{ order.assembly_staff_id }}<br>
+          client_id: {{ order.client_id }}<br>
+          client_name: {{ order.client_name }}<br>
+          client_phone: {{ order.client_phone }}<br>
+          datetime_assembly: {{ order.datetime_assembly }}<br>
+          datetime_assembly_order: {{ order.datetime_assembly_order }}<br>
+          datetime_cancel: {{ order.datetime_cancel }}<br>
+          datetime_create: {{ order.datetime_create }}<br>
+          datetime_delivery: {{ order.datetime_delivery }}<br>
+          datetime_finish: {{ order.datetime_finish }}<br>
+          datetime_order_print: {{ order.datetime_order_print }}<br>
+          datetime_paid: {{ order.datetime_paid }}<br>
+          datetime_sent: {{ order.datetime_sent }}<br>
+          datetime_wait: {{ order.datetime_wait }}<br>
+          delivery_logo: {{ order.delivery_logo }}<br>
+          delivery_method: {{ order.delivery_method }}<br>
+          delivery_price: {{ order.delivery_price }}<br>
+          delivery_submethod: {{ order.delivery_submethod }}<br>
+          delivery_text: {{ order.delivery_text }}<br>
+          epos_id: {{ order.epos_id }}<br>
+          epos_link: {{ order.epos_link }}<br>
+          hutki_billId: {{ order.hutki_billId }}<br>
+          id: {{ order.id }}<br>
+          internal_postcode: {{ order.internal_postcode }}<br>
+          number: {{ order.number }}<br>
+          order_point_address: {{ order.order_point_address }}<br>
+          paid: {{ order.paid }}<br>
+          parties_id: {{ order.parties_id }}<br>
+          post_code: {{ order.post_code }}<br>
+          status: {{ order.status }}<br>
+          status_color: {{ order.status_color }}<br>
+          status_text: {{ order.status_text }}<br>
+          status_text_admin: {{ order.status_text_admin }}<br>
+          steps: {{ order.steps }}<br>
+          sum: {{ order.sum }}<br>
+          track_number: {{ order.track_number }}<br>
+
+          <v-data-table
+            :headers="[{ title: 'Артикул', key: 'good_art' }, { title: 'Название', key: 'name' }, { title: 'Цена', key: 'price' }, { title: 'Количество', key: 'qty' }]"
+            :items="order.goods"
+          />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+
+          <v-btn @click="showOrder = false">
+            Закрыть
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
