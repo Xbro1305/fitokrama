@@ -22,7 +22,7 @@ function dpd_request($method, $operation, $data,$tag,$test=false) {
 		$ret = $client->__soapCall($operation, array($request));	
 		$ret = json_decode(json_encode($ret),TRUE);
 		if (isset($ret['return'])) return  $ret['return'];
-		send_warning_telegram('dpd25   '.json_encode($ret));
+		// send_warning_telegram('dpd25   '.json_encode($ret));
 		return $ret;
 	}
 	catch (SoapFault $fault) 
@@ -218,12 +218,11 @@ function dpd_get_lable_createLabelFile($order_number,$dpd_number,$fileformat) {
 	
 }
 
-function dpd_get_lable_createParcelLabel($order_number,$track_number,$dpd_number) {
+function dpd_get_lable_createParcelLabel($order_number,$track_number,$internal_postcode) {
 	$data = array();
-	$data['parcel'] = ['orderNum'=>$track_number,'parcelNum'=>$dpd_number];
+	$data['parcel'] = ['orderNum'=>$track_number,'parcelNum'=>$internal_postcode];
 	$data['order_number'] = $order_number;
 	$sticker_data = dpd_request ('label-print?wsdl','createParcelLabel',$data,'getLabel',false);
-	
 	if (!isset($sticker_data['order']['category']))
 	{
 		send_warning_telegram('DPD_getlabel '.json_encode($sticker_data));
@@ -369,7 +368,7 @@ function dpd_send($order,$service_code,$service_variant) {
 	[$label_filename,$post_code] = dpd_get_lable_createParcelLabel($order_number,$track_number,$request_id);
 	
 	
-	return [$track_number,$post_code,$label_filename];
+	return [$track_number,$post_code,$label_filename,$request_id];
 }
 	
 
@@ -379,13 +378,13 @@ $method = explode("/", $_SERVER ["SCRIPT_URL"])[2];
 if ($method=='test_label') // тестирование функций
 	{
 		
-	$res = dpd_get_lable_createParcelLabel($_GET['order_number'],$_GET['tracknumber'],$_GET['dpd_number']);
+	$res = dpd_get_lable_createParcelLabel($_GET['order_number'],$_GET['tracknumber'],$_GET['internal_postcode']);
 	
-		header('Content-Type: text/html; charset=UTF-8');
+		/*header('Content-Type: text/html; charset=UTF-8');
 		header("Access-Control-Allow-Origin: $http_origin");
 		if (isset($res[0])) header('Location: https://fitokrama.by/'.$res[0]);
-		else echo json_encode($res);
-	
+		else echo json_encode($res);*/
+	echo "https://fitokrama.by/$res[0]";
 		
 		
 	exit;

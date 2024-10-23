@@ -42,10 +42,7 @@
         $link = firstconnect();
         $records = ExecSQL($link, $que);
 		foreach ($records as $order1)
-		{
 			$orders[]=all_about_order($order1['number']);
-			
-		}
 
         exit(json_encode([
             'orders' => $orders,

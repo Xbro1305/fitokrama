@@ -44,7 +44,7 @@
 	$goods = $json_in['goods'];
 
 	if ($test) $order_number = $_GET['order_number']; //$json_in['order_number'];		// !!!!!!!!!!!!!!!!!!!!!!
-	if ($test) $goods = json_decode('[{"good_art":"94362","qty_as":"1"}]',TRUE); //$json_in['goods']; // !!!!!!!!!!!!!!!!!!!!!!
+	if ($test) $goods = json_decode('[{"good_art":"76544","qty_as":"1"}]',TRUE); //$json_in['goods']; // !!!!!!!!!!!!!!!!!!!!!!
 
 	$order = all_about_order($order_number,'all_info');
 	$order_id=$order['id'];
@@ -104,25 +104,26 @@
 		[$track_number,$post_code,$label_filename] = yandex_send ($address, $qty, $weight, $order_number);
 
 	if ($delivery_method==2)	// DPD-почтомат
-		[$track_number,$post_code,$label_filename] = dpd_send ($order,'PUP','ТТ');
+		[$track_number,$post_code,$label_filename,$internal_postcode] = dpd_send ($order,'PUP','ТТ');
 
 	if ($delivery_method==3)	// Евроопт, пункт выдачи
-		[$track_number,$post_code,$label_filename] = europost_send ($order,true); // selfdelivery=true, т.е. клиент заберет сам
+		[$track_number,$post_code,$label_filename,$internal_postcode] = europost_send ($order,true); // selfdelivery=true, т.е. клиент заберет сам
 
 	if ($delivery_method==4)	// DPD-доставка до двери
-		[$track_number,$post_code,$label_filename] = dpd_send ($order,'NDY','ТД');
+		[$track_number,$post_code,$label_filename,$internal_postcode] = dpd_send ($order,'NDY','ТД');
 
 	if ($delivery_method==5)	// DPD-пункт выдачи
-		[$track_number,$post_code,$label_filename] = dpd_send ($order,'NDY','ТТ');
+		[$track_number,$post_code,$label_filename,$internal_postcode] = dpd_send ($order,'NDY','ТТ');
 
 	if ($delivery_method==6)	// Белпочта-пункт выдачи
 		[$track_number,$post_code,$label_filename] = belpost_send ($address, $qty, $weight, $order_number);
 
 	if ($delivery_method==7)	// Евроопт, курьер до двери
-		[$track_number,$post_code,$label_filename] = europost_send ($order,false); // selfdelivery=false, т.е. доставка до двери
+		[$track_number,$post_code,$label_filename,$internal_postcode] = europost_send ($order,false); // selfdelivery=false, т.е. доставка до двери
 
+	if (is_null($internal_postcode)) $internal_postcode='FTKRM...';
 
-	$que = "UPDATE `orders` SET track_number='$track_number', post_code='$post_code' WHERE id=$order_id";
+	$que = "UPDATE `orders` SET track_number='$track_number', post_code='$post_code', internal_postcode='$internal_postcode' WHERE id=$order_id";
 	//send_warning_telegram($que);
 	ExecSQL($link,$que);
 	$message = "Сформировано отправление $track_number. Распечатайте наклейку!";
