@@ -162,6 +162,12 @@
 
 .product-without-description .product-actions {
     flex-direction: row-reverse;
+    align-items: center;
+    gap: 30px;
+}
+
+.product-without-description .product-actions .quantity-selector {
+    margin: 0;
 }
 
 .quantity-selector {
