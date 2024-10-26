@@ -86,6 +86,15 @@
     flex-wrap: wrap;
 }
 
+.product-without-description .product-prices {
+    width: 100%;
+}
+
+.pr-pr {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
 .old-price {
     font-size: 24px;
 
@@ -149,6 +158,10 @@
     margin-left: 20px;
 
     flex-wrap: wrap;
+}
+
+.product-without-description .product-actions {
+    flex-direction: row-reverse;
 }
 
 .quantity-selector {

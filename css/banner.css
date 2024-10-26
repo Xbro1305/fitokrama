@@ -1,71 +1,71 @@
 .banner {
-  width: 100%;
-  position: relative;
+    width: 100%;
+    position: relative;
 }
 
 .banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .banner .controls {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .banner .controls button {
-  background: rgba(0, 0, 0, 0.1);
-  color: #fff;
-  border: none; font-size: 24px;
-  padding: 10px 20px;
-  cursor: pointer;
+    color: #fff;
+    border: none;
+    font-size: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
 }
 
 .banner .controls button:hover {
-  background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 .banner .controls button:active {
-  background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .banner .pagination {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 20px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
 }
 
 @media (max-width: 768px) {
-  .banner .pagination {
-    display: none;
-  }
+    .banner .pagination {
+        display: none;
+    }
 }
 
 .banner .pagination button {
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  border: none;
-  width: 10.5px !important;
-  height: 10px !important;
-  cursor: pointer;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-  padding: 0;
+    border: none;
+    width: 10.5px !important;
+    height: 10px !important;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 3px solid #ccc;
+    padding: 0;
 }
 
 .banner .pagination button:hover {
-  background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 .banner .dot.active {
-  background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.9);
 }

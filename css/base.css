@@ -29,7 +29,6 @@ a {
 
 a:hover,
 button:hover {
-    background: #00000010;
     cursor: pointer;
 }
 
