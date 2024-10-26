@@ -29,8 +29,12 @@ a {
 
 a:hover,
 button:hover {
-    background: #00000010;
     cursor: pointer;
+}
+
+a,
+button {
+    cursor: pointer !important;
 }
 
 input {
