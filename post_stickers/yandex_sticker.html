@@ -217,45 +217,43 @@
       <div class="top">
         <div class="userInfo">
           <section class="address">
-            <p>[senderName]; [senderAddress]</p>
+            <p>[senderdata]</p>
             <img
-              src="https://fitokrama.by/logos/dpdlogo.png "
-              alt="DPD Logo"
+              src="https://fitokrama.by/logos/yandex-delivery.png"
+              alt="yandex Logo"
               width="50"
               height="50"
             />
           </section>
           <p>
-            [receiverName]; [receiverAddress]
+            
           </p>
-          <p class="orderNum">Зак. кл: <b>[clientOrderNum]</b></p>
+          <p class="orderNum">Заказ: <b>[clientOrderNum]</b></p>
         </div>
-        <h4 class="serviceCode">[serviceCode]</h4>
+        <h4 class="serviceCode">ЯНДЕКС ДОСТАВКА</h4>
         <div class="pickupTerminalCode">
           <section>
-            <h2>MSQ</h2>
-            <p><b>[datePickup]</b></p>
+            <h2>Получатель: [order_point_address]; [client_name] тел. [client_phone]</h2>
+            <p><b>[datetime_assembly]</b></p>
           </section>
           <section></section>
         </div>
         <div class="deliveryInfo">
           <section>
-            <div class="deliveryTerminalCode">[deliveryTerminalCode]</div>
-            <div class="serviceArea">[deliveryServiceArea]</div>
+            <div class="deliveryTerminalCode"></div>
+            <div class="serviceArea"></div>
           </section>
-          <h2 class="terminalName">[deliveryTerminalName]</h2>
+          <h2 class="terminalName"></h2>
         </div>
       </div>
 
       <div class="bottom">
-        <div class="orderNum">Отправка № <b>[orderNum]</b></div>
+        <div class="orderNum">id <b>[number]</b></div>
         <div class="barcode">
           <svg id="barcode"></svg>
         </div>
         <div class="parcelInfo">
           <section>
-            <p>Посылка № <b>[parcelNum]</b></p>
-            <p>Категория:<b> [category]</b></p>
           </section>
           <section>
             <div></div>
@@ -265,7 +263,7 @@
       </div>
     </main>
     <script>
-      JsBarcode("#barcode", "[Number]", {
+      JsBarcode("#barcode", "[post_code]", {
         format: "CODE128",
         lineColor: "#000",
         width: 2,

@@ -76,6 +76,8 @@ function cart_by_session_id_and_username ($session_id,$username)
 			delivery_submethod,
 			delivery_price,
 			datetime_wait,
+			lat, 
+			lng,
 			FLOOR(delivery_price) AS delivery_price_rub,
 			LPAD(ROUND((delivery_price - FLOOR(delivery_price)) * 100), 2, '0') AS delivery_price_kop
 		FROM
@@ -433,7 +435,7 @@ function all_about_order($order_number,$type=NULL) // подробности п�
 	GLOBAL $link;
 
 	$que = "SELECT * FROM `orders` WHERE number='$order_number' LIMIT 1";
- 	$orders = ExecSQL($link,$que);
+	$orders = ExecSQL($link,$que);
 	if (count($orders)==0) return NULL;
 	$order = $orders[0];
 		list($order['delivery_logo'], $order['delivery_text']) = info_about_delivery_by_id($order['delivery_method'],$order['delivery_submethod']);

@@ -101,7 +101,7 @@
 
 
 	if ($delivery_method==1)	// яндекс
-		[$track_number,$post_code,$label_filename] = yandex_send ($address, $qty, $weight, $order_number);
+		[$track_number,$post_code,$label_filename,$internal_postcode] = yandex_send ($order);
 
 	if ($delivery_method==2)	// DPD-почтомат
 		[$track_number,$post_code,$label_filename,$internal_postcode] = dpd_send ($order,'PUP','ТТ');

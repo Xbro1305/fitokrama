@@ -30,7 +30,7 @@ function dpd_request($method, $operation, $data,$tag,$test=false) {
 		send_warning_telegram('dpd30  error '.json_encode($request).'    '.$fault);
 		file_put_contents('dpd_errors_log.txt', json_encode($request).PHP_EOL , FILE_APPEND | LOCK_EX);
 		file_put_contents('dpd_errors_log.txt', ($fault).PHP_EOL.PHP_EOL , FILE_APPEND | LOCK_EX);
-		return NULL;
+		return $fault;
 	}
 	
 	
