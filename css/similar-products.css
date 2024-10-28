@@ -198,12 +198,6 @@
         width: auto !important;
     }
 
-    .quantity-input-small {
-        padding: 10px 20px;
-        height: auto !important;
-        width: auto !important;
-    }
-
     .similar-products .quantity-selector {
         flex-direction: column;
         gap: 12px;
@@ -216,8 +210,14 @@
     }
 
     .add-to-cart-small {
-        height: auto;
+        height: auto !important;
+        padding: 10px 20px !important;
+    }
+
+    .quantity-input-small {
         padding: 10px 20px;
+        height: auto !important;
+        width: auto !important;
     }
 }
 
