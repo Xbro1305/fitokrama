@@ -92,8 +92,8 @@
 }
 
 .b2 {
-    color: #fff;
-    background-image: url("../banners/banner2.jpg");
+    color: #fff !important;
+    background-image: url("../banners/banner2.jpg") !important;
 }
 
 .b h1 {
