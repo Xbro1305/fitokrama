@@ -108,18 +108,6 @@
     width: 100%;
 }
 
-@media (max-width: 768px) {
-    .similar-products .quantity-selector {
-        flex-direction: column;
-    }
-
-    .similar-products .quantity-selector button {
-        font-size: 24px;
-        font-weight: 700;
-        line-height: 31.06px;
-    }
-}
-
 .quantity-selector {
     display: flex;
 
@@ -189,6 +177,48 @@
 
 .add-to-cart-small:hover {
     background: rgb(158, 184, 158);
+}
+
+@media (max-width: 768px) {
+    .similar-products .product-prices {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .old-price {
+        overflow: hidden;
+    }
+
+    .quantity-button-small {
+        padding: 10px !important;
+        height: auto !important;
+        width: auto !important;
+    }
+
+    .quantity-input-small {
+        padding: 10px 20px;
+        height: auto !important;
+        width: auto !important;
+    }
+
+    .similar-products .quantity-selector {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .similar-products .quantity-selector button {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 31.06px;
+    }
+
+    .add-to-cart-small {
+        height: auto;
+        padding: 10px 20px;
+    }
 }
 
 .quantity-section {
