@@ -1,10 +1,9 @@
-const img = document.querySelector(".bannerimg");
+const img = document.querySelector(".banner");
 const pagination = document.querySelector(".pagination");
 
 const imagesArry = [
-  "./logos/banner_1.png",
-  "./logos/banner_2.png",
-  "./logos/banner_3.png",
+  '<div class="b b2"><p>здоровая экономия</p><h1>СРАВНИ ЦЕНЫ!</h1></div>',
+  '<div class="b"><h1>ТОП-10</h1><p>для суставов</p></div>',
 ];
 
 let currentImage = 0;
@@ -19,10 +18,10 @@ pagination.innerHTML = imagesArry
 const dots = document.querySelectorAll(".dot");
 
 dots[currentImage].classList.add("active");
-img.src = imagesArry[currentImage];
+img.innerHTML = imagesArry[currentImage];
 
 function changeImage() {
-  img.src = imagesArry[currentImage];
+  img.innerHTML = imagesArry[currentImage];
   dots.forEach((dot) => dot.classList.remove("active"));
   dots[currentImage].classList.add("active");
 }
