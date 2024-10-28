@@ -96,6 +96,25 @@
     align-items: flex-end;
 }
 
+@media (max-width: 475px) {
+    .pr-pr {
+        width: 100%;
+    }
+
+    .pr-pr > .old-price {
+        font-size: calc(24px * 0.8);
+    }
+
+    .pr-pr > .new-price {
+        font-size: calc(36px * 0.8);
+    }
+
+    .product-actions {
+        flex-direction: column !important;
+        gap: 10px;
+    }
+}
+
 .old-price {
     font-size: 24px;
 
