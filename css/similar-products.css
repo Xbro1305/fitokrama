@@ -247,8 +247,8 @@
 
     .quantity-input-small {
         padding: 10px 20px;
-        height: auto !important;
-        width: auto !important;
+        height: 50px !important;
+        width: 30px !important;
     }
 
     .products-container {
