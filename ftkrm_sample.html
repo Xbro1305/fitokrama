@@ -1075,112 +1075,114 @@
 
         <div class="modal" id="authModal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('authModal')"
-                    >&times;</span
-                >
-                <h4>Aвторизация</h4>
-                <center>
-                    <button
-                        class="custom-google-button appleID"
-                        onclick="onGoogleSignIn()"
+                <div class="authWrapper">
+                    <span class="close" onclick="closeModal('authModal')"
+                        >&times;</span
                     >
-                        <img src="./logos/google.webp" alt="" />
-                        <p>Google</p>
-                    </button>
-                </center>
-                <center>
-                    <button
-                        class="appleID authWithAppleID"
-                        id="custom-appleid-signin"
-                    >
-                        <img
-                            style="transform: scale(1.2)"
-                            src="./logos/apple.svg"
-                            alt=""
-                        />
-                        <p>Apple ID</p>
-                    </button>
-                </center>
-                <div class="emailAuth">
-                    <h4>или через почту</h4>
-
-                    <section class="getEmailCode">
-                        <label>
-                            <span>E-mail</span>
-                            <input
-                                type="email"
-                                name=""
-                                id="client_email"
-                                class="authWindowEmailInput"
+                    <h4>Aвторизация</h4>
+                    <center>
+                        <button
+                            class="custom-google-button appleID"
+                            onclick="onGoogleSignIn()"
+                        >
+                            <img src="./logos/google.webp" alt="" />
+                            <p>Google</p>
+                        </button>
+                    </center>
+                    <center>
+                        <button
+                            class="appleID authWithAppleID"
+                            id="custom-appleid-signin"
+                        >
+                            <img
+                                style="transform: scale(1.2)"
+                                src="./logos/apple.svg"
+                                alt=""
                             />
-                        </label>
-                        <label class="getButton" style="display: none">
-                            <span></span>
-                            <button
-                                onclick="getEmailCode()"
-                                class="show-with-list getCodeButton"
-                            >
-                                Получить код
-                            </button>
-                        </label>
-                        <label>
-                            <span></span>
-                            <p
-                                class="getCodeAgainButton getAgain"
-                                style="display: none"
-                            >
-                                <i>Получить код повторно &nbsp;</i>
-                                <i class="getCodeButtonZero">0:</i>
-                                <i class="getCodeButtonTimer">59</i>
-                            </p>
-                        </label>
-                        <label style="display: none" class="emailCodeLabel">
-                            <p>введите пришедший на почту код</p>
-                            <br />
-                            <div class="code-container">
+                            <p>Apple ID</p>
+                        </button>
+                    </center>
+                    <div class="emailAuth">
+                        <h4>или через почту</h4>
+
+                        <section class="getEmailCode">
+                            <label>
+                                <span>E-mail</span>
                                 <input
-                                    type="text"
-                                    class="code-input first-code-input"
-                                    maxlength="1"
-                                    oninput="moveToNext(this, 0,
+                                    type="email"
+                                    name=""
+                                    id="client_email"
+                                    class="authWindowEmailInput"
+                                />
+                            </label>
+                            <label class="getButton" style="display: none">
+                                <span></span>
+                                <button
+                                    onclick="getEmailCode()"
+                                    class="show-with-list getCodeButton"
+                                >
+                                    Получить код
+                                </button>
+                            </label>
+                            <label>
+                                <span></span>
+                                <p
+                                    class="getCodeAgainButton getAgain"
+                                    style="display: none"
+                                >
+                                    <i>Получить код повторно &nbsp;</i>
+                                    <i class="getCodeButtonZero">0:</i>
+                                    <i class="getCodeButtonTimer">59</i>
+                                </p>
+                            </label>
+                            <label style="display: none" class="emailCodeLabel">
+                                <p>введите пришедший на почту код</p>
+                                <br />
+                                <div class="code-container">
+                                    <input
+                                        type="text"
+                                        class="code-input first-code-input"
+                                        maxlength="1"
+                                        oninput="moveToNext(this, 0,
                 document.querySelectorAll('.code-input'))"
-                                    onkeydown="checkBackspace(event, this, 0, document.querySelectorAll('.code-input'))"
-                                />
+                                        onkeydown="checkBackspace(event, this, 0, document.querySelectorAll('.code-input'))"
+                                    />
 
-                                <input
-                                    type="text"
-                                    class="code-input"
-                                    maxlength="1"
-                                    oninput="moveToNext(this, 1, document.querySelectorAll('.code-input'))"
-                                    onkeydown="checkBackspace(event, this, 1, document.querySelectorAll('.code-input'))"
-                                />
+                                    <input
+                                        type="text"
+                                        class="code-input"
+                                        maxlength="1"
+                                        oninput="moveToNext(this, 1, document.querySelectorAll('.code-input'))"
+                                        onkeydown="checkBackspace(event, this, 1, document.querySelectorAll('.code-input'))"
+                                    />
 
-                                <input
-                                    type="text"
-                                    class="code-input"
-                                    maxlength="1"
-                                    oninput="moveToNext(this, 2, document.querySelectorAll('.code-input'))"
-                                    onkeydown="checkBackspace(event, this, 2, document.querySelectorAll('.code-input'))"
-                                />
+                                    <input
+                                        type="text"
+                                        class="code-input"
+                                        maxlength="1"
+                                        oninput="moveToNext(this, 2, document.querySelectorAll('.code-input'))"
+                                        onkeydown="checkBackspace(event, this, 2, document.querySelectorAll('.code-input'))"
+                                    />
 
-                                <input
-                                    type="text"
-                                    class="code-input"
-                                    maxlength="1"
-                                    oninput="moveToNext(this, 3, document.querySelectorAll('.code-input'))"
-                                    onkeydown="checkBackspace(event, this, 3, document.querySelectorAll('.code-input'))"
-                                />
+                                    <input
+                                        type="text"
+                                        class="code-input"
+                                        maxlength="1"
+                                        oninput="moveToNext(this, 3, document.querySelectorAll('.code-input'))"
+                                        onkeydown="checkBackspace(event, this, 3, document.querySelectorAll('.code-input'))"
+                                    />
 
-                                <input
-                                    type="text"
-                                    class="code-input"
-                                    maxlength="1"
-                                    oninput="moveToNext(this, 4, document.querySelectorAll('.code-input'))"
-                                    onkeydown="checkBackspace(event, this, 4, document.querySelectorAll('.code-input'))"
-                                />
-                            </div>
-                        </label>
-                    </section>
+                                    <input
+                                        type="text"
+                                        class="code-input"
+                                        maxlength="1"
+                                        oninput="moveToNext(this, 4, document.querySelectorAll('.code-input'))"
+                                        onkeydown="checkBackspace(event, this, 4, document.querySelectorAll('.code-input'))"
+                                    />
+                                </div>
+                            </label>
+                        </section>
+                    </div>
                 </div>
             </div>
         </div>

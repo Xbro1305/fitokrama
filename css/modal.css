@@ -285,3 +285,10 @@
     position: absolute;
     top: 0;
 }
+
+.authWrapper {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
