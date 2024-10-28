@@ -1,209 +1,211 @@
 .cart-item {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  padding: 20px;
+    padding: 20px;
 
-  background-color: #fff;
+    background-color: #fff;
 
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .cart-item .product-image {
-  width: 100px;
+    width: 100px;
 
-  height: 100px;
+    height: 100px;
 
-  background-color: #f0f0f0;
+    background-color: #f0f0f0;
 
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  justify-content: center;
+    justify-content: center;
 
-  font-size: 24px;
+    font-size: 24px;
 
-  color: #aaa;
+    color: #aaa;
 
-  margin-right: 20px;
+    margin-right: 20px;
 
-  border-radius: 10px;
+    border-radius: 10px;
 }
 
 .product-info {
-  flex: 1;
+    flex: 1;
 
-  display: flex;
+    display: flex;
 
-  flex-direction: column;
+    flex-direction: column;
 
-  align-items: flex-start;
+    align-items: flex-start;
 
-  position: relative;
+    position: relative;
 }
 
 .product-name {
-  font-size: 18px;
+    font-size: 18px;
 
-  margin: 0 0 10px;
-  text-align: left;
+    margin: 0 0 10px;
+    text-align: left;
 }
 
 .cart-item-info {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  justify-content: space-between;
+    justify-content: space-between;
 
-  width: 100%;
+    width: 100%;
 }
 
 .cart-item-info .product-name {
-  flex: 2;
+    flex: 2;
 }
 
 .cart-item-info .product-prices {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  justify-content: space-between;
+    justify-content: space-between;
 }
 
 .orderItemQty {
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 10px;
-  width: 80px;
-  display: flex;
-  justify-content: flex-end;
-  color: black;
-  margin-left: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+    width: 80px;
+    display: flex;
+    justify-content: flex-end;
+    color: black;
+    margin-left: 20px;
 }
 
 .cart-item-info .old-price {
-  font-size: 18px;
+    font-size: 18px;
 
-  color: red;
+    color: red;
 
-  text-decoration: none;
+    text-decoration: none;
 
-  position: relative;
+    position: relative;
+
+    overflow: hidden;
 }
 
 .cart-item-info .old-price sup {
-  font-size: 12px;
+    font-size: 12px;
 
-  vertical-align: super;
-  color: red;
+    vertical-align: super;
+    color: red;
 }
 
 .cart-item-info .old-price::before {
-  content: "";
+    content: "";
 
-  position: absolute;
+    position: absolute;
 
-  left: 0;
+    left: 0;
 
-  top: 50%;
+    top: 50%;
 
-  width: 100%;
+    width: 100%;
 
-  height: 1px;
+    height: 1px;
 
-  background-color: red;
+    background-color: red;
 
-  transform: rotate(-45deg); /* Диагональное зачеркивание */
+    transform: rotate(-45deg); /* Диагональное зачеркивание */
 }
 
 .cart-item-info .new-price {
-  font-size: 24px;
+    font-size: 24px;
 
-  color: rgb(97, 129, 98);
+    color: rgb(97, 129, 98);
 
-  font-weight: bold;
+    font-weight: bold;
 
-  position: relative;
+    position: relative;
 
-  margin-left: 20px;
+    margin-left: 20px;
 }
 
 .cart-item-info .new-price sup {
-  font-size: 16px;
+    font-size: 16px;
 
-  vertical-align: super;
+    vertical-align: super;
 
-  color: rgb(97, 129, 98) !important;
+    color: rgb(97, 129, 98) !important;
 }
 
 .cart-item-info .new-price .currency {
-  font-size: 16px;
+    font-size: 16px;
 
-  color: rgb(97, 129, 98);
+    color: rgb(97, 129, 98);
 }
 
 .quantity-selector {
-  display: flex;
+    display: flex;
 
-  align-items: center;
+    align-items: center;
 
-  margin-left: 20px;
+    margin-left: 20px;
 }
 
 .quantity-button {
-  width: 30px;
+    width: 30px;
 
-  height: 30px;
+    height: 30px;
 
-  background-color: #ddd;
+    background-color: #ddd;
 
-  border: none;
+    border: none;
 
-  border-radius: 5px;
+    border-radius: 5px;
 
-  font-size: 18px;
+    font-size: 18px;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .quantity-input {
-  width: 50px;
+    width: 50px;
 
-  text-align: center;
+    text-align: center;
 
-  border: 1px solid #ddd;
+    border: 1px solid #ddd;
 
-  border-radius: 5px;
+    border-radius: 5px;
 
-  font-size: 16px;
+    font-size: 16px;
 
-  margin: 0 5px;
+    margin: 0 5px;
 
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 
-  font-family: "PT Sans", sans-serif; /* Обновленный шрифт */
+    font-family: "PT Sans", sans-serif; /* Обновленный шрифт */
 }
 
 .quantity-input::-webkit-outer-spin-button,
 .quantity-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+    -webkit-appearance: none;
 
-  margin: 0;
+    margin: 0;
 }
 
 .total-price {
-  font-size: 24px;
+    font-size: 24px;
 
-  font-weight: bold;
+    font-weight: bold;
 
-  color: black;
+    color: black;
 
-  margin-left: 20px;
+    margin-left: 20px;
 }

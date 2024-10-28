@@ -93,6 +93,26 @@
 .pr-pr {
     display: flex;
     flex-direction: row-reverse;
+    align-items: flex-end;
+}
+
+@media (max-width: 475px) {
+    .pr-pr {
+        width: 100%;
+    }
+
+    .pr-pr > .old-price {
+        font-size: calc(24px * 0.8);
+    }
+
+    .pr-pr > .new-price {
+        font-size: calc(36px * 0.8);
+    }
+
+    .product-actions {
+        flex-direction: column !important;
+        gap: 10px;
+    }
 }
 
 .old-price {
@@ -103,6 +123,7 @@
     margin-right: 10px;
 
     position: relative;
+    overflow: hidden;
 }
 
 .old-price::before {
@@ -273,7 +294,7 @@
     margin-bottom: 20px;
 
     padding-left: 0;
-
+    text-align: left;
     width: 100%;
 }
 

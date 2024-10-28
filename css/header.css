@@ -270,14 +270,16 @@
 
     .contact-info {
         align-items: center;
-        justify-content: center;
         gap: 10px;
+        width: fit-content;
     }
 
-    .menu-buttons {
-        margin-top: 10px;
-        border-top: 1px solid #ccc;
+    .menu-buttons > a {
         display: none;
+    }
+
+    .menu-buttons > :nth-child(2) {
+        display: block;
     }
 
     .contact-info > :last-child {
@@ -313,12 +315,6 @@
     .company-logo {
         width: 70px;
         height: auto;
-    }
-
-    .menuButton {
-        display: flex;
-        position: absolute;
-        right: 10px;
     }
 }
 
@@ -409,5 +405,16 @@
     .menu-button {
         padding: 7px;
         margin: 0;
+    }
+
+    .menuButton {
+        display: flex;
+        position: absolute;
+        right: 10px;
+        top: 14px;
+    }
+
+    .contact-info {
+        display: none;
     }
 }
