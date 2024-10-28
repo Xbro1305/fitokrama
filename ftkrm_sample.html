@@ -226,8 +226,16 @@
                         alt="QR Code"
                         style="width: 300px; height: 300px"
                     />
-					<a href="[paylinktoapp]" onclick="window.open(this.href, '_blank', 'width=800,height=600'); return false;" style="display: block; text-align: center; margin-top: 10px;">Оплатить в банковском приложении</a>
-
+                    <a
+                        href="[paylinktoapp]"
+                        onclick="window.open(this.href, '_blank', 'width=800,height=600'); return false;"
+                        style="
+                            display: block;
+                            text-align: center;
+                            margin-top: 10px;
+                        "
+                        >Оплатить в банковском приложении</a
+                    >
                 </div>
             </div>
             <div id="messageModal" class="modal">
@@ -375,7 +383,7 @@
         <!-- BANNERS_PAGE_BEGIN -->
         <link rel="stylesheet" href="./css/banner.css" />
         <div class="banner">
-            <img src="" class="bannerimg" alt="" />
+            <div class="bannerWrapper"></div>
             <div class="controls">
                 <button class="prevbutton" onclick="moveTo(-1)">
                     &lsaquo;

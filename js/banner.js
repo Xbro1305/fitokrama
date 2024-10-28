@@ -1,8 +1,8 @@
-const img = document.querySelector(".banner");
+const img = document.querySelector(".bannerWrapper");
 const pagination = document.querySelector(".pagination");
 
 const imagesArry = [
-  '<div class="b b2"><p>здоровая экономия</p><h1>СРАВНИ ЦЕНЫ!</h1></div>',
+  '<div class="b b2"><p style="color: #fff !important">здоровая экономия</p><h1 style="color: #fff !important">СРАВНИ ЦЕНЫ!</h1></div>',
   '<div class="b"><h1>ТОП-10</h1><p>для суставов</p></div>',
 ];
 

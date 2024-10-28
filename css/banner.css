@@ -103,7 +103,7 @@
 }
 
 .b p {
-    font-family: "Eskal Font4You Regular";
+    font-family: "Eskal Font4You Regular" !important;
     width: fit-content;
     margin: 0;
 }
