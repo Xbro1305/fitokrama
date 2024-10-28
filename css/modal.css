@@ -304,12 +304,13 @@
     }
 
     .addedToCartModal .modal-content {
-        bottom: 0 !important;
+        top: 100%;
+        transform: translateY(100%);
         background: #000;
     }
 
     .addedToCartModal .modal-body {
-        display: none;
+        display: none !important;
     }
 
     .addedToCartModal .modalMob {
@@ -319,7 +320,7 @@
         justify-content: center;
         gap: 5px;
         color: #fff;
-        background: rgb(97, 129, 98);
+        background: rgb(97, 129, 98) !important;
         font-size: 19px;
     }
 
