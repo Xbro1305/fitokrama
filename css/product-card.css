@@ -86,26 +86,26 @@
     flex-wrap: wrap;
 }
 
-.product-without-description .product-prices {
+.product-prices {
     width: 100%;
 }
 
-.pr-pr {
+.product-prices {
     display: flex;
     flex-direction: row-reverse;
     align-items: flex-end;
 }
 
 @media (max-width: 475px) {
-    .pr-pr {
+    .product-prices {
         width: 100%;
     }
 
-    .pr-pr > .old-price {
+    .product-prices > .old-price {
         font-size: calc(24px * 0.8);
     }
 
-    .pr-pr > .new-price {
+    .product-prices > .new-price {
         font-size: calc(36px * 0.8);
     }
 
