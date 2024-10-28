@@ -93,6 +93,7 @@
 .pr-pr {
     display: flex;
     flex-direction: row-reverse;
+    align-items: flex-end;
 }
 
 .old-price {
@@ -103,6 +104,7 @@
     margin-right: 10px;
 
     position: relative;
+    overflow: hidden;
 }
 
 .old-price::before {
