@@ -200,7 +200,6 @@
     display: flex;
     flex-direction: column;
     gap: 3px;
-    padding-left: 10px;
 }
 
 .appleID {
@@ -259,15 +258,10 @@
 .code-input,
 .code-container input {
     width: 23px !important;
-
     height: 23px !important;
-
     font-size: 18px;
-
     text-align: center;
     padding: 0 !important;
-
-    margin: 5px !important;
     border: 1px solid #ccc !important;
     border-radius: 5px !important;
 }
@@ -275,6 +269,7 @@
 .code-container {
     display: flex;
     align-items: center;
+    gap: 10px;
     width: 193px;
 }
 
@@ -291,4 +286,10 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.authWrapper center {
+    display: flex;
+    margin: 0;
+    width: 100%;
 }
