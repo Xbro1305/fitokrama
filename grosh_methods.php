@@ -2,7 +2,7 @@
 	include_once  'mnn.php';
 	//header('Content-Type: application/json');
 
-function hutkigrosh_new_POST($method, $dataJSON = null) {
+function hutkigrosh_new_POST($method, $dataJSON = null,$test=false) {
     GLOBAL $grosh_apiKey;
   $url = 'https://api.hgrosh.by/'.$method;    
   $ch = curl_init();
@@ -39,11 +39,9 @@ function hutkigrosh_new_POST($method, $dataJSON = null) {
 }
 
 function hutkigrosh_new_GET($method) {
-    GLOBAL $grosh_apiKey;
+	GLOBAL $grosh_apiKey;
     $url = 'https://api.hgrosh.by/'.$method;
-    // Инициализация cURL
-    $ch = curl_init();
-
+	$ch = curl_init();
     // Настройка URL и метода запроса
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_HTTPGET, true);
@@ -61,6 +59,8 @@ function hutkigrosh_new_GET($method) {
 
     // Выполнение запроса
     $response = curl_exec($ch);
+
+	
 	
     // Проверка на ошибки
     if (curl_errno($ch)) {
@@ -76,12 +76,12 @@ function hutkigrosh_new_GET($method) {
 function new_hutki_invoice($order_number,$sum,$cart)		// сформировать новый счет по заказу и вернуть его id
 {
 	
-	$invId = 'FTKRM-' . $order_number . '-' . strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 4));
+	$invId = '' . $order_number . '-' . strtoupper(substr(str_shuffle('0123456789'), 0, 4));
 	$billData_arr = [
     'number' => $invId,  
     'currency' => 'BYN', 
     'serviceProviderInfo' => [
-        'serviceProviderCode' => 10020002  
+        'serviceCode' => 20032002  
     ],
     'paymentChannels' => [  // каналы оплаты
         'ERIP', 'WEBPAY'
@@ -154,17 +154,17 @@ if ($method == 'linkbyid')
 	$url = "invoicing/invoice/$invoiceid/webpay?paymentChannel=$paymentChannel&returnUrl=%3Cstring%3E&cancelReturnUrl=%3Cstring%3E&submitValue=$submitValue&api-version=2.0";
 	$response = hutkigrosh_new_GET($url);
 	
-// Выводим HTML форму
-echo $response['form'];
-die;
+	// Выводим HTML форму
+	echo $response['form'];
+	die;
 
-// Добавляем JavaScript для автоматического отправления формы
-echo '
-<script type="text/javascript">
-    window.onload = function() {
-        document.forms[0].submit(); // Автоматически отправляем первую форму на странице
-    };
-</script>';
+	// Добавляем JavaScript для автоматического отправления формы
+	echo '
+	<script type="text/javascript">
+		window.onload = function() {
+			document.forms[0].submit(); // Автоматически отправляем первую форму на странице
+		};
+	</script>';
 
 die;
 
@@ -183,14 +183,15 @@ if ($method == 'check')
 }
 if ($method == 'bills') 
 {
-	$response = hutkigrosh_new_GET("invoicing/invoice?api-version=2.0&beginDate=2024-09-28");
+	
+	$response = hutkigrosh_new_GET("invoicing/invoice?skip=0&take=10&beginDate=2024-10-01&endDate=2024-12-31&states=ACTIVE&queryType=EMPTY&sortType=BY_BEGIN_DATE&order=DESCENDING&api-version=2.0");
 	echo json_encode($response).PHP_EOL.PHP_EOL;
 	die;
 }
 
 if ($method == 'newqr') 
 {
-	$invoiceid = '00000000-0000-0000-6d47-cd108ee1dc08';
+	$invoiceid = $_GET['invoiceid'];
 	$response = hutkigrosh_new_GET("invoicing/invoice/$invoiceid/qr?channelType=ERIP&width=256&height=256&api-version=2.0");
 	$base64Image = $response['image']; // Извлечение base64-строки из ответа
 // Выводим HTML для отображения картинки
@@ -200,8 +201,17 @@ echo '<img src="data:image/png;base64,' . $base64Image . '" alt="QR Code" />';
 }
 if ($method == 'newlink') 
 {
-	$invoiceid = '00000000-0000-0000-6d47-cd108ee1dc08';
+	$invoiceid = $_GET['invoiceid'];
 	$response = hutkigrosh_new_GET("invoicing/invoice/$invoiceid/link?paymentChannel=ERIP&api-version=2.0");
+	$url = $response['url']; // Извлечение base64-строки из ответа
+	echo json_encode($url);
+	die;
+}
+
+if ($method == 'aboutdev') 
+{
+	//$invoiceid = $_GET['invoiceid'];
+	$response = hutkigrosh_new_GET("invoicing/metadata?api-version=2.0");
 	$url = $response['url']; // Извлечение base64-строки из ответа
 	echo json_encode($url);
 	die;

@@ -2,6 +2,7 @@
 	include_once  'mnn.php';
 	include_once  'alfa_methods.php';
 	include_once  'epos_methods.php';
+	include_once  'grosh_methods.php';
 	
 	header('Content-Type: application/json');
 
@@ -62,6 +63,19 @@ if ($method=='epos_incoming') // вызванный webhook при соверш�
 		
 		exit(json_encode(['status'=>'ok', 'message'=>'ok']));	
 	}
+
+if ($method=='erip_incoming') // вызванный webhook 
+{
+	//send_warning_telegram('payment_recieved 68. erip_incoming GET= '.json_encode($_GET).' POST= '.json_encode($_POST));
+	$invoiceid = $_GET['invoiceid'];
+	$billstate = hutkigrosh_new_GET("invoicing/invoice/$invoiceid?api-version=2.0");
+	$billstate_array = json_decode($billstate,TRUE);
+	
+	die(json_encode($billstate));
+	
+	
+
+}
 
 if ($method=='hutki_incoming_ok') // вызванный webhook при совершенной оплате
 {
