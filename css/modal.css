@@ -337,5 +337,6 @@
         border-radius: 50%;
         color: #fff;
         background: rgb(158, 184, 158);
+        font-size: 8px;
     }
 }
