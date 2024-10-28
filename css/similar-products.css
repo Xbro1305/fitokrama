@@ -238,7 +238,8 @@
         font-size: 24px;
         font-weight: 700;
         line-height: 31.06px;
-        height: auto !important;
+        height: 30px !important;
+        width: 30px !important;
         padding: 10px 20px !important;
     }
 
