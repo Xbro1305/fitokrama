@@ -254,7 +254,7 @@
         align-items: center;
     }
 
-    .add-to-cart-small {
+    .quantity-selector > button {
         width: auto !important;
     }
 }
