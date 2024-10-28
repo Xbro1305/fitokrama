@@ -257,7 +257,7 @@
     .similar-products .quantity-selector > button {
         font-weight: 700;
         line-height: 31.06px;
-        height: 30px !important;
+        height: auto !important;
         width: auto !important;
         padding: 10px 20px !important;
         border-radius: 25px ;

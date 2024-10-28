@@ -293,3 +293,49 @@
     margin: 0;
     width: 100%;
 }
+
+.addedToCartModal .modalMob {
+    display: none;
+}
+
+@media (max-width: 475px) {
+    .addedToCartModal {
+        background: none !important;
+    }
+
+    .addedToCartModal .modal-content {
+        bottom: 0 !important;
+        background: #000;
+    }
+
+    .addedToCartModal .modal-body {
+        display: none;
+    }
+
+    .addedToCartModal .modalMob {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        justify-content: center;
+        gap: 5px;
+        color: #fff;
+        background: rgb(97, 129, 98);
+        font-size: 19px;
+    }
+
+    .modalMob div {
+        position: relative;
+    }
+
+    .modalMob p {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 13px;
+        height: 13px;
+        text-align: center;
+        border-radius: 50%;
+        color: #fff;
+        background: rgb(158, 184, 158);
+    }
+}
