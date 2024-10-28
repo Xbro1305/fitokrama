@@ -58,17 +58,20 @@
 	
 	
 	$paylink = $order['epos_link'];
+	$hutki_url = $order['hutki_url'];
 	$paycode = $epos_client_number.$order['number'];
-	$payalfalink = $order['alfa_url'];
+	//$payalfalink = $order['alfa_url'];
 	
 	ob_start();
-	QRcode::png($paylink, null, QR_ECLEVEL_Q, 4);
+	QRcode::png($hutki_url, null, QR_ECLEVEL_Q, 4);
 	$imageString = base64_encode(ob_get_clean());
 	
 	$doc = str_replace('[payqrpicture]', $imageString , $doc);
 	$doc = str_replace('[paylink]', $paylink, $doc);
 	$doc = str_replace('[paycode]', $paycode, $doc);
 	$doc = str_replace('[payalfalink]', $payalfalink, $doc);
+	$doc = str_replace('[paylinktoapp]', $hutki_url, $doc);
+	
 	
 	$doc = cut_fragment($doc,'<!-- ORDER_GOOD_1_BEGIN -->','<!-- ORDER_GOOD_1_END -->','[goods_table]',$html_good_1);
 	

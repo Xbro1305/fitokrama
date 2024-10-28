@@ -25,11 +25,16 @@
 		if ($test_order_number_unique==NULL) break;
 	}
 	$sum = $cart['sum'];
-	$sum = 1.11;			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	$sum = 0.15;			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	
 	[$epos_link,$epos_id] = new_epos_invoice($order_number,$sum,$cart);
-	$hutki_billId = new_hutki_invoice($order_number,$sum,$cart);
-	[$alfa_orderId,$alfa_url] = new_alfa_invoice($order_number,$sum,$cart);
+	$hutki_billId 	= new_hutki_invoice($order_number,$sum,$cart);
+	$hutki_url 		= hutkigrosh_new_GET("invoicing/invoice/$hutki_billId/link?paymentChannel=ERIP&api-version=2.0")['url'];
+	
+	
+	
+	
+	//[$alfa_orderId,$alfa_url] = new_alfa_invoice($order_number,$sum,$cart);
 
 	
 	$order_point_address = NULL;
@@ -80,6 +85,7 @@
 	`epos_link`, 
 	`epos_id`,
 	`hutki_billId`,
+	`hutki_url`,
 	`alfa_orderId`,
 	`alfa_url`
 	
@@ -100,9 +106,11 @@
 	'$epos_link', 
 	'$epos_id',
 	'$hutki_billId',
+	'$hutki_url',
 	'$alfa_orderId',
 	'$alfa_url'
 	);";
+	
 	
 	$order_id = ExecSQL($link,$que);
 	
