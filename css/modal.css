@@ -293,7 +293,7 @@
 }
 
 .addedToCartModal .modalMob {
-    display: none;
+    display: none !important;
 }
 
 @media (max-width: 475px) {
@@ -312,7 +312,7 @@
     }
 
     .addedToCartModal .modalMob {
-        display: flex;
+        display: flex !important;
         align-items: center;
         padding: 15px;
         justify-content: center;
