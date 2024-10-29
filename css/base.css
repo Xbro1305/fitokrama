@@ -7,6 +7,9 @@
     /* color :R55 G78 B66 */
 
     color: rgb(55, 78, 66);
+
+    margin: 0;
+    padding: 0;
 }
 
 body {
