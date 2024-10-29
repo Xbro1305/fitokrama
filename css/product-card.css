@@ -59,9 +59,13 @@
 }
 
 .product-title {
-    font-size: 18px;
-
+    font-size: 20px;
     margin: 0 0 10px;
+}
+
+.pr-pr {
+    flex-direction: row-reverse;
+    margin-bottom: 15px;
 }
 
 .product-description {
@@ -134,7 +138,6 @@
     width: 100%;
     height: 1px;
     background-color: red;
-    transform: rotate(-45deg); /* Диагональное зачеркивание */
 }
 
 .old-price sup {
@@ -176,7 +179,6 @@
 
     align-items: center;
 
-    margin-left: 20px;
 
     flex-wrap: wrap;
 }
