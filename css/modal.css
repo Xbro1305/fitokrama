@@ -292,26 +292,26 @@
     width: 100%;
 }
 
-.addedToCartModal .modalMob {
+#addedToCartModal .modalMob {
     display: none !important;
 }
 
 @media (max-width: 475px) {
-    .addedToCartModal {
+    #addedToCartModal {
         background: none !important;
     }
 
-    .addedToCartModal .modal-content {
+    #addedToCartModal .modal-content {
         top: 100%;
         transform: translateY(100%);
         background: #000;
     }
 
-    .addedToCartModal .modal-body {
+    #addedToCartModal .modal-body {
         display: none !important;
     }
 
-    .addedToCartModal .modalMob {
+    #addedToCartModal .modalMob {
         display: flex !important;
         align-items: center;
         padding: 15px;
