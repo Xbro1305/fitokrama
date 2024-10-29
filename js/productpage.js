@@ -21,12 +21,6 @@ function showAddedToCartModal(art, price, quantity) {
       )
       .finally(() => {
         document.querySelector("#waiting").style.display = "none";
-
-        setTimeout(() => {
-          console.log(ok);
-
-          document.querySelector(".modalMob").style.display = "none";
-        }, 3000);
       });
   } else {
     document.querySelector(".cookiesagainstpopup").style.display = "flex";
