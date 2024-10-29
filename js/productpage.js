@@ -21,10 +21,12 @@ function showAddedToCartModal(art, price, quantity) {
       )
       .finally(() => {
         document.querySelector("#waiting").style.display = "none";
-        if (document.querySelector(".modalMob").style.display == "flex")
-          setTimeout(() => {
-            document.querySelector(".modalMob").style.display = "none";
-          }, 3000);
+
+        setTimeout(() => {
+          console.log(ok);
+
+          document.querySelector(".modalMob").style.display = "none";
+        }, 3000);
       });
   } else {
     document.querySelector(".cookiesagainstpopup").style.display = "flex";
