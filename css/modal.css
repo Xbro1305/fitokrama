@@ -302,9 +302,6 @@
     }
 
     #addedToCartModal .modal-content {
-        top: 100%;
-        transform: translateY(100%);
-        background: #000;
     }
 
     #addedToCartModal .modal-body {
