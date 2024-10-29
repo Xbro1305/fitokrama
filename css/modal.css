@@ -325,12 +325,18 @@
 
     .modalMob div {
         position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .modalMob img {
+        width: 20px;
     }
 
     .modalMob p {
         position: absolute;
-        right: 0;
-        top: 0;
+        right: -6px;
+        top: -3px;
         width: 13px;
         height: 13px;
         text-align: center;
@@ -338,11 +344,13 @@
         color: #fff;
         background: rgb(158, 184, 158);
         font-size: 8px;
+        margin: 0;
     }
 
-    .modalMob h2 {
+    .modalMob a {
         margin: 0;
         font-size: 19px;
         color: #fff;
+        text-decoration: none;
     }
 }

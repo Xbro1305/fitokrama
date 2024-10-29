@@ -19,9 +19,13 @@ function showAddedToCartModal(art, price, quantity) {
       .catch(
         (error) => (document.getElementById("fail").style.display = "flex")
       )
-      .finally(
-        () => (document.querySelector("#waiting").style.display = "none")
-      );
+      .finally(() => {
+        document.querySelector("#waiting").style.display = "none";
+        if (document.querySelector(".modalMob").style.display == "flex")
+          setTimeout(() => {
+            document.querySelector(".modalMob").style.display = "none";
+          }, 3000);
+      });
   } else {
     document.querySelector(".cookiesagainstpopup").style.display = "flex";
 
