@@ -320,6 +320,7 @@
         font-size: 19px;
         position: fixed;
         bottom: 0;
+        width: 100%;
     }
 
     .modalMob div {
@@ -342,5 +343,6 @@
     .modalMob h2 {
         margin: 0;
         font-size: 19px;
+        color: #fff;
     }
 }
