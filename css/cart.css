@@ -469,4 +469,11 @@ body {
 .but_option {
     font-weight: 600;
     font-size: 18px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.but_option p {
+    transform: rotate(90deg);
 }
