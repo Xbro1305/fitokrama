@@ -302,6 +302,7 @@
     }
 
     #addedToCartModal .modal-content {
+        display: none;
     }
 
     #addedToCartModal .modal-body {
@@ -317,6 +318,8 @@
         color: #fff;
         background: rgb(97, 129, 98) !important;
         font-size: 19px;
+        position: fixed;
+        bottom: 0;
     }
 
     .modalMob div {
@@ -334,5 +337,10 @@
         color: #fff;
         background: rgb(158, 184, 158);
         font-size: 8px;
+    }
+
+    .modalMob h2 {
+        margin: 0;
+        font-size: 19px;
     }
 }
