@@ -37,6 +37,10 @@
     margin-right: auto;
 }
 
+.contact-info > :last-child:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
 .contact-info a {
     color: white;
     height: 20px;
@@ -211,9 +215,9 @@
 }
 
 .account-buttons img {
-    width: 30px; /* Задаем высоту значков */
+    width: 25px; /* Задаем высоту значков */
 
-    height: 30px; /* Задаем высоту значков */
+    height: 25px; /* Задаем высоту значков */
 }
 .menuButton {
     width: 30px;
