@@ -102,9 +102,9 @@
 @media (max-width: 475px) {
     .pr-pr {
         display: flex;
-        flex-direction: column !important;
-        justify-content: flex-start;
-        align-items: flex-start;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
         gap: 20px;
     }
 }
