@@ -53,10 +53,9 @@
 .product-prices {
     display: flex;
 
-    flex-direction: column;
-
+    flex-direction: row-reverse;
+    justify-content: space-between;
     align-items: flex-start;
-
     margin-top: 10px;
     flex: 1;
 }

@@ -466,14 +466,16 @@ body {
     width: 100%;
 }
 
-.but_option {
+.but_option a {
     font-weight: 600;
     font-size: 18px;
     display: flex;
     gap: 5px;
     align-items: center;
+    gap: 10px;
 }
 
 .but_option p {
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
+    width: fit-content;
 }
