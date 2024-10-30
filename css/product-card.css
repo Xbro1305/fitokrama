@@ -100,7 +100,7 @@
 }
 
 @media (max-width: 475px) {
-    .product-prices {
+    .pr-pr {
         display: flex;
         flex-direction: column !important;
         justify-content: flex-start;
