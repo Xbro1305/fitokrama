@@ -91,6 +91,14 @@
     flex-wrap: wrap;
 }
 
+.product-without-description .product-prices {
+    display: flex;
+    flex-direction: column !important;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+}
+
 .product-prices {
     width: 100%;
 }
