@@ -102,7 +102,7 @@
 @media (max-width: 475px) {
     .pr-pr {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         width: 100%;
         gap: 20px;
@@ -167,17 +167,10 @@
 
 .new-price {
     font-size: 36px;
-
     color: rgb(97, 129, 98);
-
     font-weight: bold;
-
     position: relative;
-
-    margin-right: 20px;
-
     display: flex;
-
     align-items: center;
 }
 
