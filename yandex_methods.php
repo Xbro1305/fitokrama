@@ -155,6 +155,8 @@ function yandex_send($order) {
 	
 	
 	$data['auto_accept'] = true;			// можно сделать автоподтверждение по согласованию менеджера
+	$data['skip_confirmation'] = true;
+	
 	$data['callback_properties']['callback_url'] = "https://fitokrama.by/post_checker.php/imcoming?order_number=$order_number&";
 	$data['client_requirements'] = ['taxi_class'=>'courier', 'pro_courier'=>false];
 	$data['comment'] = 'Необходимо забрать товар по склада Фитокрама и доставить клиенту.';
