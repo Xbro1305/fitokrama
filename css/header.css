@@ -272,6 +272,10 @@
         padding: 0;
     }
 
+    .menu-buttons {
+        justify-content: flex-end;
+    }
+
     .contact-info {
         align-items: center;
         gap: 10px;
@@ -400,15 +404,25 @@
     display: flex;
 }
 
+.mobHeader {
+    display: none;
+}
+
 @media (max-width: 475px) {
+    .mobHeader {
+        display: flex;
+        padding: 20px;
+        align-items: flex-end;
+        justify-content: space-between;
+    }
+
     .top-bar {
         padding: 5px;
         overflow: hidden;
+        display: none;
     }
-
-    .menu-button {
-        padding: 7px;
-        margin: 0;
+    .bottom-bar {
+        display: none;
     }
 
     .menuButton {

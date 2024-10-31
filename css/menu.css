@@ -2,6 +2,7 @@
     width: 100%;
     position: fixed !important;
     top: 1px;
+    right: 0;
     transform: translateY(-100%);
     z-index: 999999999999 !important;
     display: flex;
