@@ -23,9 +23,26 @@
 	//	подкорректировать настройки баннеров
 
 	
-	$que = "SELECT * FROM goods WHERE goods_groups_id IS NOT NULL LIMIT 12;";
+	$que = "SELECT g.*,
+    COALESCE(
+        (
+            (SELECT r.qty FROM register_qty r WHERE r.art = g.art) 
+            + (SELECT COALESCE(SUM(d.qty), 0) FROM goods_deliveries d WHERE d.art = g.art AND d.datetime > (SELECT r.datetime FROM register_qty r WHERE r.art = g.art))
+            - (SELECT COALESCE(SUM(og.qty), 0) FROM orders_goods og LEFT JOIN orders o ON og.order_id = o.id WHERE og.good_art = g.art AND o.datetime_assembly > (SELECT r.datetime FROM register_qty r WHERE r.art = g.art))
+        ), 0
+    ) AS qty,
+    COALESCE(
+        (
+            SELECT COALESCE(SUM(og.qty), 0)
+            FROM orders_goods og
+            LEFT JOIN orders o ON og.order_id = o.id
+            WHERE og.good_art = g.art AND o.datetime_assembly IS NULL
+        ), 0
+    ) AS qty_fr
+	FROM goods g
+	WHERE g.goods_groups_id IS NOT NULL 
+	LIMIT 12;";
 	$goods = ExecSQL($link,$que);
-	$list_goods = array_column($goods, 'art');
 
 	$doc = 		 preg_replace('/<!\s*--\s*\[CHANGE_FROM\]\s*--\s*>.*?<!\s*--\s*\[CHANGE_TO\]\s*--\s*>/s', '' , $doc);
 	$cart_count = $cart['cart_count'];
@@ -37,9 +54,8 @@
 		else $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', 'КАТАЛОГ', $doc);
 	
 	
-	foreach ($list_goods as $similar_good_art_1)
+	foreach ($goods as $sgood)
 	{
-		$sgood = ExecSQL($link,"SELECT * FROM goods WHERE art=$similar_good_art_1")[0];
 		$similargood_1 = $similargood_1.$tmpts_similargoods;
 		$similargood_1 = str_replace('[goodart]', $sgood['art'], $similargood_1);
 		$similargood_1 = str_replace('[goodname]', $sgood['name'], $similargood_1);
@@ -47,6 +63,8 @@
 		$similargood_1 = str_replace('[goodspics]', $sgood['pic_name'], $similargood_1);
 		$similargood_1 = str_replace('[goodoldprice]', $sgood['price_old'], $similargood_1);
 		$similargood_1 = str_replace('[goodactprice]', $sgood['price'], $similargood_1);
+		if ($sgood['qty']-$sgood['qty_fr']<3) $similargood_1 = str_replace('[low_qty]', '<3', $similargood_1); 		
+										else  $similargood_1 = str_replace('[low_qty]', '', $similargood_1); 	
 	}
 	
 	
