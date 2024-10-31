@@ -449,6 +449,7 @@
 
     .mobHeader > img {
         width: 70px !important;
+        height: auto
     }
 
     .mobHeader {
