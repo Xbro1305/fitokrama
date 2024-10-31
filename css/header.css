@@ -442,15 +442,20 @@
         margin: 0;
     }
 
+    .mobHeader img {
+        width: 25px;
+        height: 25px;
+    }
+
     .mobHeader > img {
-        width: 70px;
+        width: 70px !important;
     }
 
     .mobHeader {
         margin: 0;
     }
 
-    .maintext{
+    .maintext {
         top: 77px;
     }
 }
