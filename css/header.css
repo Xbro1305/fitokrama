@@ -414,6 +414,8 @@
         padding: 20px;
         align-items: flex-end;
         justify-content: space-between;
+        position: sticky;
+        top: 0;
     }
 
     .top-bar {
@@ -427,12 +429,19 @@
 
     .menuButton {
         display: flex;
-        position: absolute;
-        right: 10px;
-        top: 14px;
     }
 
     .contact-info {
         display: none;
+    }
+
+    .mobHeader div {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .mobHeader > img {
+        width: 70px;
     }
 }
