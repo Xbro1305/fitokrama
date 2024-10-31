@@ -419,10 +419,10 @@
     .top-bar {
         padding: 5px;
         overflow: hidden;
-        display: none;
+        display: none !important;
     }
     .bottom-bar {
-        display: none;
+        display: none !important;
     }
 
     .menuButton {
