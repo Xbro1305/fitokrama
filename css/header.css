@@ -444,4 +444,8 @@
     .mobHeader > img {
         width: 70px;
     }
+
+    .mobHeader {
+        margin: 0;
+    }
 }
