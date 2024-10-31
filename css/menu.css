@@ -2,14 +2,55 @@
     width: 100%;
     position: fixed !important;
     top: 1px;
-    right: 0;
-    transform: translateY(-100%);
+    left: 0;
+    height: 100vh;
+    transform: translateX(-100%);
     z-index: 999999999999 !important;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    background-color: rgb(97, 129, 98);
-    padding: 10px 30px;
+    background-color: #00000050;
+    padding: 0;
     transition: all 0.3s ease;
+    width: 100%;
+}
+
+.menuContainer {
+    max-width: 280px;
+    width: 100%;
+}
+
+.menuTopSect {
+    padding: 10px;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.menuTopSect > * {
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.menuTopSect a {
+    width: 100%;
+}
+
+.menuTopSect img {
+    width: 120px;
+}
+
+.menuBottomSect {
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    align-items: center;
+    background: #618162;
+}
+
+.menuBottomSect img {
+    width: 40px;
 }
 
 .menu.active {
