@@ -449,4 +449,8 @@
     .mobHeader {
         margin: 0;
     }
+
+    .maintext{
+        top: 77px;
+    }
 }
