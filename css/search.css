@@ -1,0 +1,98 @@
+.mobSearch {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobSearch {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: #fff;
+        transform: translateY(-100%);
+    }
+
+    .searchCont {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        width: 100%;
+        background: #acabab;
+    }
+
+    .searchCont > div {
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .searchCont div img {
+        max-width: 80px;
+        width: 80px;
+    }
+
+    .searchCont div section {
+        max-width: 230px;
+        width: calc(100% - 100px);
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .srchPrices {
+        display: flex;
+        gap: 5px;
+        align-items: flex-start;
+    }
+
+    .srchPrices p {
+        color: #618162;
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .srchPrices > :last-child {
+        font-size: 18px;
+        color: #ff0000;
+        position: relative;
+    }
+
+    .srchPrices span {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+        display: block;
+        transform: translateY(-50%);
+    }
+
+    .searchTop {
+        padding: 20px;
+        background: #618162;
+    }
+
+    .searchTop input {
+        width: calc(100% - 50px);
+        padding: 5px 10px;
+        border-radius: 25px;
+        height: 36px;
+        border: 1px solid #8c8c8c;
+        background: #d9d9d9;
+        outline: none;
+    }
+
+    .searchTop button {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 1px solid #8c8c8c;
+        background: #d9d9d9;
+        outline: none;
+        font-weight: 400;
+        color: #757575;
+    }
+}
