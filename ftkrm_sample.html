@@ -1527,9 +1527,11 @@
                 fetch("https://fitokrama.by/search.php?search=" + searchValue)
                     .then((response) => response.json())
                     .then((res) => {
-                        document.querySelector(".searchCont").innerHTML = res
-                            ?.map((i) => {
-                                return `
+                        document.querySelector(".searchCont").innerHTML =
+                            JSON.stringify(res) != "[]"
+                                ? res
+                                      ?.map((i) => {
+                                          return `
                                  <a href="${i.art}">
                     <img src="./goods_pics/${i.pic_name}" alt="" />
                     <section>
@@ -1543,8 +1545,9 @@
                         </div>
                     </section>
                 </a>`;
-                            })
-                            .join(" ");
+                                      })
+                                      .join(" ")
+                                : "Ничего не найдено";
                     })
                     .catch((error) => console.error(error));
             }
