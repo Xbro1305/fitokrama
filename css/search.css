@@ -6,12 +6,14 @@
     .mobSearch {
         position: fixed;
         display: flex;
+        flex-direction: column;
         top: 0;
         left: 0;
         width: 100%;
         height: 100vh;
         background: #fff;
-        transform: translateY(-100%);
+        /* transform: translateY(-100%); */
+        z-index: 99999999 !important;
     }
 
     .searchCont {
@@ -20,6 +22,7 @@
         padding: 20px;
         width: 100%;
         background: #fff;
+        height: calc(100vh - 76px);
     }
 
     .searchCont > div {
@@ -27,7 +30,6 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
-        height: calc(100vh - 76px);
         border-bottom: 1px solid #acabab;
     }
 
@@ -53,7 +55,7 @@
 
     .srchPrices {
         display: flex;
-        gap: 5px;
+        gap: 15px;
         justify-content: flex-end;
         align-items: flex-end;
     }
