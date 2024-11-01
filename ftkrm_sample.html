@@ -65,21 +65,7 @@
                 <img src="./logos/search_logo.png" alt="" />
                 <button onclick="toggleSearch()">&times;</button>
             </div>
-            <div class="searchCont">
-                <div>
-                    <img src="./goods_pics/22645.png" alt="" />
-                    <section>
-                        <h1>Сусталь капсулы №10 по 0,5г в среде-активаторе.</h1>
-                        <div class="srchPrices">
-                            <p>19.21 руб.</p>
-                            <p>
-                                40.29
-                                <span></span>
-                            </p>
-                        </div>
-                    </section>
-                </div>
-            </div>
+            <div class="searchCont"></div>
         </div>
         <div class="menu">
             <button onclick="toggleMenu()"></button>
@@ -1541,8 +1527,8 @@
                 fetch("https://fitokrama.by/search.php?search=" + searchValue)
                     .then((response) => response.json())
                     .then((res) => {
-                        document.querySelector(".searchCont").innerHTML =
-                            res?.map((i) => {
+                        document.querySelector(".searchCont").innerHTML = res
+                            ?.map((i) => {
                                 return `
                                  <a href="${i.art}">
                     <img src="./goods_pics/${i.pic_name}" alt="" />
@@ -1557,7 +1543,8 @@
                         </div>
                     </section>
                 </a>`;
-                            });
+                            })
+                            .join(" ");
                     })
                     .catch((error) => console.error(error));
             }
