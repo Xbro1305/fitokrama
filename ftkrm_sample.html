@@ -1531,12 +1531,12 @@
                 document.querySelector(".menu").classList.toggle("active");
             };
 
-              const toggleSearch = () => {
-                document.querySelector(".searcMob").classList.toggle("active");
+            const toggleSearch = () => {
+                document.querySelector(".mobSearch").classList.toggle("active");
             };
 
             function searchMob() {
-                let searchValue = document.querySelector(".mobSrch").value;
+                let searchValue = document.querySelector(".mobsrch").value;
 
                 fetch("https://fitokrama.by/search.php?search=" + searchValue)
                     .then((response) => response.json())
@@ -1561,6 +1561,10 @@
                     })
                     .catch((error) => console.error(error));
             }
+
+            document
+                .querySelector(".mobsrch")
+                .addEventListener("input", searchMob);
         </script>
 
         <script src="./js/main.js"></script>
