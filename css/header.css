@@ -116,6 +116,7 @@
     width: 100%;
 
     z-index: 1;
+    overflow: visible;
 }
 
 .bottom-bar-content {
@@ -337,7 +338,7 @@
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 9999999 !important;
     border-top: none;
 }
 .search-result-item {

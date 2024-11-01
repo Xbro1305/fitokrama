@@ -1531,18 +1531,34 @@
                 document.querySelector(".menu").classList.toggle("active");
             };
 
+              const toggleSearch = () => {
+                document.querySelector(".searcMob").classList.toggle("active");
+            };
+
             function searchMob() {
                 let searchValue = document.querySelector(".mobSrch").value;
 
-                if (searchValue.length < 3) {
-                    document.querySelector(".search-results").style.display =
-                        "none";
-                    return;
-                }
-
                 fetch("https://fitokrama.by/search.php?search=" + searchValue)
                     .then((response) => response.json())
-                    .then((data) => {})
+                    .then((data) => {
+                        document.querySelector(".searchCont").innerHTML =
+                            res?.data?.map((i) => {
+                                return `
+                                 <a href="${i.art}">
+                    <img src="./goods_pics/${i.pic_name}" alt="" />
+                    <section>
+                        <h1>${i.name}</h1>
+                        <div class="srchPrices">
+                            <p>19.21 руб.</p>
+                            <p>
+                                ${i.price_old}
+                                <span></span>
+                            </p>
+                        </div>
+                    </section>
+                </a>`;
+                            });
+                    })
                     .catch((error) => console.error(error));
             }
         </script>

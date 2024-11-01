@@ -51,6 +51,7 @@
     .searchCont div section h1 {
         text-align: right;
         font-size: 14px;
+        color: #000;
     }
 
     .srchPrices {
@@ -118,5 +119,6 @@
         width: 15px;
         top: 29px;
         left: calc(100% - 100px);
+        position: absolute;
     }
 }
