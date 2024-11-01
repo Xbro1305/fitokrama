@@ -449,7 +449,7 @@
 
     .mobHeader > img {
         width: 70px !important;
-        height: auto
+        height: auto;
     }
 
     .mobHeader {
@@ -457,6 +457,6 @@
     }
 
     .maintext {
-        top: 77px;
+        top: 77px !important;
     }
 }
