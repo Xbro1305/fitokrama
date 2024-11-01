@@ -20,7 +20,25 @@
 	$doc = cut_fragment($doc, '<!-- BANNERS_PAGE_BEGIN -->','<!-- BANNERS_PAGE_END -->','');
 	
 	$art = $_GET['art'];
-	$good = ExecSQL($link,"SELECT * FROM goods WHERE goods_groups_id IS NOT NULL AND art='$art'")[0];
+	$good = ExecSQL($link,"SELECT g.*,
+    COALESCE(
+        (
+            (SELECT r.qty FROM register_qty r WHERE r.art = g.art) 
+            + (SELECT COALESCE(SUM(d.qty), 0) FROM goods_deliveries d WHERE d.art = g.art AND d.datetime > (SELECT r.datetime FROM register_qty r WHERE r.art = g.art))
+            - (SELECT COALESCE(SUM(og.qty), 0) FROM orders_goods og LEFT JOIN orders o ON og.order_id = o.id WHERE og.good_art = g.art AND o.datetime_assembly > (SELECT r.datetime FROM register_qty r WHERE r.art = g.art))
+        ), 0
+    ) AS qty,
+    COALESCE(
+        (
+            SELECT COALESCE(SUM(og.qty), 0)
+            FROM orders_goods og
+            LEFT JOIN orders o ON og.order_id = o.id
+            WHERE og.good_art = g.art AND o.datetime_assembly IS NULL
+        ), 0
+    ) AS qty_fr
+	FROM goods g
+	WHERE g.goods_groups_id IS NOT NULL
+	AND art='$art'")[0];
 	
 	
 	if (($good==NULL) or count($good)==0)
@@ -47,6 +65,9 @@
 	$doc = str_replace('[goodcat]', $good['cat'], $doc);
 	$doc = str_replace('[goodsubcat]',$good['subcat'], $doc);
 	$doc = str_replace('[goodtegs]','', $doc);						// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику
+	if ($good['qty']-$good['qty_fr']<3) $doc = str_replace('[low_qty]', '<3', $doc); 		
+								  else  $doc = str_replace('[low_qty]', '', $doc); 		
+	
 	
 	$nolek = '';
 	if ($good['goods_groups_id']!=99) 	$nolek.='Не является лекарственным средством. ';
@@ -59,12 +80,29 @@
 	
 	
 	$similargood_1 ='';
-	$que = "SELECT * FROM goods WHERE goods_groups_id IS NOT NULL ORDER BY RAND () LIMIT 3 ";
-	$similar_goods = array_column(ExecSQL($link,$que), 'art');
+	$que = "SELECT g.*,
+    COALESCE(
+        (
+            (SELECT r.qty FROM register_qty r WHERE r.art = g.art) 
+            + (SELECT COALESCE(SUM(d.qty), 0) FROM goods_deliveries d WHERE d.art = g.art AND d.datetime > (SELECT r.datetime FROM register_qty r WHERE r.art = g.art))
+            - (SELECT COALESCE(SUM(og.qty), 0) FROM orders_goods og LEFT JOIN orders o ON og.order_id = o.id WHERE og.good_art = g.art AND o.datetime_assembly > (SELECT r.datetime FROM register_qty r WHERE r.art = g.art))
+        ), 0
+    ) AS qty,
+    COALESCE(
+        (
+            SELECT COALESCE(SUM(og.qty), 0)
+            FROM orders_goods og
+            LEFT JOIN orders o ON og.order_id = o.id
+            WHERE og.good_art = g.art AND o.datetime_assembly IS NULL
+        ), 0
+    ) AS qty_fr
+	FROM goods g
+	WHERE g.goods_groups_id IS NOT NULL
+	ORDER BY RAND () LIMIT 3 ";
+	$similar_goods = ExecSQL($link,$que);
 
-	foreach ($similar_goods as $similar_good_art_1)
+	foreach ($similar_goods as $sgood)
 	{
-		$sgood = ExecSQL($link,"SELECT * FROM goods WHERE art=$similar_good_art_1")[0];		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику
 		$similargood_1 = $similargood_1.$tmpts_similargoods;
 		$similargood_1 = str_replace('[goodart]', $sgood['art'], $similargood_1);
 		$similargood_1 = str_replace('[goodname]', $sgood['name'], $similargood_1);
@@ -72,6 +110,8 @@
 		$similargood_1 = str_replace('[goodspics]', $sgood['pic_name'], $similargood_1);
 		$similargood_1 = str_replace('[goodoldprice]', $sgood['price_old'], $similargood_1);
 		$similargood_1 = str_replace('[goodactprice]', $sgood['price'], $similargood_1);
+		if ($sgood['qty']-$sgood['qty_fr']<3) $similargood_1 = str_replace('[low_qty]', '<3', $similargood_1); 		
+										else  $similargood_1 = str_replace('[low_qty]', '', $similargood_1); 		
 	}
 	
 	$doc = str_replace('[similargoods]', $similargood_1, $doc);			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику

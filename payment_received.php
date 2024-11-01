@@ -130,3 +130,42 @@ if ($method=='alfa_incoming_ok' || $method=='alfa_incoming_no') // вызван�
 	
 	exit(json_encode(['status'=>'ok', 'message'=>'ok']));	
 }
+
+if ($method=='check_orders_not_paid') // вызываемый webhook по CRON для действий с неоплаченными заказами
+{
+	// взять неоплаченные >30 минут заказы с отсутствующим NOT_PAID_EMAIL и отправить письма
+	$que = "SELECT * FROM orders o WHERE 
+    o.datetime_cancel IS NULL 
+    AND o.datetime_paid IS NULL
+    AND NOT EXISTS ( SELECT 1 
+        FROM messages m 
+        WHERE m.order_number = o.number 
+          AND m.type = 'NOT_PAID_EMAIL' ) LIMIT 3";
+	$orders_30 = ExecSQL($link,$que);
+	
+	foreach ($orders_30 as $order_30)
+	{
+		$que = '';
+		
+		
+	}
+	
+	
+
+	
+	
+	
+	
+	// взять неоплаченные >90 минут заказы с отсутствующим NOT_PAID_PHONE и отправить СМС
+	// взять неоплаченные >120 минут заказы, расформировать обратно в корзину, и если отсутствует NOT_PAID_ORDER_CANCEL, выслать письмо
+	
+	
+	
+	
+	// сократить срок платежных ссылок до 2 часов
+	
+	
+	
+	
+	exit(json_encode(['status'=>'ok', 'message'=>'ok']));	
+}

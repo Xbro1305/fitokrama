@@ -79,7 +79,8 @@ if ($method=='checkstate') // информация о состоянии пос�
 
 if ($method=='imcoming') // входящий вебхук
 {
-		send_warning_telegram('post_checker 78 incoming    GET '.json_encode($_GET).'   POST   '.json_encode($_POST).'    SERVER  '.json_encode($_SERVER) );
+		$txt = file_get_contents("php://input");
+		send_warning_telegram('post_checker 78 incoming    GET '.json_encode($_GET).'   POST   '.json_encode($_POST).'    txt  '.($txt) );
 		die;
 	
 	

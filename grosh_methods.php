@@ -38,9 +38,10 @@ function hutkigrosh_new_POST($method, $dataJSON = null,$test=false) {
     return ['headers' => $headers, 'body' => $body];
 }
 
-function hutkigrosh_new_GET($method) {
+function hutkigrosh_new_GET($method,$test=false) {
 	GLOBAL $grosh_apiKey;
     $url = 'https://api.hgrosh.by/'.$method;
+	if ($test) echo ('URL --- '.$url.PHP_EOL);
 	$ch = curl_init();
     // Настройка URL и метода запроса
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -59,8 +60,8 @@ function hutkigrosh_new_GET($method) {
 
     // Выполнение запроса
     $response = curl_exec($ch);
-
-	
+	if ($test) echo ('response --- '.$response.PHP_EOL);
+	if ($test) echo ('error --- '.curl_error($ch).PHP_EOL);
 	
     // Проверка на ошибки
     if (curl_errno($ch)) {
@@ -177,7 +178,7 @@ die;
 if ($method == 'check') 
 {
 	$invoiceid = $_GET['invoiceid'];
-	$response = hutkigrosh_new_GET("invoicing/invoice/$invoiceid?api-version=2.0");
+	$response = hutkigrosh_new_GET("invoicing/invoice/$invoiceid?api-version=2.0",true);
 	echo json_encode($response).PHP_EOL.PHP_EOL;
 	die;
 }
