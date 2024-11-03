@@ -77,10 +77,21 @@ function hutkigrosh_new_GET($method,$test=false) {
 function new_hutki_invoice($order_number,$sum,$cart)		// сформировать новый счет по заказу и вернуть его id
 {
 	
+	$nowUtcPlus2Hours = (new DateTime('now', new DateTimeZone('UTC')))
+                    ->modify('+2 hours')
+                    ->format('Y-m-d\TH:i:s\Z');					
+	$addDateUTC = (new DateTime('now', new DateTimeZone('UTC')))
+                    ->format('Y-m-d\TH:i:s\Z');					
+	
 	$invId = '' . $order_number . '-' . strtoupper(substr(str_shuffle('0123456789'), 0, 4));
 	$billData_arr = [
     'number' => $invId,  
     'currency' => 'BYN', 
+	'invoiceDates' => [
+		'addDateUTC' => $addDateUTC,
+		'dateInAirUTC' => $addDateUTC,
+		'lastPayDateUTC' => $nowUtcPlus2Hours
+	],
     'serviceProviderInfo' => [
         'serviceCode' => 20032002  
     ],
@@ -138,11 +149,81 @@ function new_hutki_invoice($order_number,$sum,$cart)		// сформироват�
 	$method = explode("/", $_SERVER["SCRIPT_URL"])[2];
 
 
-if ($method == 'new_invoice') 
+if ($method == 'new_invoice_test') 
 {
+	[$order_number,$sum,$cart] = ['123456', 1.11, ['client_name'=>'Имя клиента','client_address'=>'Адрес клиента','client_email'=>'client@client.com']];
+		
+	$nowUtcPlus2Hours = (new DateTime('now', new DateTimeZone('UTC')))
+                    ->modify('+2 hours')
+                    ->format('Y-m-d\TH:i:s\Z');					
+	$addDateUTC = (new DateTime('now', new DateTimeZone('UTC')))
+                    ->format('Y-m-d\TH:i:s\Z');					
+	
+	$invId = '' . $order_number . '-' . strtoupper(substr(str_shuffle('0123456789'), 0, 4));
+	$billData_arr = [
+    'number' => $invId,  
+    'currency' => 'BYN', 
+	'invoiceDates' => [
+		'addDateUTC' => $addDateUTC,
+		'dateInAirUTC' => $addDateUTC,
+		'lastPayDateUTC' => $nowUtcPlus2Hours
+	],
+    'serviceProviderInfo' => [
+        'serviceCode' => 20032002  
+    ],
+    'paymentChannels' => [  // каналы оплаты
+        'ERIP', 'WEBPAY'
+    ],
+    'payerInfo' => [  // информация о плательщике
+        'contact' => [
+            'firstName' => $cart['client_name'],  // Имя клиента
+            'lastName' => '',  
+            'middleName' => '' 
+        ],
+        'address' => [
+            'country' => 'Беларусь',
+            'line1' => $cart['client_address'], 
+        ],
+		
+        'email' => $cart['client_email'],
+        'notifyParams' => [  
+            'eventTypes' => [
+                'INVOICE_CREATED' 
+            ],
+            'notifyByEMail' => false, 
+            'notifyBySMS' => false  
+        ]
+    ],
+    'items' => [  // Продукты в счете
+        [
+            'code' => '',  // Код товара
+            'name' => 'Заказ '.$order_number,  // Наименование товара
+            'description' => '',  // Описание товара
+            'quantity' => 1,  // Количество товаров
+            'measure' => 'шт.',  // Единица измерения (например, штуки)
+            'unitPrice' => $sum
+            ]
+        ],
+    'note' => 'Заказ № '.$order_number,
+    'amount' => $sum,  
+    'transactions' => []  
+	];
+	//foreach $cart['items'] as $item1
+	
+	$billData = json_encode($billData_arr);
+	header('Content-Type: application/json');	
+	
+	echo('--- PAYLOAD --- '.PHP_EOL.json_encode($billData_arr, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).PHP_EOL);
 
-	$invoiceid = new_hutki_invoice('123456',1.10,['client_name'=>'Кенгерли Эмиль Рафикович','client_email'=>'kenherli@gmail.com','client_address'=>'Ратомка, ул. Корицкого, 30А','client_phone'=>'+375296767861']);
-	die($invoiceid);
+	$responseBill = json_decode(hutkigrosh_new_POST('invoicing/invoice?api-version=2.0', $billData)['body'],true);  
+	
+	echo('--- RESPONSE (BODY)--- '.PHP_EOL.json_encode($responseBill, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).PHP_EOL);
+	$invoiceid = $responseBill['invoiceId'];
+	echo('--- GET_URL --- '.PHP_EOL."invoicing/invoice/$invoiceid?api-version=2.0");
+	$response = hutkigrosh_new_GET("invoicing/invoice/$invoiceid?api-version=2.0");
+	echo('--- RESPONSE --- '.PHP_EOL.json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).PHP_EOL);
+
+
 }
 
 if ($method == 'linkbyid') 
@@ -170,18 +251,63 @@ if ($method == 'linkbyid')
 die;
 
 
-die;
 }
+
+function erip_check($invoiceid)  		// проверить статус оплаты 
+{
+	$response = hutkigrosh_new_GET("invoicing/invoice/$invoiceid?api-version=2.0",false);
+	
+	if ($response['state']=='PAID')		
+			return ['erip','erip_check tr_id '.$response['transactions'][0]['id'],$response['amount']];
+	else 	return [NULL,NULL,0];
+}
+
+
+function erip_kill ($invoiceid,$test=NULL) 	// отключить неоплаченный счет
+{
+	GLOBAL $grosh_apiKey;
+	header('Content-Type: application/json');
+    
+	[,,$sum] = erip_check($invoiceid);
+	if ($sum!=0) return ('error: invoce has been paid');
+	$url = "https://api.hgrosh.by/invoicing/invoice/$invoiceid/draft?api-version=2.0";
+	if ($test) echo ('URL --- '.$url.PHP_EOL);
+	if ($test) echo ('method --- '.'PATCH'.PHP_EOL);
+	$ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+    $headers = [
+        'x-api-version: 2.0',
+        'Accept: application/json',
+        'Authorization: Bearer ' . $grosh_apiKey  // Подстановка API ключа
+    ];
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+	if ($test) echo ('response --- '.$response.PHP_EOL);
+	if ($test) echo ('error --- '.curl_error($ch).PHP_EOL);
+	
+    return('ok');
+}
+	
+if ($method == 'erip_kill') 
+{
+	$invoiceid = $_GET['invoiceid'];
+	$res = erip_kill($invoiceid);
+	echo json_encode($res).PHP_EOL.PHP_EOL;
+	die;
+}	
 
 
 
 if ($method == 'check') 
 {
 	$invoiceid = $_GET['invoiceid'];
-	$response = hutkigrosh_new_GET("invoicing/invoice/$invoiceid?api-version=2.0",true);
-	echo json_encode($response).PHP_EOL.PHP_EOL;
+	$res = erip_check($invoiceid);
+	echo json_encode($res).PHP_EOL.PHP_EOL;
 	die;
 }
+
 if ($method == 'bills') 
 {
 	

@@ -28,6 +28,7 @@
 	$orders = ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id ORDER BY datetime_create ");
 	
 	$html_orders = '';
+
 	if (count($orders)>0) foreach ($orders as $order)
 	{
 		$order = all_about_order($order['number']);
@@ -62,7 +63,7 @@
 		
 	}	
 		$doc = str_replace('[orders_table]', $html_orders, $doc);
-
+	
 	
 	
 	exit ($doc);

@@ -45,6 +45,9 @@ function new_epos_invoice($invoice_number,$epos_sum,$cart)	//	создать н�
 		$nowUtcPlus14Days = (new DateTime('now', new DateTimeZone('UTC')))
                     ->modify('+14 days')
                     ->format('Y-m-d\TH:i:s\Z');
+		$nowUtcPlus2Hours = (new DateTime('now', new DateTimeZone('UTC')))
+                    ->modify('+2 hours')
+                    ->format('Y-m-d\TH:i:s\Z');					
 
 		$body = [
 			"number" => $invoice_number,
@@ -57,7 +60,7 @@ function new_epos_invoice($invoice_number,$epos_sum,$cart)	//	создать н�
 			],
 			"note" => $text_epos,
 			"paymentDueTerms" => [
-				"dueUTC" => $nowUtcPlus14Days, // +14 дней
+				"dueUTC" => $nowUtcPlus2Hours, // +2 часа
 				"termsDay" => 0
 			],
 			"billingInfo" => [
@@ -143,6 +146,65 @@ function new_epos_invoice($invoice_number,$epos_sum,$cart)	//	создать н�
 		return [$qr_link,$invoice_id];
 }
 
+function epos_kill ($invoice_id, $test = NULL) {    
+    header('Content-Type: application/json');
+    
+    [, , $sum] = epos_check($invoice_id);
+    if ($sum != 0) return 'error: invoice has been paid';
+
+    $epos_token = get_epos_token();
+    $url = 'https://api-epos.hgrosh.by/public/v1/invoicing/invoice/' . $invoice_id.'/cancel';
+
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $epos_token
+        ),
+    ));
+
+    $response = curl_exec($curl);
+
+    // Additional diagnostic output
+    $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    if ($test) {
+        echo 'URL --- ' . $url . PHP_EOL;
+        echo 'Response --- ' . $response . PHP_EOL;
+        echo 'HTTP Code --- ' . $httpCode . PHP_EOL;
+        echo 'Error --- ' . curl_error($curl) . PHP_EOL;
+    }
+
+    curl_close($curl);
+
+    $res = json_decode($response, TRUE);
+
+    return 'ok';
+}
+
+
+function epos_check($invoice_id)		// проверить статус оплаты 
+{
+		$epos_token =  get_epos_token();
+		$url = 'https://api-epos.hgrosh.by/public/v1/invoicing/invoice/' . $invoice_id ;
+		$curl = curl_init();		curl_setopt_array($curl, array(		  CURLOPT_URL => $url,		  CURLOPT_RETURNTRANSFER => true,		  CURLOPT_ENCODING => '',		  CURLOPT_MAXREDIRS => 10,		  CURLOPT_TIMEOUT => 30,
+		  CURLOPT_FOLLOWLOCATION => true,		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,		  CURLOPT_CUSTOMREQUEST => 'GET',		  CURLOPT_HTTPHEADER => array(    'Content-Type: application/json',										'Authorization: Bearer '.$epos_token )		));
+		$response = curl_exec($curl);
+		
+		$res = json_decode($response, TRUE);
+		if ($res['state']==20)	 // оплачено ли?
+				return ['epos','epos_check',$res['totalCurrencyAmount']];
+		else 	return [NULL,NULL,0];
+}
+
 function epos_pay_check($invoice_id)		// проверить статус оплаты 
 {
 		$epos_token =  get_epos_token();
@@ -158,10 +220,20 @@ function epos_pay_check($invoice_id)		// проверить статус опл�
 $link = firstconnect ();
 $method = explode("/", $_SERVER ["SCRIPT_URL"])[2];	
 
+if ($method == 'epos_kill') 
+{
+	$invoice_id = $_GET['invoice_id'];
+	$res = epos_kill($invoice_id,false);
+	
+	echo json_encode($res).PHP_EOL.PHP_EOL;
+	die;
+}	
+
+
 if ($method=='epos_check') 
 {
 		$invoice_id = $_GET['invoice_id'];
-		$payres = epos_pay_check($invoice_id);
+		$payres = epos_check($invoice_id);
 			echo(json_encode($payres));
 		exit;	
 }

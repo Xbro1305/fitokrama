@@ -47,6 +47,7 @@ function enterregistration ()
 	$cart = cart_by_session_id_and_username ($session_id,$username);
 	$client_id = $cart['client_id'];
 	$reddottext = orders_short_info ($client_id);
+	
 
 
     return [$session_id, $username, $cart, $client_id, $reddottext];
@@ -380,7 +381,11 @@ function actual_by_auth ($username,$reddottext,$doc,$sum_goods=0)	// дораб�
 		$doc = cut_fragment($doc, '<!-- AUTHORIZED_START -->', '<!-- AUTHORIZED_END -->','');
 	}
 
-	if ($reddottext=='') $doc = cut_fragment($doc, '<!-- RED_DOT_START -->','<!-- RED_DOT_END -->','');	// красная точка на профиле
+	if ($reddottext=='') 
+		{ 
+			$doc = cut_fragment($doc, '<!-- RED_DOT_START -->','<!-- RED_DOT_END -->','');
+			$doc = cut_fragment($doc, '<!-- RED_DOT_START -->','<!-- RED_DOT_END -->',''); 
+		}	// красная точка на профиле
 	$doc = str_replace('[reddottext]'	, $reddottext, $doc);
 
 if ($sum_goods==0 || is_null($sum_goods))

@@ -26,12 +26,13 @@
 	$doc = str_replace('[pagename]', 'Подробности заказа '.$order_number, $doc);
 	
 	$order = all_about_order($order_number);
-	if ($order['client_id']!=$client_id) die(json_encode(['status'=>'error', 'message'=>'Access error' ]));
+	
+	if ($order['client_id']!=$client_id && $order['client_id']!=NULL) die(json_encode(['status'=>'error', 'message'=>'Access error' ]));
 	
 	
 	$cart_count = $cart['cart_count'];
 	if ($cart_count>0) $doc = str_replace('[cart_count]', $cart_count, $doc); else $doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
-	$doc = str_replace('[order_number]', $order['number'], $doc);
+	$doc = str_replace('[order_number]', $order_number, $doc);
 	$doc = str_replace('[order_detailed]', json_encode($order), $doc);
 	$doc = str_replace('[order_date]', (new DateTime($order['datetime_create']))->format('d.m.Y H:i') , $doc);
 
@@ -69,44 +70,44 @@
 	$doc = str_replace('[payqrpicture]', $imageString , $doc);
 	$doc = str_replace('[paylink]', $paylink, $doc);
 	$doc = str_replace('[paycode]', $paycode, $doc);
-	$doc = str_replace('[payalfalink]', $payalfalink, $doc);
+	//$doc = str_replace('[payalfalink]', $payalfalink, $doc);
 	$doc = str_replace('[paylinktoapp]', $hutki_url, $doc);
 	
 	
 	$doc = cut_fragment($doc,'<!-- ORDER_GOOD_1_BEGIN -->','<!-- ORDER_GOOD_1_END -->','[goods_table]',$html_good_1);
-	
-	$html_goods = '';
-	foreach ($order['goods'] as $good_1)
+	if (is_null($order)) 
+		$html_goods = 'Упс... Заказ не найден... Возможно, его не было или он расформирован.';
+	else
 	{
+		$html_goods = '';
+		
+		foreach ($order['goods'] as $good_1)
+		{
+			$html_goods = $html_goods . $html_good_1;
+			
+			$html_goods = str_replace('[good_pic]'			, './'.$good_1['pic_name'], $html_goods);
+			$html_goods = str_replace('[good_name]'			, $good_1['name'], $html_goods);
+			$html_goods = str_replace('[good_price_rub]'	, f2_rub($good_1['price']), $html_goods);
+			$html_goods = str_replace('[good_price_kop]'	, f2_kop($good_1['price']), $html_goods);
+			$html_goods = str_replace('[good_art]'			, $good_1['good_art'], $html_goods);
+			$html_goods = str_replace('[goodart]'			, $good_1['good_art'], $html_goods);
+			$html_goods = str_replace('[good_price]'		, ($good_1['price']), $html_goods);
+			$html_goods = str_replace('[good_sum_rub]'		, f2_rub($good_1['price']*$good_1['qty']), $html_goods);
+			$html_goods = str_replace('[good_sum_kop]'		, f2_kop($good_1['price']*$good_1['qty']), $html_goods);
+			$html_goods = str_replace('[good_qty]'			, $good_1['qty'], $html_goods);
+			$html_goods = str_replace('[good_link]'			, $good_1['qty'], $html_goods);
+		}	
 		$html_goods = $html_goods . $html_good_1;
-		
-		$html_goods = str_replace('[good_pic]'			, './'.$good_1['pic_name'], $html_goods);
-		$html_goods = str_replace('[good_name]'			, $good_1['name'], $html_goods);
-		$html_goods = str_replace('[good_price_rub]'	, f2_rub($good_1['price']), $html_goods);
-		$html_goods = str_replace('[good_price_kop]'	, f2_kop($good_1['price']), $html_goods);
-		$html_goods = str_replace('[good_art]'			, $good_1['good_art'], $html_goods);
-		$html_goods = str_replace('[goodart]'			, $good_1['good_art'], $html_goods);
-		$html_goods = str_replace('[good_price]'		, ($good_1['price']), $html_goods);
-		$html_goods = str_replace('[good_sum_rub]'		, f2_rub($good_1['price']*$good_1['qty']), $html_goods);
-		$html_goods = str_replace('[good_sum_kop]'		, f2_kop($good_1['price']*$good_1['qty']), $html_goods);
-		$html_goods = str_replace('[good_qty]'			, $good_1['qty'], $html_goods);
-		$html_goods = str_replace('[good_link]'			, $good_1['qty'], $html_goods);
-	}	
-	$html_goods = $html_goods . $html_good_1;
-	$html_goods = str_replace('/goods_pics/[good_pic]'			, '/logos/'.$order['delivery_logo'], $html_goods);
-	$html_goods = str_replace('[good_name]'			, 'Доставка: '.$order['delivery_text'], $html_goods);
-	$html_goods = str_replace('[good_sum_rub]'		, f2_rub($order['delivery_price']), $html_goods);
-	$html_goods = str_replace('[good_sum_kop]'		, f2_kop($order['delivery_price']), $html_goods);
-	$html_goods = str_replace('[good_qty]'			, '', $html_goods);
-	$html_goods = str_replace('[good_price_rub]'	,  f2_rub($order['delivery_price']), $html_goods);
-	$html_goods = str_replace('[good_price_kop]'	,  f2_kop($order['delivery_price']), $html_goods);
-	$html_goods = str_replace('шт.'	, '', $html_goods);
-		
-
+		$html_goods = str_replace('/goods_pics/[good_pic]'			, '/logos/'.$order['delivery_logo'], $html_goods);
+		$html_goods = str_replace('[good_name]'			, 'Доставка: '.$order['delivery_text'], $html_goods);
+		$html_goods = str_replace('[good_sum_rub]'		, f2_rub($order['delivery_price']), $html_goods);
+		$html_goods = str_replace('[good_sum_kop]'		, f2_kop($order['delivery_price']), $html_goods);
+		$html_goods = str_replace('[good_qty]'			, '', $html_goods);
+		$html_goods = str_replace('[good_price_rub]'	,  f2_rub($order['delivery_price']), $html_goods);
+		$html_goods = str_replace('[good_price_kop]'	,  f2_kop($order['delivery_price']), $html_goods);
+		$html_goods = str_replace('шт.'	, '', $html_goods);
+			
+			
+	}
 	$doc = str_replace('[goods_table]', $html_goods, $doc);
-	//$doc = str_replace('Оплата:',json_encode($order),$doc);
-	
-	
-	
-	
 	exit ($doc);

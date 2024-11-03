@@ -83,6 +83,28 @@ function alfa_pay_check($alfa_orderId)		// проверить статус оп�
 	return $pay_res;
 }
 
+function alfa_kill ($invoiceid,$test=NULL) 	// отключить неоплаченный счет
+{
+	 // !!!!!!!!!!!!!!!!! метод не описан
+	
+    return('ok');
+}
+
+function alfa_check($alfa_orderId)  		// проверить статус оплаты 
+{
+	$data = ([
+		'orderId' => $alfa_orderId
+	]);
+
+	$response = alfaPOST('getOrderStatusExtended.do', $data);  
+	$pay_res = ($response['errorCode']==1 || $response['errorCode']==2);
+	
+	if ($pay_res['state']=='PAID')			//	!!!!!!!!!!!!!! это не корректно !!!!!!!!!!!!!!!!!!!
+			return ['alfa','alfa_check tr_id '.$response['transactions'][0]['id'],$response['amount']];
+	else 	return [NULL,NULL,0];
+}
+
+
 
 
 
