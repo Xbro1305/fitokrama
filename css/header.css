@@ -409,7 +409,7 @@
     display: none;
 }
 
-@media (max-width: 475px) {
+@media (max-width: 768px) {
     .mobHeader {
         display: flex;
         padding: 20px;
