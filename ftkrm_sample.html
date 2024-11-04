@@ -1437,8 +1437,10 @@
                 });
 
             document.addEventListener("DOMContentLoaded", () => {
-                document.querySelector(".cart-float").style.display =
-                    [cart_count] != 0 ? "flex" : "none";
+                [cart_count]
+                    ? (document.querySelector(".cart-float").style.display =
+                          [cart_count] != 0 ? "flex" : "none")
+                    : "";
             });
             function goToPage(page) {
                 window.location.href =
