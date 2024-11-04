@@ -211,8 +211,11 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch((err) => {
         console.log(err);
+        window.location.reload();
       })
-      .finally(() => window.location.reload());
+      .finally(
+        () => (document.querySelector("#waiting").style.display = "none")
+      );
   };
 
   function setInputValue() {

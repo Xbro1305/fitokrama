@@ -299,6 +299,9 @@
 @media (max-width: 475px) {
     #addedToCartModal {
         background: none !important;
+        height: fit-content;
+        top: 100%;
+        transform: translateX(-100%);
     }
 
     #addedToCartModal .modal-content {
@@ -318,7 +321,6 @@
         color: #fff;
         background: rgb(97, 129, 98) !important;
         font-size: 19px;
-        position: fixed;
         bottom: 0;
         width: 100%;
     }
