@@ -51,11 +51,6 @@
                 background-color: #e9e9e9;
             }
         </style>
-        <script
-            src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
-            async
-            defer
-        ></script>
     </head>
 
     <body>
@@ -216,7 +211,11 @@
                     onclick="toggleSearch()"
                 />
             </div>
-            <img src="./logos/ftkrm_logo.png" alt="" />
+            <img
+                src="./logos/ftkrm_logo.png"
+                alt=""
+                onclick="goTo('/index_page.php')"
+            />
             <div class="account-buttons">
                 <div class="profileButton" onclick="[account_action]">
                     <a href="#" onclick="[account_action]">
@@ -1368,14 +1367,19 @@
             </div>
             <!-- BANK_ICONS_END -->
         </footer>
-
-        <script src="./js/auth.js"></script>
-
         <script
             src="https://accounts.google.com/gsi/client"
             async
             defer
         ></script>
+        <script
+            src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+            async
+            defer
+        ></script>
+
+        <script async src="./js/auth.js"></script>
+
         <script>
             const closeModal = (modalId) => {
                 const modal = document.getElementById(modalId);

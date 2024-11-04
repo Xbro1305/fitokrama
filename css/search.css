@@ -4,17 +4,16 @@
 
 @media (max-width: 768px) {
     .mobSearch {
-        position: fixed;
         display: flex;
+        z-index: 99999999 !important;
         flex-direction: column;
+        position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100vh;
         background: #fff;
         transform: translateY(-100%);
-        z-index: 99999999 !important;
-        transition: all 0.5s ease;
     }
 
     .mobSearch.active {
@@ -28,6 +27,7 @@
         width: 100%;
         background: #fff;
         height: calc(100vh - 76px);
+        margin-top: 76px;
     }
 
     .searchCont > a {
@@ -94,6 +94,18 @@
         background: #618162;
         display: flex;
         justify-content: space-between;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: #fff;
+        transform: translateY(-100%);
+        transition: all 0.5s ease;
+    }
+
+    .mobSearch.active .searchTop {
+        transform: translateX(0);
     }
 
     .searchTop input {
