@@ -301,7 +301,7 @@
         background: none !important;
         height: fit-content;
         top: 100%;
-        transform: translateX(-100%);
+        transform: translateY(-100%);
     }
 
     #addedToCartModal .modal-content {
