@@ -51,6 +51,19 @@
                 background-color: #e9e9e9;
             }
         </style>
+
+        <script
+            src="https://accounts.google.com/gsi/client"
+            async
+            defer
+        ></script>
+        <script
+            src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+            async
+            defer
+        ></script>
+
+        <script async src="./js/auth.js"></script>
     </head>
 
     <body>
@@ -291,7 +304,7 @@
             </div>
 
             <div class="checkout-button-row">
-                <button class="buy-button" onclick="window.location.reload();">
+                <button class="buy-button" onclick="location.reload();">
                     ПРОВЕРИТЬ ОПЛАТУ
                 </button>
             </div>
@@ -1416,18 +1429,6 @@
             </div>
             <!-- BANK_ICONS_END -->
         </footer>
-        <script
-            src="https://accounts.google.com/gsi/client"
-            async
-            defer
-        ></script>
-        <script
-            src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
-            async
-            defer
-        ></script>
-
-        <script async src="./js/auth.js"></script>
 
         <script async defer>
             const closeModal = (modalId) => {
@@ -1497,6 +1498,13 @@
                         })
                         .catch((error) => console.error(error));
                 });
+
+            document.addEventListener("DOMContentLoaded", () => {
+                [cart_count]
+                    ? (document.querySelector(".cart-float").style.display =
+                          [cart_count] != 0 ? "flex" : "none")
+                    : "";
+            });
             function goToPage(page) {
                 window.location.href =
                     "https://fitokrama.by/profile_page.php?page=";
@@ -1626,20 +1634,6 @@
             document
                 .querySelector(".mobsrch")
                 .addEventListener("input", searchMob);
-
-            document.addEventListener("DOMContentLoaded", () => {
-                [cart_count]
-                    ? (document.querySelector(".cart-float").style.display =
-                          [cart_count] != 0 ? "flex" : "none")
-                    : "";
-
-                document.querySelector(".modalMob").style.display ==
-                "flex !important"
-                    ? (document.querySelector(
-                          ".addedToCartModal"
-                      ).style.display = [cart_count] != 0 ? "flex" : "none")
-                    : "";
-            });
         </script>
 
         <script src="./js/main.js"></script>
