@@ -384,18 +384,23 @@
 }
 
 @media (max-width: 421px) {
-    .cart-item {
-        flex-direction: column;
-    }
-
     .product-image {
         width: 100%;
         margin-right: 0;
         margin-bottom: 20px;
     }
 
+    .product-name {
+        min-width: none;
+        width: auto;
+    }
+
     .product-info {
         text-align: center;
+    }
+
+    .cart-item > * {
+        font-size: 70% !important;
     }
 
     .cart-item-info {
