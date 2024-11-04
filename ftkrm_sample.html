@@ -1499,15 +1499,20 @@
                         .catch((error) => console.error(error));
                 });
 
-            [cart_count]
-                ? (document.querySelector(".cart-float").style.display =
-                      [cart_count] != 0 ? "flex" : "none")
-                : "";
-            document.querySelector(".modalMob").style.display ==
-                "flex !important" && [cart_count > 0]
-                ? (document.querySelector("#addedToCartModal").style.display =
-                      "flex")
-                : "";
+            fetch("/cart_correct.php")
+                .then((res) => res.json())
+                .then((res) => {
+                    res.cart_count > 0
+                        ? (document.querySelector(".cart-float").style.display =
+                              [cart_count] != 0 ? "flex" : "none")
+                        : "";
+                    document.querySelector(".modalMob").style.display ==
+                        "flex !important" && res.cart_count > 0
+                        ? (document.querySelector(
+                              "#addedToCartModal"
+                          ).style.display = "flex")
+                        : "";
+                });
             function goToPage(page) {
                 window.location.href =
                     "https://fitokrama.by/profile_page.php?page=";
