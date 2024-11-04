@@ -17,7 +17,11 @@ function showAddedToCartModal(art, price, quantity) {
         console.log(document.querySelector(".cart_count"));
         console.log(document.querySelector(".cart_count").innerHTML);
         document.querySelector(".modalMobMsg").innerHTML = c;
-        document.querySelector(".cart_count").innerHTML = c;
+        document.querySelector(".cart-float").innerHTML = `
+                            <p class="cart_count">${c}</p>
+        `;
+        console.log(document.querySelector(".cart_count"));
+        console.log(document.querySelector(".cart_count").innerHTML);
       })
       .catch(
         (error) => (document.getElementById("fail").style.display = "flex")
