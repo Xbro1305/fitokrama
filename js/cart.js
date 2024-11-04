@@ -85,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function changeQuantity(change, itemId, id, price) {
     const quantityInput = document.getElementById(`quantity-${itemId}`);
-    document.querySelector("#waiting").style.display = "flex";
 
     let quantity = parseInt(quantityInput.value) + change;
 
@@ -98,6 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
       deletingItem.price = price;
       deletingItem.qty = 0;
       return;
+    } else {
+      document.querySelector("#waiting").style.display = "flex";
     }
 
     fetch("https://fitokrama.by/cart_correct.php", {
