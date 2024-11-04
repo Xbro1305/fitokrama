@@ -450,7 +450,7 @@
 
     .mobLogo {
         width: 70px !important;
-        height: auto;
+        height: auto !important;
     }
 
     .mobHeader {

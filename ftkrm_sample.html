@@ -1379,7 +1379,7 @@
 
         <script async src="./js/auth.js"></script>
 
-        <script>
+        <script async defer>
             const closeModal = (modalId) => {
                 const modal = document.getElementById(modalId);
 
@@ -1388,7 +1388,7 @@
 
             document
                 .querySelector(".authWindowEmailInput")
-                .addEventListener("input", checkAuthEmail);
+                .addEventListener("input", window.checkAuthEmail);
 
             const SI = document.querySelector(".search-input");
             if (SI)
