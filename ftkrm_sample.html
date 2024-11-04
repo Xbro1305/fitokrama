@@ -1504,7 +1504,10 @@
                       [cart_count] != 0 ? "flex" : "none")
                 : "";
             document.querySelector(".modalMob").style.display ==
-                "flex !important" && [cart_count > 0]?document.querySelector("#addedToCartModal").style.display = "flex";
+                "flex !important" && [cart_count > 0]
+                ? (document.querySelector("#addedToCartModal").style.display =
+                      "flex")
+                : "";
             function goToPage(page) {
                 window.location.href =
                     "https://fitokrama.by/profile_page.php?page=";
