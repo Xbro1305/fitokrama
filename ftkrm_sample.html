@@ -1497,21 +1497,6 @@
                         })
                         .catch((error) => console.error(error));
                 });
-
-            document.addEventListener("DOMContentLoaded", () => {
-                [cart_count]
-                    ? (document.querySelector(".cart-float").style.display =
-                          [cart_count] != 0 ? "flex" : "none")
-                    : "";
-
-                [cart_count] &&
-                document.querySelector(".modalMob").style.display ==
-                    "flex !important"
-                    ? (document.querySelector(
-                          ".addedToCartModal"
-                      ).style.display = [cart_count] != 0 ? "flex" : "none")
-                    : "";
-            });
             function goToPage(page) {
                 window.location.href =
                     "https://fitokrama.by/profile_page.php?page=";
@@ -1641,6 +1626,20 @@
             document
                 .querySelector(".mobsrch")
                 .addEventListener("input", searchMob);
+
+            document.addEventListener("DOMContentLoaded", () => {
+                [cart_count]
+                    ? (document.querySelector(".cart-float").style.display =
+                          [cart_count] != 0 ? "flex" : "none")
+                    : "";
+
+                document.querySelector(".modalMob").style.display ==
+                "flex !important"
+                    ? (document.querySelector(
+                          ".addedToCartModal"
+                      ).style.display = [cart_count] != 0 ? "flex" : "none")
+                    : "";
+            });
         </script>
 
         <script src="./js/main.js"></script>
