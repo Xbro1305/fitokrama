@@ -89,11 +89,15 @@
     }
 
     .menuBottomSect img {
-        width: 40px;
+        width: 35px;
     }
 
     .menu.active {
         transform: translateY(0);
+    }
+
+    .menuBottomSect > :last-child img {
+        width: 30px;    
     }
 
     .menu button {
