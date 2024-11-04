@@ -215,7 +215,7 @@
                         <img src="../logos/wallet_logo.png" alt="Кошелек" />
                         <!-- CART_COUNT_START -->
                         <div class="cart-float">
-                            <p class="cart-count">[cart_count]</p>
+                            <p class="cart_count">[cart_count]</p>
                         </div>
                         <!-- CART_COUNT_END -->
                     </a>
@@ -1510,7 +1510,7 @@
                         console.log(window.innerWidth);
                         
 
-                    window.innerWidth < "425px" && res.cart_count > 0
+                    window.innerWidth < 425 && res.cart_count > 0
                         ? (document.querySelector(
                               "#addedToCartModal"
                           ).style.display = "flex")
