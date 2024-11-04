@@ -54,6 +54,7 @@
     }
 
     .searchCont a section h1 {
+        width: 100%;
         text-align: left;
         font-size: 14px;
         color: #000;
