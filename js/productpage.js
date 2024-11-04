@@ -13,8 +13,10 @@ function showAddedToCartModal(art, price, quantity) {
       .then((response) => response.json())
       .then((data) => {
         document.querySelector("#addedToCartModal").style.display = "flex";
-        document.querySelector(".modalMobMsg").innerHTML = data?.cart_count;
-        document.querySelector(".cart_count").innerHTML = data?.cart_count;
+        const c = data.cart_count;
+        console.log(document.querySelector(".modalMobMsg"));
+        document.querySelector(".modalMobMsg").innerHTML = c;
+        document.querySelector(".cart_count").innerHTML = c;
       })
       .catch(
         (error) => (document.getElementById("fail").style.display = "flex")
