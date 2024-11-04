@@ -228,7 +228,7 @@ body ::-webkit-scrollbar {
     padding: 10px 0;
     font-size: 18px;
     position: sticky;
-    top: 181px;
+    top: 179px;
     background: rgb(97, 129, 98);
     display: flex;
     align-items: center;

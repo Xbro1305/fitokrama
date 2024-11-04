@@ -88,24 +88,6 @@ window.onload = function () {
 function onGoogleSignIn() {
   google.accounts.id.prompt(); // Открытие окна авторизации Google
 }
-const checkAuthEmail = () => {
-  const email = document.querySelector(".authWindowEmailInput").value;
-  const emailST = email?.split("@");
-
-  if (
-    emailST[0]?.length > 1 &&
-    emailST[1]?.split(".")[0]?.length > 1 &&
-    emailST[1]?.split(".")[1]?.length > 1
-  ) {
-    document.querySelector(".authWindowEmailInput").style.border =
-      "1px solid #ccc";
-    document.querySelector(".getButton").style.display = "flex";
-  } else {
-    document.querySelector(".authWindowEmailInput").style.border =
-      "2px solid red";
-    document.querySelector(".getButton").style.display = "none";
-  }
-};
 
 function getCookie(name) {
   let matches = document.cookie.match(
@@ -271,4 +253,3 @@ window.setCookie = setCookie;
 window.handleCredentialResponse = handleCredentialResponse;
 window.getCookie = getCookie;
 window.onTelegramAuth = onTelegramAuth;
-window.checkAuthEmail = checkAuthEmail;

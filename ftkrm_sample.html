@@ -413,9 +413,47 @@
             <div class="cart-content orders">
                 <h2>Добро пожаловать в личный кабинет!</h2>
                 <h3>Клиент: [client_email]</h3>
-                <h3 onclick="goTo('https://fitokrama.by/orders_page.php')">
-                    Мои заказы
-                </h3>
+                <!-- ORDER_1_BEGIN -->
+                <a href="[order_link]" class="cart-item">
+                    <div class="product-info">
+                        <div class="cart-item-info">
+                            <h4 class="product-name">[order_number]</h4>
+                            <!-- BUTTON_PAY_BEGIN -->
+                            <div class="checkout-button-row">
+                                <button class="buy-button" onclick="buyItem()">
+                                    ОПЛАТИТЬ
+                                </button>
+                            </div>
+                            <!-- BUTTON_PAY_END -->
+                            <!-- BUTTON_GET_BEGIN -->
+                            <div class="checkout-button-row">
+                                <button
+                                    class="buy-button"
+                                    onclick="goTo('fitokrama.by/order_page.php?order=[order_number]')"
+                                    style="background: #bf8424 !important"
+                                >
+                                    ИНСТРУКЦИЯ ПО ПОЛУЧЕНИЮ
+                                </button>
+                            </div>
+                            <!-- BUTTON_GET_END -->
+
+                            <div
+                                class="total-price"
+                                id="total-price-item[good_count]"
+                                data-price="[good_price]"
+                            >
+                                <span class="price-full-[good_count]"
+                                    >[order_sum_rub]</span
+                                >,
+                                <sup class="price-small-[good_count]"
+                                    >[order_sum_kop]
+                                </sup>
+                                <span class="currency"> руб.</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <!-- ORDER_1_END -->
                 <button class="exitButton" onclick="exitaccount()">
                     Выйти из профиля
                 </button>
@@ -1400,7 +1438,7 @@
 
             document
                 .querySelector(".authWindowEmailInput")
-                .addEventListener("input", window.checkAuthEmail);
+                .addEventListener("input", checkAuthEmail);
 
             const SI = document.querySelector(".search-input");
             if (SI)

@@ -212,9 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((err) => {
         console.log(err);
       })
-      .finally(
-        () => (document.querySelector("#waiting").style.display = "none")
-      );
+      .finally(() => window.location.reload());
   };
 
   function setInputValue() {
