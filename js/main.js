@@ -172,6 +172,8 @@ function showAuthMetods() {
 }
 
 function checkPhoneAndEmail(response) {
+  if (document.querySelector(".nonauthorized")) return;
+
   if (response.datetime_email_confirmed == null) {
     document.querySelector(".EC").style.display = "none";
     document.querySelector(".ENC").style.display = "flex";

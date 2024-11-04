@@ -391,16 +391,12 @@
     }
 
     .product-name {
-        min-width: none;
+        min-width: 0;
         width: auto;
     }
 
     .product-info {
         text-align: center;
-    }
-
-    .cart-item > * {
-        font-size: 70% !important;
     }
 
     .cart-item-info {

@@ -121,6 +121,8 @@ document.addEventListener("DOMContentLoaded", function () {
       .finally(
         () => (document.querySelector("#waiting").style.display = "none")
       );
+      
+    if (document.querySelector(".nonauthorized")) return;
 
     if (document.querySelector("#client_email").value == "") {
       const ENC = document.querySelector(".ENC");
