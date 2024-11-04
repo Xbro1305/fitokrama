@@ -1514,6 +1514,8 @@
                               "#addedToCartModal"
                           ).style.display = "flex")
                         : "";
+
+                        document.querySelector(".modalMobMsg").innerHTML = res.cart_count
                 });
             function goToPage(page) {
                 window.location.href =
