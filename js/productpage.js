@@ -15,10 +15,7 @@ function showAddedToCartModal(art, price, quantity) {
         document.querySelector("#addedToCartModal").style.display = "flex";
         const c = data.cart_count;
         document.querySelector(".modalMobMsg").innerHTML = c;
-        document.querySelectorAll(".cart_count").map((i) => {
-          i.innerHTML = c;
-          i.innerText = c;
-        });
+        document.querySelector(".cart_count").innerHTML = c;
       })
       .catch(
         (error) => (document.getElementById("fail").style.display = "flex")

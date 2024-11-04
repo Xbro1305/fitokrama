@@ -213,9 +213,11 @@
 
                     <a href="/cart_page.php">
                         <img src="../logos/wallet_logo.png" alt="Кошелек" />
+                        <!-- CART_COUNT_START -->
                         <div class="cart-float">
-                            <p class="cart_count"></p>
+                            <p class="cart_count">[cart_count]</p>
                         </div>
+                        <!-- CART_COUNT_END -->
                     </a>
                 </div>
             </div>
@@ -255,9 +257,11 @@
 
                 <a href="/cart_page.php">
                     <img src="../logos/wallet_logo.png" alt="Кошелек" />
+                    <!-- CART_COUNT_START -->
                     <div class="cart-float">
-                        <p class="cart_count"></p>
+                        <p class="cart_count">[cart_count]</p>
                     </div>
+                    <!-- CART_COUNT_END -->
                 </a>
             </div>
         </header>
@@ -1499,10 +1503,8 @@
                 .then((res) => res.json())
                 .then((res) => {
                     res.cart_count > 0
-                        ? document.querySelectorAll(".cart-float").map((i) => {
-                              i.innerHTML = c;
-                              i.innerText = c;
-                          })
+                        ? (document.querySelector(".cart-float").style.display =
+                              res.cart_count != 0 ? "flex" : "none")
                         : "";
 
                     console.log(window.innerWidth);
@@ -1512,13 +1514,6 @@
                               "#addedToCartModal"
                           ).style.display = "flex")
                         : "";
-
-                    const c = res.cart_count;
-                    document.querySelector(".modalMobMsg").innerHTML = c;
-                    document.querySelectorAll(".cart_count").map((i) => {
-                        i.innerHTML = c;
-                        i.innerText = c;
-                    });
                 });
             function goToPage(page) {
                 window.location.href =
