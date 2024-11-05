@@ -445,18 +445,22 @@
     }
 
     .mobHeader img {
-        width: 6.4%;
+        width: calc(50% - 2.5px);
         aspect-ratio: 1/1;
     }
 
     .mobHeader > a {
         width: 30% !important;
         height: auto !important;
+        aspect-ratio: none !important;
     }
 
-    .mobHeader > :nth-child(1) img {
-        width: 8.2% !important;
-        aspect-ratio: 1/1;
+    .mobHeader > :nth-child(1) {
+        width: calc(8.2% * 2 + 5px);
+    }
+
+    .mobHeader > :nth-child(3) {
+        width: calc(6.4% * 2 + 5px);
     }
 
     .mobLogo {
@@ -475,23 +479,17 @@
 
 @media (max-width: 600px) {
     .maintext {
-        top: 134px !important;
-    }
-}
-
-@media (max-width: 600px) {
-    .maintext {
-        top: 134px !important;
+        top: 120px !important;
     }
 }
 
 @media (max-width: 475px) {
     .maintext {
-        top: 113px !important;
+        top: 105px !important;
     }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 425px) {
     .maintext {
         top: 97px !important;
     }
