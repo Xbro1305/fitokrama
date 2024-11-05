@@ -463,7 +463,7 @@
         width: calc(6.4% * 2 + 5px);
     }
 
-    .mobHeader >:last-child img{
+    .mobHeader > :last-child img {
         width: 100%;
     }
 
@@ -477,13 +477,13 @@
     }
 
     .maintext {
-        top: 150px !important;
+        top: 130px !important;
     }
 }
 
 @media (max-width: 600px) {
     .maintext {
-        top: 120px !important;
+        top: 110px !important;
     }
 }
 
@@ -496,5 +496,19 @@
 @media (max-width: 425px) {
     .maintext {
         top: 97px !important;
+    }
+
+    .mobHeader > :nth-child(3) {
+        width: fit-content;
+    }
+
+    .mobHeader > :last-child img {
+        width: 25px !important;
+        height: 25px !important;
+    }
+
+    .mobLogo {
+        width: 100% !important;
+        height: auto !important;
     }
 }
