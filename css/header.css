@@ -463,6 +463,10 @@
         width: calc(6.4% * 2 + 5px);
     }
 
+    .mobHeader >:last-child img{
+        width: 100%;
+    }
+
     .mobLogo {
         width: 100% !important;
         height: auto !important;
