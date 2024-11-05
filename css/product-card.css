@@ -380,7 +380,7 @@
     }
 
     .product-image {
-        width: 100%;
+        min-width: 400px;
         margin-right: 0;
     }
 
@@ -401,5 +401,11 @@
 
     .quantity-selector {
         margin: 0 !important;
+    }
+}
+
+@media (max-width: 475px) {
+    .product-image {
+        width: 100%;
     }
 }
