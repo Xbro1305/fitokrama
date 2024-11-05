@@ -469,6 +469,7 @@
 
     .mobLogo {
         width: 100% !important;
+        aspect-ratio: inherit !important;
         height: auto !important;
     }
 
