@@ -3,7 +3,10 @@
 <html lang="ru">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"
+        />
         <link rel="icon" href="logos/favicon.png" type="image/png" />
         <link rel="stylesheet" href="./css/base.css" />
         <link rel="stylesheet" href="./css/header.css" />
@@ -1509,13 +1512,14 @@
 
                     console.log(window.innerWidth);
 
-                    window.innerWidth < 425 && res.cart_count > 0
+                    window.innerWidth < 475 && res.cart_count > 0
                         ? (document.querySelector(
                               "#addedToCartModal"
                           ).style.display = "flex")
                         : "";
 
-                        document.querySelector(".modalMobMsg").innerHTML = res.cart_count
+                    document.querySelector(".modalMobMsg").innerHTML =
+                        res.cart_count;
                 });
             function goToPage(page) {
                 window.location.href =

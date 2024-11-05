@@ -372,7 +372,7 @@
     cursor: pointer;
 }
 
-@media (max-width: 421px) {
+@media (max-width: 475px) {
     .product-without-description {
         width: 100%;
         display: flex;
