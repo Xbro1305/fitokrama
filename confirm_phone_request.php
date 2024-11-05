@@ -19,7 +19,7 @@
 	$code = random_int(10001,99999);
 	
 	
-	if (substr($phone,0,4)=='+375 УДАЛИТЬ' || substr($phone,0,3)=='375 УДАЛИТЬ') 
+	if (substr($phone,0,4)=='+375' || substr($phone,0,3)=='375') 
 		{
 			$text = '🌿 Ваш код [code] 🌿';	
 			$text = str_replace('[code]', $code, $text);

@@ -80,7 +80,7 @@ function check_payment_by_order ($order,$payid)	// проверяет стату
 	
 	if ($payment_method!='epos') epos_kill($order['epos_id']);
 	if ($payment_method!='erip') erip_kill($order['hutki_billId']);
-	//if ($payment_method!='alfa') alfa_kill($order['alfa_orderId']);
+	if ($payment_method!='alfa') alfa_kill($order['alfa_orderId']);
 	
 	$payment_records = ExecSQL($link,"SELECT * FROM payments WHERE order_id={$order['id']} AND payment_method='$payment_method'");
 	
@@ -148,6 +148,11 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 	{
 		
 		$order_number = $order['number'];
+		if (check_payment_by_order($order,NULL)>0) continue; // счет на самом деле оплачен, пропускаем
+		epos_kill($order['epos_id']);	// убить все ссылки на оплату
+		erip_kill($order['hutki_billId']);
+		alfa_kill($order['alfa_orderId']);		
+
 		$doc = file_get_contents("./pages/for_mail_payment_push.html");
 		
 		$finaldatetime = (new DateTime($order['datetime_create']))->modify('+2 hours')->format('H:i d.m.Y');
@@ -219,6 +224,7 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 	
 	foreach ($orders_90 as $order)
 	{
+	if (check_payment_by_order($order,NULL)>0) continue; // счет на самом деле оплачен, пропускаем
 		
 	$order_number = $order['number'];
 	$finaldatetime = (new DateTime($order['datetime_create']))->modify('+2 hours')->format('H:i');
@@ -258,6 +264,10 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 	
 	foreach ($orders_120 as $order)
 	{
+		if (check_payment_by_order($order,NULL)>0) continue; // счет на самом деле оплачен, пропускаем
+		// убить ссылку на оплату
+		
+
 		$order_number = $order['number'];
 		$doc = file_get_contents("./pages/for_mail_payment_deadline_missed.html");
 		
@@ -285,6 +295,8 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 		$rep = mail_sender($order['client_email'], "⚡️ Заказ не оплачен! ☘", $doc);		
 		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report='$rep' WHERE id=$ins_id;";
 		ExecSQL($link,$que);
+		
+		
 
 		// а теперь расформировать заказ!
 		$client_id = $order['client_id'];

@@ -23,10 +23,13 @@
 	
 
 	$doc = actual_by_auth($username,$reddottext,$doc,$cart['sum_goods']);
+	
 		
-	if ($cart['goods']==NULL) 
+	if ($cart['goods']==NULL || count($cart['goods'])==0) 
 	{
+			
 		$doc = cut_fragment($doc, '<!-- CART_BEGIN -->', '<!-- CART_END -->','oops Корзина пуста');
+		$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
 		$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
 		exit ($doc);
 	}

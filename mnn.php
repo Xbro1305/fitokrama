@@ -41,7 +41,6 @@ function enterregistration ()
 
 
 
-
 	//$que = "INSERT INTO `enters` (`session_id`, `method`,`get_params`, `post_params`, `datetime`) VALUES (('$session_id'), '".$callerFile."','".json_encode($_GET)."', '".json_encode($_POST)."', CURRENT_TIMESTAMP() );";
 	//ExecSQL($link,$que);
 	$cart = cart_by_session_id_and_username ($session_id,$username);
@@ -427,8 +426,8 @@ function orders_short_info($client_id = null, $selection = null) // кратко
 	$reddottext = '';
 
 
-	if (count(ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id AND datetime_delivery IS NOT NULL AND datetime_finish IS NULL AND datetime_cancel IS NOT NULL "))>0) $reddottext = 'Посылка ждёт вас!';
-	if (count(ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id AND datetime_paid IS NULL AND  datetime_cancel IS NOT NULL "))>0) $reddottext = 'Необходимо оплатить!';
+	if (count(ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id AND datetime_delivery IS NOT NULL AND datetime_finish IS NULL AND datetime_cancel IS NULL "))>0) $reddottext = 'Посылка ждёт вас!';
+	if (count(ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id AND datetime_paid IS NULL AND  datetime_cancel IS NULL "))>0) $reddottext = 'Необходимо оплатить!';
 
 	return $reddottext;
 }

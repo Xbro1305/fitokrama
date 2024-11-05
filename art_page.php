@@ -65,7 +65,7 @@
 	$doc = str_replace('[goodcat]', $good['cat'], $doc);
 	$doc = str_replace('[goodsubcat]',$good['subcat'], $doc);
 	$doc = str_replace('[goodtegs]','', $doc);						// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику
-	if ($good['qty']-$good['qty_fr']<3) $doc = str_replace('[low_qty]', '<3', $doc); 		
+	if ($good['qty']-$good['qty_fr']<3) $doc = str_replace('[low_qty]', '', $doc); 		
 								  else  $doc = str_replace('[low_qty]', '', $doc); 		
 	
 	
@@ -110,7 +110,7 @@
 		$similargood_1 = str_replace('[goodspics]', $sgood['pic_name'], $similargood_1);
 		$similargood_1 = str_replace('[goodoldprice]', $sgood['price_old'], $similargood_1);
 		$similargood_1 = str_replace('[goodactprice]', $sgood['price'], $similargood_1);
-		if ($sgood['qty']-$sgood['qty_fr']<3) $similargood_1 = str_replace('[low_qty]', '<3', $similargood_1); 		
+		if ($sgood['qty']-$sgood['qty_fr']<3) $similargood_1 = str_replace('[low_qty]', '', $similargood_1); 		
 										else  $similargood_1 = str_replace('[low_qty]', '', $similargood_1); 		
 	}
 	
