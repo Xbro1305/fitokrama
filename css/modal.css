@@ -296,7 +296,7 @@
     display: none !important;
 }
 
-@media (max-width: 475px) {
+@media (max-width: 700px) {
     #addedToCartModal {
         background: none !important;
         height: fit-content;
