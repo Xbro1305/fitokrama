@@ -513,3 +513,9 @@
         height: auto !important;
     }
 }
+
+@media (max-width: 375px) {
+    .maintext {
+        top: 88px !important;
+    }
+}
