@@ -448,9 +448,14 @@
         height: 25px;
     }
 
-    .mobLogo {
+    .mobHeader > a {
         width: 30% !important;
         height: auto !important;
+    }
+
+    .mobLogo {
+        width: 100%;
+        height: auto;
     }
 
     .mobHeader {
@@ -458,6 +463,6 @@
     }
 
     .maintext {
-        top: 77px !important;
+        top: 97px !important;
     }
 }
