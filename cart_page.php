@@ -246,7 +246,7 @@
 	$doc = str_replace('<!-- STYLES -->', '<style> '.$style_add.' </style>', $doc);
 	$doc = str_replace('[methods_table]', $html_methods, $doc);
 	if (!$method_found || $cou==1) 
-	$doc=str_replace('Больше вариантов ⋁', '', $doc); 
+	$doc=str_replace('Больше вариантов <p class="quot_down">«</p>', '', $doc); 
 
 	
 	exit ($doc);

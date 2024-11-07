@@ -64,7 +64,7 @@ function qty_by_art ($art)			// вычисление текущего колич
 
 	
 	if (!$cart['sum']>0 OR !$cart['cart_count']>0 OR $cart['datetime_phone_confirmed']==NULL OR $cart['datetime_email_confirmed']==NULL)
-		exit (json_encode(['icon'=>'./logos/problerm_red.png', 'error_text'=>'Ошибка оформления заказа. Не указаные некоторые необходимые данные.', 'data'=>json_encode([$cart['sum'],$cart['cart_count'],$cart['datetime_phone_confirmed'],$cart['datetime_email_confirmed']])], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		exit (json_encode(['icon'=>'./logos/problem_red.png', 'error_text'=>'Ошибка оформления заказа. Не указаные некоторые необходимые данные.', 'data'=>json_encode([$cart['sum'],$cart['cart_count'],$cart['datetime_phone_confirmed'],$cart['datetime_email_confirmed']])], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 	
 	// контроль, нет ли необходимости скорректировать количества
 	$good_shortage = false;		// флаг нехватки товара

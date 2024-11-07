@@ -864,7 +864,7 @@
 
                         <!-- REPEAT_METHOD_1_BEGIN 
 						<div class="but_option hidden_option">
-						<a href="#" id="toggleButton_[prefix]" onclick="toggleVisibility(event, '[prefix]')">[method_name] - Больше вариантов <p style="transform:rotate(90deg), font-size: 22px">&laquo;</p></a> 
+						<a href="#" id="toggleButton_[prefix]" onclick="toggleVisibility(event, '[prefix]')">[method_name] - Больше вариантов<p class="quot_down">«</p></a> 
 						</div>
 						<!--HIDDEN 
 						<div class="toggleContent_[prefix] toggle_[prefix]">
@@ -915,7 +915,7 @@
 						REPEAT_METHOD_2_END -->
                         <!-- METHOD_1_END -->
                         <button id="toggleOptionsBtn" onclick="toggleOptions()">
-                            Больше вариантов ⋁
+                            Больше вариантов <p class="quot_down">«</p>
                         </button>
                     </section>
                 </div>
@@ -1558,21 +1558,21 @@
                     .finally(() => window.location.reload());
             }
 
-            function toggleOptions() {
-                const options = document.querySelectorAll(".hidden_option");
-                const toggleBtn = document.getElementById("toggleOptionsBtn");
+          function toggleOptions() {
+    const options = document.querySelectorAll(".hidden_option");
+    const toggleBtn = document.getElementById("toggleOptionsBtn");
 
-                const showMore =
-                    toggleBtn.textContent.trim() === "Больше вариантов ⋁";
+    const showMore = toggleBtn.innerHTML.trim() === 'Меньше вариантов <span class="quot_up">«</span>';
 
-                if (showMore) {
-                    toggleBtn.textContent = "Меньше вариантов ⋀";
-                    options.forEach((opt) => opt.classList.add("dn"));
-                } else {
-                    toggleBtn.textContent = "Больше вариантов ⋁";
-                    options.forEach((opt) => opt.classList.remove("dn"));
-                }
-            }
+    if (showMore) {
+        toggleBtn.innerHTML = 'Больше вариантов <span class="quot_down">«</span>';
+        options.forEach((opt) => opt.classList.remove("dn"));
+    } else {
+        toggleBtn.innerHTML = 'Меньше вариантов <span class="quot_up">«</span>';
+        options.forEach((opt) => opt.classList.add("dn"));
+    }
+}
+
 
             const gotoCart = () => {
                 document.querySelector("#waiting").style.display = "flex";
