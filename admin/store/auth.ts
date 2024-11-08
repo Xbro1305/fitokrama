@@ -35,7 +35,9 @@ export const useAuthStore = defineStore('auth', () => {
 
     if (data.value) {
       if (data.value.error) {
-        console.log(data.value.error)
+        const { showError } = useNotificationStore()
+
+        showError(data.value.error)
       }
       else if (data.value.role) {
         const date = new Date()
