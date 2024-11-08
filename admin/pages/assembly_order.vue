@@ -208,6 +208,11 @@ const closeForm = () => {
 const closeFormConfirmation = () => {
   confirmationDialog.value = true
 }
+
+const barcodeScanned = (result: string) => {
+  barcode.value = result
+  addItem()
+}
 </script>
 
 <template>
@@ -261,7 +266,13 @@ const closeFormConfirmation = () => {
                   :error-messages="barcodeErrors"
                   @input="barcodeErrors = []"
                   @keydown.enter.prevent="addItem"
-                />
+                >
+                  <template #prepend>
+                    <qrcode-scan
+                      @code-scanned="barcodeScanned"
+                    />
+                  </template>
+                </v-text-field>
               </v-col>
 
               <v-col
