@@ -260,6 +260,7 @@ const closeFormConfirmation = () => {
                   variant="outlined"
                   :error-messages="barcodeErrors"
                   @input="barcodeErrors = []"
+                  @keydown.enter.prevent="addItem"
                 />
               </v-col>
 
