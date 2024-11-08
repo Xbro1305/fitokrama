@@ -12,7 +12,7 @@ const backendUrl = config.public.backendUrl
 const order = ref(null)
 const barcode = ref('')
 const qty = ref('1')
-const code = ref('')
+const code2 = ref('')
 const barcodeErrors = ref([])
 const qtyErrors = ref([])
 const dialog = ref(false)
@@ -62,6 +62,7 @@ const checkCode = async (code: string) => {
   if (data.value.order) {
     order.value = data.value.order
     dialog.value = true
+    code2.value = ''
 
     order.value.goods.forEach((good) => {
       if (Number.parseInt(good.qty_as) !== 0) {
@@ -127,9 +128,11 @@ const addItem = async () => {
     }
   })
 
+  barcode.value = ''
+
   if (completed) {
     showSuccess('Заказ собран!')
-    good.qty_as = Number.parseInt(good.qty_as) + Number.parseInt(qty.value)
+    // good.qty_as = Number.parseInt(good.qty_as) + Number.parseInt(qty.value)
     const audio = new Audio('/sounds/long_ok.mp3')
     audio.play()
 
@@ -193,11 +196,11 @@ const minusQty = () => {
 
 //
 const codeUpdated = () => {
-  if (code.value.split('/')[0] !== '002-' || !code.value.split('/')[1] || code.value.split('/')[1].length !== 6) {
+  if (code2.value.split('/')[0] !== '002-' || !code2.value.split('/')[1] || code2.value.split('/')[1].length !== 6) {
     return
   }
 
-  checkCode(code.value)
+  checkCode(code2.value)
 }
 
 const closeForm = () => {
@@ -224,7 +227,7 @@ const barcodeScanned = (result: string) => {
     <v-card-text>
       <!-- v-maska="'002-/######'" -->
       <v-text-field
-        v-model="code"
+        v-model="code2"
         label="Код"
         @input="codeUpdated"
       >
