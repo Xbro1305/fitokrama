@@ -90,7 +90,9 @@ const sleep = (ms: number) => new Promise((r: never) => setTimeout(r, ms))
 const addItem = async () => {
   let barcodeExists = false
   const bar = barcode.value
+  const amount = Number.parseInt(qty.value)
   barcode.value = ''
+  qty.value = 1
 
   if (!order.value) {
     return
@@ -109,19 +111,19 @@ const addItem = async () => {
       await audio.play()
     }
     catch (e) {
-     // Не нашли музыку
+      // Не нашли музыку
     }
     return
   }
 
-  if (Number.parseInt(qty.value) < 1) {
+  if (amount < 1) {
     qtyErrors.value = ['Количество меньше нуля!']
     return
   }
 
   order.value.goods.forEach((good) => {
     if (good.barcode === bar) {
-      if (Number.parseInt(good.qty_as) + Number.parseInt(qty.value) > Number.parseInt(good.qty)) {
+      if (Number.parseInt(good.qty_as) + amount > Number.parseInt(good.qty)) {
         qtyErrors.value = ['Лишний товар!']
         try {
           const audio = new Audio('/sounds/short_error.mp3')
@@ -132,7 +134,7 @@ const addItem = async () => {
         }
       }
       else {
-        good.qty_as = Number.parseInt(good.qty_as) + Number.parseInt(qty.value)
+        good.qty_as = Number.parseInt(good.qty_as) + amount
         try {
           const audio = new Audio('/sounds/short_ok.mp3')
           audio.play()
@@ -154,7 +156,6 @@ const addItem = async () => {
 
   if (completed) {
     showSuccess('Заказ собран!')
-    // good.qty_as = Number.parseInt(good.qty_as) + Number.parseInt(qty.value)
     try {
       const audio = new Audio('/sounds/long_ok.mp3')
       await audio.play()
