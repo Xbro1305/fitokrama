@@ -1504,25 +1504,6 @@
                         .catch((error) => console.error(error));
                 });
 
-            fetch("/cart_correct.php")
-                .then((res) => res.json())
-                .then((res) => {
-                    res.cart_count > 0
-                        ? (document.querySelector(".cart-float").style.display =
-                              res.cart_count != 0 ? "flex" : "none")
-                        : "";
-
-                    console.log(window.innerWidth);
-
-                    window.innerWidth < 475 && res.cart_count > 0
-                        ? (document.querySelector(
-                              "#addedToCartModal"
-                          ).style.display = "flex")
-                        : "";
-
-                    document.querySelector(".modalMobMsg").innerHTML =
-                        res.cart_count;
-                });
             function goToPage(page) {
                 window.location.href =
                     "https://fitokrama.by/profile_page.php?page=";
@@ -1637,7 +1618,7 @@
                     <section>
                         <h1>${i.name}</h1>
                         <div class="srchPrices">
-                            <p> 
+                            <p>
                                  ${i.price.split(".")[0]},
                                 <sup>
                                 ${i.price.split(".")[1]}
@@ -1658,6 +1639,25 @@
                     })
                     .catch((error) => console.error(error));
             }
+
+             fetch("/cart_correct.php")
+                .then((res) => res.json())
+                .then((res) => {
+                    res.cart_count > 0
+                        ? (document.querySelector(".cart-float").style.display =
+                              res.cart_count != 0 ? "flex" : "none")
+                        : "";
+
+
+                    window.innerWidth < 475 && res?.cart_count > 0
+                        ? (document?.querySelector(
+                              "#addedToCartModal"
+                          ).style.display = "flex")
+                        : "";
+
+                    document?.querySelector(".modalMobMsg")?.innerHTML =
+                        res?.cart_count;
+                }).catch((err)=>console.log(err))
 
             document
                 .querySelector(".mobsrch")
