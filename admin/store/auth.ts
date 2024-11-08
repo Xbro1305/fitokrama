@@ -15,7 +15,7 @@ export const useAuthStore = defineStore('auth', () => {
   const loginDate = ref(localStorage.getItem('loginDate'))
   const email = ref(localStorage.getItem('email'))
   const password = ref(localStorage.getItem('password'))
-  const role = ref(localStorage.getItem('role'))
+  const role = ref(localStorage.getItem('role') ?? '')
 
   const isAuthenticated = computed(() => {
     const date = new Date()
@@ -52,7 +52,12 @@ export const useAuthStore = defineStore('auth', () => {
         localStorage.setItem('password', password.value)
         localStorage.setItem('role', data.value.role)
 
-        navigateTo('/print')
+        if (window.navigator.userAgent === 'adminpage configuration') {
+          navigateTo('/print')
+        }
+        else {
+          navigateTo('/')
+        }
       }
     }
     else if (error) {
