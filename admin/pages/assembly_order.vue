@@ -89,21 +89,28 @@ const sleep = (ms: number) => new Promise((r: never) => setTimeout(r, ms))
 
 const addItem = async () => {
   let barcodeExists = false
+  const bar = barcode.value
+  barcode.value = ''
 
   if (!order.value) {
     return
   }
 
   order.value.goods.forEach((good) => {
-    if (good.barcode === barcode.value) {
+    if (good.barcode === bar) {
       barcodeExists = true
     }
   })
 
   if (!barcodeExists) {
     barcodeErrors.value = ['Лишний товар!']
-    const audio = new Audio('/sounds/short_error.mp3')
-    await audio.play()
+    try {
+      const audio = new Audio('/sounds/short_error.mp3')
+      await audio.play()
+    }
+    catch (e) {
+     // Не нашли музыку
+    }
     return
   }
 
@@ -113,13 +120,14 @@ const addItem = async () => {
   }
 
   order.value.goods.forEach((good) => {
-    if (good.barcode === barcode.value) {
+    if (good.barcode === bar) {
       if (Number.parseInt(good.qty_as) + Number.parseInt(qty.value) > Number.parseInt(good.qty)) {
         qtyErrors.value = ['Лишний товар!']
         try {
           const audio = new Audio('/sounds/short_error.mp3')
           audio.play()
-        } catch (e) {
+        }
+        catch (e) {
           // Не нашли музыку
         }
       }
@@ -144,15 +152,14 @@ const addItem = async () => {
     }
   })
 
-  barcode.value = ''
-
   if (completed) {
     showSuccess('Заказ собран!')
     // good.qty_as = Number.parseInt(good.qty_as) + Number.parseInt(qty.value)
     try {
       const audio = new Audio('/sounds/long_ok.mp3')
       await audio.play()
-    } catch (e) {
+    }
+    catch (e) {
       // Не нашли музыку
     }
 
