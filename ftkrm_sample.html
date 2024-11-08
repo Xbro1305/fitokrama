@@ -75,7 +75,7 @@
                 <input type="text" placeholder="Поиск" class="mobsrch" />
                 <img src="./logos/search_logo.png" alt="" />
                 <button onclick="toggleSearch()">
-                    <img src="./logos/крестик.svg" alt="" />
+                    <img src="./logos/close.svg" alt="" />
                 </button>
             </div>
             <div class="searchCont"></div>
@@ -84,11 +84,11 @@
             <button onclick="toggleMenu()"></button>
             <div class="menuContainer">
                 <button class="closeMenu" onclick="toggleMenu()">
-                    <img src="./logos/крестик.svg" alt="" />
+                    <img src="./logos/close.svg" alt="" />
                 </button>
                 <div class="menuTopSect">
                     <a href="/index_page.php">
-                        <img src="./logos/ЛОГО Фитокрама полный.png" alt="" />
+                        <img src="./logos/ftkrm_logo_full.png" alt="" />
                     </a>
                     <a
                         href="http://fitokrama.by/catalog_page.php"
@@ -122,7 +122,7 @@
                     </a>
 
                     <a href="tel:+375445975005">
-                        <img src="./logos/Трубка телефона белая 2.svg" alt="" />
+                        <img src="./logos/phone.svg" alt="" />
                     </a>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                     <a style="margin-right: 25px" href="tel:+375445975005"
                         ><img
                             style="height: 14px"
-                            src="./logos/Трубка телефона белая 2.svg"
+                            src="./logos/phone.svg"
                             alt=""
                         />
                         +375 44 597-50-05</a
@@ -228,15 +228,15 @@
         <header class="mobHeader">
             <div>
                 <img
-                    src="./logos/бургер белый 1 (1).svg"
+                    src="./logos/burgerMenu.svg"
                     alt=""
                     class="menuButton"
                     onclick="toggleMenu()"
                 />
                 <img
-                    src="./logos/search_logo.png.svg"
+                    src="./logos/search_logo.svg"
                     alt=""
-                    style="transform: scale(0.8);"
+                    style="transform: scale(0.8)"
                     onclick="toggleSearch()"
                 />
             </div>
@@ -687,7 +687,7 @@
             </div>
             <div class="modalMob">
                 <div>
-                    <img src="./logos/Корзина белая 1.svg" alt="" />
+                    <img src="./logos/cart_white.svg" alt="" />
                     <p class="modalMobMsg">1</p>
                 </div>
                 <a href="/cart_page.php">перейти к оформлению</a>
@@ -915,7 +915,8 @@
 						REPEAT_METHOD_2_END -->
                         <!-- METHOD_1_END -->
                         <button id="toggleOptionsBtn" onclick="toggleOptions()">
-                            Больше вариантов <p class="quot_down">«</p>
+                            Больше вариантов
+                            <p class="quot_down">«</p>
                         </button>
                     </section>
                 </div>
@@ -1328,7 +1329,7 @@
         </div>
         <div class="popup cookiespopup">
             <figure>
-                <img src="./logos/images.png" alt="" />
+                <img src="./logos/cookie.png" alt="" />
             </figure>
             <h1>Мы используем куки</h1>
             <p>
@@ -1346,7 +1347,7 @@
         </div>
         <div class="popup cookiesagainstpopup">
             <figure>
-                <img src="./logos/images.png" alt="" />
+                <img src="./logos/cookie.png" alt="" />
             </figure>
             <h1>Мы используем куки</h1>
             <p>
@@ -1558,21 +1559,24 @@
                     .finally(() => window.location.reload());
             }
 
-          function toggleOptions() {
-    const options = document.querySelectorAll(".hidden_option");
-    const toggleBtn = document.getElementById("toggleOptionsBtn");
+            function toggleOptions() {
+                const options = document.querySelectorAll(".hidden_option");
+                const toggleBtn = document.getElementById("toggleOptionsBtn");
 
-    const showMore = toggleBtn.innerHTML.trim() === 'Меньше вариантов <span class="quot_up">«</span>';
+                const showMore =
+                    toggleBtn.innerHTML.trim() ===
+                    'Меньше вариантов <span class="quot_up">«</span>';
 
-    if (showMore) {
-        toggleBtn.innerHTML = 'Больше вариантов <span class="quot_down">«</span>';
-        options.forEach((opt) => opt.classList.remove("dn"));
-    } else {
-        toggleBtn.innerHTML = 'Меньше вариантов <span class="quot_up">«</span>';
-        options.forEach((opt) => opt.classList.add("dn"));
-    }
-}
-
+                if (showMore) {
+                    toggleBtn.innerHTML =
+                        'Больше вариантов <span class="quot_down">«</span>';
+                    options.forEach((opt) => opt.classList.remove("dn"));
+                } else {
+                    toggleBtn.innerHTML =
+                        'Меньше вариантов <span class="quot_up">«</span>';
+                    options.forEach((opt) => opt.classList.add("dn"));
+                }
+            }
 
             const gotoCart = () => {
                 document.querySelector("#waiting").style.display = "flex";
@@ -1633,9 +1637,16 @@
                     <section>
                         <h1>${i.name}</h1>
                         <div class="srchPrices">
-                            <p>19.21 руб.</p>
+                            <p> 
+                                 ${i.price.split(".")[0]},
+                                <sup>
+                                ${i.price.split(".")[1]}
+                                </sup>руб.</p>
                             <p>
-                                ${i.price_old}
+                                ${i.price_old.split(".")[0]},
+                                <sup>
+                                ${i.price_old.split(".")[1]}
+                                </sup>
                                 <span></span>
                             </p>
                         </div>
