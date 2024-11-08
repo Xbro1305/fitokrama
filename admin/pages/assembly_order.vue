@@ -18,6 +18,11 @@ const qtyErrors = ref([])
 const dialog = ref(false)
 const confirmationDialog = ref(false)
 
+const successDialog = ref(false)
+const successMessage = ref('')
+const errorDialog = ref(false)
+const errorMessage = ref('')
+
 watch(barcodeErrors, () => {
   setTimeout(() => {
     if (barcodeErrors.value.length > 0) {
@@ -71,7 +76,9 @@ const checkCode = async (code: string) => {
     })
   }
   else if (data.value.error) {
-    showError(data.value.error)
+    // showError(data.value.error)
+    errorMessage.value = data.value.error
+    errorDialog.value = true
   }
   else if (error) {
     showError('Ошибка соединения с сервером')
@@ -109,13 +116,22 @@ const addItem = async () => {
     if (good.barcode === barcode.value) {
       if (Number.parseInt(good.qty_as) + Number.parseInt(qty.value) > Number.parseInt(good.qty)) {
         qtyErrors.value = ['Лишний товар!']
-        const audio = new Audio('/sounds/short_error.mp3')
-        audio.play()
+        try {
+          const audio = new Audio('/sounds/short_error.mp3')
+          audio.play()
+        } catch (e) {
+          // Не нашли музыку
+        }
       }
       else {
         good.qty_as = Number.parseInt(good.qty_as) + Number.parseInt(qty.value)
-        const audio = new Audio('/sounds/short_ok.mp3')
-        audio.play()
+        try {
+          const audio = new Audio('/sounds/short_ok.mp3')
+          audio.play()
+        }
+        catch (e) {
+          // Не нашли музыку
+        }
       }
     }
   })
@@ -133,8 +149,12 @@ const addItem = async () => {
   if (completed) {
     showSuccess('Заказ собран!')
     // good.qty_as = Number.parseInt(good.qty_as) + Number.parseInt(qty.value)
-    const audio = new Audio('/sounds/long_ok.mp3')
-    audio.play()
+    try {
+      const audio = new Audio('/sounds/long_ok.mp3')
+      await audio.play()
+    } catch (e) {
+      // Не нашли музыку
+    }
 
     const goods = []
 
@@ -156,12 +176,16 @@ const addItem = async () => {
     })
 
     if (data.value.message) {
-      showSuccess(data.value.message)
+      // showSuccess(data.value.message)
+      successMessage.value = data.value.message
+      successDialog.value = true
       closeForm()
     }
 
     if (data.value.error) {
-      showError(data.value.error)
+      // showError(data.value.error)
+      errorMessage.value = data.value.error
+      errorDialog.value = true
     }
 
     if (data.value.html_for_print) {
@@ -334,6 +358,50 @@ const barcodeScanned = (result: string) => {
               text="Закрыть"
               variant="text"
               @click="closeForm"
+            />
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        v-model="successDialog"
+        max-width="700"
+        persistent
+      >
+        <v-card
+          title="Успешно"
+          :text="successMessage"
+          color="success"
+        >
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn
+              text="Закрыть"
+              variant="text"
+              @click="successDialog = !successDialog"
+            />
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        v-model="errorDialog"
+        max-width="700"
+        persistent
+      >
+        <v-card
+          title="Ошибка"
+          :text="errorMessage"
+          color="error"
+        >
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn
+              text="Закрыть"
+              variant="text"
+              @click="errorDialog = !errorDialog"
             />
           </v-card-actions>
         </v-card>
