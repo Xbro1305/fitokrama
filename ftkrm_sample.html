@@ -186,7 +186,7 @@
                         <input
                             type="text"
                             placeholder="Поиск"
-                            class="search-input"
+                            class="searchInput"
                         />
                         <button class="search-button">
                             <img
@@ -1661,6 +1661,10 @@
 
             document
                 .querySelector(".mobsrch")
+                .addEventListener("input", searchMob);
+
+            document
+                .querySelector(".searchInput")
                 .addEventListener("input", searchMob);
         </script>
 
