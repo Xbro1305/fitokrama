@@ -22,7 +22,7 @@ items.push(
     props: {
       to: '/print',
       prependIcon: 'mdi-printer',
-      disabled: false, // window.navigator.userAgent !== 'adminpage configuration',
+      disabled: window.navigator.userAgent !== 'adminpage configuration',
     },
   },
 )
