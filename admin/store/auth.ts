@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useNotificationStore } from '~/store/notification'
+import {a} from "unplugin-vue-router/types-DBiN4-4c";
 
 interface UserPayloadInterface {
   mail: string
@@ -61,5 +62,15 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { isAuthenticated, login, role, email, password }
+  const logout = async () => {
+    loginDate.value = null
+    localStorage.removeItem('loginDate')
+    localStorage.removeItem('email')
+    localStorage.removeItem('password')
+    localStorage.removeItem('role')
+
+    await navigateTo('/login')
+  }
+
+  return { isAuthenticated, login, logout, role, email, password }
 })
