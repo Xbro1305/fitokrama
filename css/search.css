@@ -3,93 +3,6 @@
 }
 
 @media (max-width: 768px) {
-    .mobSearch {
-        display: flex;
-        z-index: 99999999 !important;
-        flex-direction: column;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        background: #fff;
-        transform: translateY(-100%);
-    }
-
-    .mobSearch.active {
-        transform: translateY(0%);
-    }
-
-    .searchCont {
-        display: flex;
-        flex-direction: column;
-        padding: 20px;
-        width: 100%;
-        background: #fff;
-        height: calc(100vh - 76px);
-        margin-top: 76px;
-    }
-
-    .searchCont > a {
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        border-bottom: 1px solid #acabab;
-    }
-
-    .searchCont a img {
-        max-width: 80px;
-        width: 80px;
-    }
-
-    .searchCont a section {
-        max-width: 230px;
-        width: calc(100% - 100px);
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        text-align: right;
-        gap: 5px;
-    }
-
-    .searchCont a section h1 {
-        width: 100%;
-        text-align: left;
-        font-size: 14px;
-        color: #000;
-    }
-
-    .srchPrices {
-        display: flex;
-        gap: 15px;
-        justify-content: flex-end;
-        align-items: flex-end;
-    }
-
-    .srchPrices p {
-        color: #618162;
-        font-weight: bold;
-        font-size: 24px;
-    }
-
-    .srchPrices > :last-child {
-        font-size: 18px;
-        color: #ff0000;
-        position: relative;
-        font-weight: 400;
-    }
-
-    .srchPrices span {
-        position: absolute;
-        top: 50%;
-        width: 100%;
-        height: 1px;
-        display: block;
-        transform: translateY(-50%);
-        background: #ff0000;
-    }
-
     .searchTop {
         padding: 20px;
         background: #618162;
@@ -143,4 +56,97 @@
         left: calc(100% - 100px);
         position: absolute;
     }
+}
+
+.mobSearch {
+    display: flex;
+    z-index: 99999999 !important;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    transform: translateY(-100%);
+}
+
+.mobSearch.active {
+    transform: translateY(0%);
+}
+
+.searchCont {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 100%;
+    background: #fff;
+    height: calc(100vh - 76px);
+    margin-top: 76px;
+}
+
+.searchCont > a {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid #acabab;
+}
+
+.searchCont a img {
+    max-width: 80px;
+    width: 80px;
+}
+
+.searchCont a section {
+    max-width: 230px;
+    width: calc(100% - 100px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 5px;
+}
+
+.searchCont a section h1 {
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+    color: #000;
+}
+
+.srchPrices {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.srchPrices p {
+    color: #618162;
+    font-weight: bold;
+    font-size: 24px;
+    display: flex;
+    gap: 3px;
+}
+
+.srchPrices sup {
+    color: inherit;
+}
+
+.srchPrices > :last-child {
+    font-size: 18px;
+    color: #ff0000;
+    position: relative;
+    font-weight: 400;
+}
+
+.srchPrices span {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    display: block;
+    transform: translateY(-50%);
+    background: #ff0000;
 }
