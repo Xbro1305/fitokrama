@@ -222,9 +222,9 @@ const barcodeScanned = (result: string) => {
     </v-card-title>
 
     <v-card-text>
+      <!-- v-maska="'002-/######'" -->
       <v-text-field
         v-model="code"
-        v-maska="'002-/######'"
         label="Код"
         @input="codeUpdated"
       >
