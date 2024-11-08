@@ -698,7 +698,6 @@
         <!-- SIMILAR_GOODS_END -->
 
         <!-- CART_BEGIN -->
-        <link rel="stylesheet" href="./css/product-in-cart.css" />
         <link rel="stylesheet" href="./css/cart.css" />
         <link rel="stylesheet" href="./css/cart_delivery.css" />
         <link rel="stylesheet" href="./css/cart_payment.css" />
@@ -1649,11 +1648,11 @@
                         : "";
 
 
-                    window.innerWidth < 475 && res?.cart_count > 0
-                        ? (document?.querySelector(
+                   if( window.innerWidth < 475 && res?.cart_count > 0)
+                    document?.querySelector(
                               "#addedToCartModal"
-                          ).style.display = "flex")
-                        : "";
+                          ).style.display = "flex"
+
 
                     document?.querySelector(".modalMobMsg")?.innerHTML =
                         res?.cart_count;
