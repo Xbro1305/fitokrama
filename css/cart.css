@@ -440,7 +440,7 @@
 
     .cart-item-info {
         display: grid;
-        grid-template-columns: 1fr 100px !important;
+        grid-template-columns: 1fr 70px !important;
     }
 }
 
@@ -493,7 +493,8 @@
     .new-price,
     .total-price {
         font-size: 16px !important;
-        margin-left: 0;
+        margin-left: 0 !important;
+        margin-top: auto !important;
     }
 
     .new-price sup,
@@ -510,7 +511,11 @@
         font-size: 14px !important;
     }
 
-    .cart-content .product-image{
+    .cart-content .product-image {
         max-width: 50px;
+    }
+
+    .cart-item-info > * {
+        align-items: flex-end;
     }
 }
