@@ -5,7 +5,8 @@
 .delivery_option {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    position: relative;
     justify-content: flex-start;
     gap: 7px;
     padding: 10px;
@@ -374,12 +375,12 @@
     }
 
     .cart-item-info {
-        display: grid;
+        display: grid !important;
         grid-template-columns: repeat(2, 1fr);
     }
 
     .old-price {
-        display: none;
+        display: none !important;
     }
 
     .total-price {
@@ -457,6 +458,9 @@
     border-radius: 5px;
     padding: 1px 3px;
     font-weight: 600;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
 }
 
 .delivery_checkout {
