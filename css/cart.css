@@ -486,7 +486,7 @@
         padding: 2px 10px;
     }
 
-    .delivery-option {
+    .delivery_option {
         padding-bottom: 40px !important;
     }
 
@@ -498,9 +498,12 @@
 
     .delivery-price {
         display: flex;
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
     }
 
-    .delivery-price sup{
+    .delivery-price sup {
         padding-top: 3px;
     }
 }
