@@ -444,11 +444,16 @@
     }
 
     .quantity-selector {
-        margin: 0;
+        margin-left: 0 !important;
+    }
+
+    .new-price {
+        margin-left: 0 !important;
     }
 
     .cart-content .product-image {
         max-width: 50px;
+        margin-right: 0 !important;
     }
 
     .total-price sup {
