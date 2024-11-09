@@ -114,6 +114,10 @@
     max-height: calc(100vh - 200px);
 }
 
+.search-results>:last-child{
+    border-bottom: none;
+}
+
 .search-results > a {
     padding: 10px;
     display: flex;
