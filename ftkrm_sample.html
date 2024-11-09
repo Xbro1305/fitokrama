@@ -884,7 +884,10 @@
 						<div class="toggleContent_[prefix] toggle_[prefix]">
 						REPEAT_METHOD_1_END -->
 
-                        <div class="[option_class]" style="padding-bottom: [pb];">
+                        <div
+                            class="[option_class]"
+                            style="padding-bottom: [pb]"
+                        >
                             <img
                                 src="../logos/[button_pic]"
                                 alt="Выбор"
@@ -1531,8 +1534,10 @@
                         .catch((error) => console.error(error));
                 });
             SI.addEventListener("blur", () => {
-                document.querySelector(".search-results").style.display =
-                    "none";
+                setTimeout(() => {
+                    document.querySelector(".search-results").style.display =
+                        "none";
+                }, 100);
             });
 
             function goToPage(page) {
