@@ -501,6 +501,18 @@
         font-size: 14px !important;
     }
 
+    .total-price sup {
+        padding-bottom: 4px;
+    }
+
+    .product-prices{
+        margin-top: auto;
+    }
+
+    .new-price sup {
+        padding-top: 1.5px;
+    }
+
     .cart-content .quantity-selector {
         transform: scale(0.8);
         margin-left: -18px;
