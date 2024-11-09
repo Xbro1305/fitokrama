@@ -53,14 +53,16 @@
 .similar-products .product-prices {
     display: flex;
 
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 10px;
     margin-top: 10px;
     flex: 1;
 }
 
-.similar-products .old-pr{
+.similar-products .old-pr {
     margin: 0;
 }
 
