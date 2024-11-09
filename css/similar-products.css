@@ -50,12 +50,12 @@
     text-align: center;
 }
 
-.product-prices {
+.similar-products .product-prices {
     display: flex;
 
-    flex-direction: row-reverse;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-top: 10px;
     flex: 1;
 }
@@ -94,7 +94,6 @@
     align-items: center;
 
     margin-bottom: 10px;
-
 }
 
 .similar-products .quantity-selector {
