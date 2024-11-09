@@ -109,8 +109,7 @@
     padding: 20px;
     width: 100%;
     background: #fff;
-    height: calc(100vh - 76px);
-    margin-top: 76px;
+    max-height: calc(100vh - 200px);
 }
 
 .search-results > a {
