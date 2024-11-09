@@ -509,4 +509,8 @@
     .cart-content .currency {
         font-size: 14px !important;
     }
+
+    .cart-content .product-image{
+        max-width: 50px;
+    }
 }
