@@ -3,12 +3,8 @@
 * {
     box-sizing: border-box;
     font-family: "PT Sans", sans-serif !important;
-
-    /* color :R55 G78 B66 */
-
-    color: rgb(55, 78, 66);
-
     margin: 0;
+    color: #374E42;
     padding: 0;
 }
 

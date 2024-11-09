@@ -11,14 +11,19 @@ const config = useRuntimeConfig()
 const backendUrl = config.public.backendUrl
 
 const isUseragentCorrect = ref(false)
+const pausePrint = ref(false)
 
 let intervalId
-const forPrint = ref([])
+// const forPrint = ref([])
 
 if (window.navigator.userAgent === 'adminpage configuration') {
   isUseragentCorrect.value = true
 
   intervalId = setInterval(() => {
+    if (pausePrint.value) {
+      return
+    }
+
     const { data, error } = useFetch(`${backendUrl}/order_print_for_assembly.php`, {
       method: 'POST',
       body: {
@@ -92,6 +97,11 @@ const printClick = () => {
           indeterminate
         />
       </v-alert>
+
+      <v-checkbox
+        v-model="pausePrint"
+        label="Приостановить печать"
+      />
 
       <!--
       <v-btn

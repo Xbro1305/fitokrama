@@ -20,10 +20,6 @@ const loading = ref(false)
 
 const handleSubmit = async () => {
   await login({ mail: form.email, pass: form.password })
-
-  if (isAuthenticated) {
-    navigateTo('/print')
-  }
 }
 </script>
 

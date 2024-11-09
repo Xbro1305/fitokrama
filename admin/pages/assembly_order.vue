@@ -12,11 +12,16 @@ const backendUrl = config.public.backendUrl
 const order = ref(null)
 const barcode = ref('')
 const qty = ref('1')
-const code = ref('')
+const code2 = ref('')
 const barcodeErrors = ref([])
 const qtyErrors = ref([])
 const dialog = ref(false)
 const confirmationDialog = ref(false)
+
+const successDialog = ref(false)
+const successMessage = ref('')
+const errorDialog = ref(false)
+const errorMessage = ref('')
 
 watch(barcodeErrors, () => {
   setTimeout(() => {
@@ -62,6 +67,7 @@ const checkCode = async (code: string) => {
   if (data.value.order) {
     order.value = data.value.order
     dialog.value = true
+    code2.value = ''
 
     order.value.goods.forEach((good) => {
       if (Number.parseInt(good.qty_as) !== 0) {
@@ -70,7 +76,9 @@ const checkCode = async (code: string) => {
     })
   }
   else if (data.value.error) {
-    showError(data.value.error)
+    // showError(data.value.error)
+    errorMessage.value = data.value.error
+    errorDialog.value = true
   }
   else if (error) {
     showError('Ошибка соединения с сервером')
@@ -81,40 +89,59 @@ const sleep = (ms: number) => new Promise((r: never) => setTimeout(r, ms))
 
 const addItem = async () => {
   let barcodeExists = false
+  const bar = barcode.value
+  const amount = Number.parseInt(qty.value)
+  barcode.value = ''
+  qty.value = 1
 
   if (!order.value) {
     return
   }
 
   order.value.goods.forEach((good) => {
-    if (good.barcode === barcode.value) {
+    if (good.barcode === bar) {
       barcodeExists = true
     }
   })
 
   if (!barcodeExists) {
     barcodeErrors.value = ['Лишний товар!']
-    const audio = new Audio('/sounds/short_error.mp3')
-    await audio.play()
+    try {
+      const audio = new Audio('/sounds/short_error.mp3')
+      await audio.play()
+    }
+    catch (e) {
+      // Не нашли музыку
+    }
     return
   }
 
-  if (Number.parseInt(qty.value) < 1) {
+  if (amount < 1) {
     qtyErrors.value = ['Количество меньше нуля!']
     return
   }
 
   order.value.goods.forEach((good) => {
-    if (good.barcode === barcode.value) {
-      if (Number.parseInt(good.qty_as) + Number.parseInt(qty.value) > Number.parseInt(good.qty)) {
+    if (good.barcode === bar) {
+      if (Number.parseInt(good.qty_as) + amount > Number.parseInt(good.qty)) {
         qtyErrors.value = ['Лишний товар!']
-        const audio = new Audio('/sounds/short_error.mp3')
-        audio.play()
+        try {
+          const audio = new Audio('/sounds/short_error.mp3')
+          audio.play()
+        }
+        catch (e) {
+          // Не нашли музыку
+        }
       }
       else {
-        good.qty_as = Number.parseInt(good.qty_as) + Number.parseInt(qty.value)
-        const audio = new Audio('/sounds/short_ok.mp3')
-        audio.play()
+        good.qty_as = Number.parseInt(good.qty_as) + amount
+        try {
+          const audio = new Audio('/sounds/short_ok.mp3')
+          audio.play()
+        }
+        catch (e) {
+          // Не нашли музыку
+        }
       }
     }
   })
@@ -129,9 +156,13 @@ const addItem = async () => {
 
   if (completed) {
     showSuccess('Заказ собран!')
-    good.qty_as = Number.parseInt(good.qty_as) + Number.parseInt(qty.value)
-    const audio = new Audio('/sounds/long_ok.mp3')
-    audio.play()
+    try {
+      const audio = new Audio('/sounds/long_ok.mp3')
+      await audio.play()
+    }
+    catch (e) {
+      // Не нашли музыку
+    }
 
     const goods = []
 
@@ -153,12 +184,16 @@ const addItem = async () => {
     })
 
     if (data.value.message) {
-      showSuccess(data.value.message)
+      // showSuccess(data.value.message)
+      successMessage.value = data.value.message
+      successDialog.value = true
       closeForm()
     }
 
     if (data.value.error) {
-      showError(data.value.error)
+      // showError(data.value.error)
+      errorMessage.value = data.value.error
+      errorDialog.value = true
     }
 
     if (data.value.html_for_print) {
@@ -193,11 +228,11 @@ const minusQty = () => {
 
 //
 const codeUpdated = () => {
-  if (code.value.split('/')[0] !== '002-' || !code.value.split('/')[1] || code.value.split('/')[1].length !== 6) {
+  if (code2.value.split('/')[0] !== '002-' || !code2.value.split('/')[1] || code2.value.split('/')[1].length !== 6) {
     return
   }
 
-  checkCode(code.value)
+  checkCode(code2.value)
 }
 
 const closeForm = () => {
@@ -208,6 +243,11 @@ const closeForm = () => {
 const closeFormConfirmation = () => {
   confirmationDialog.value = true
 }
+
+const barcodeScanned = (result: string) => {
+  barcode.value = result
+  addItem()
+}
 </script>
 
 <template>
@@ -217,9 +257,9 @@ const closeFormConfirmation = () => {
     </v-card-title>
 
     <v-card-text>
+      <!-- v-maska="'002-/######'" -->
       <v-text-field
-        v-model="code"
-        v-maska="'002-/######'"
+        v-model="code2"
         label="Код"
         @input="codeUpdated"
       >
@@ -260,7 +300,14 @@ const closeFormConfirmation = () => {
                   variant="outlined"
                   :error-messages="barcodeErrors"
                   @input="barcodeErrors = []"
-                />
+                  @keydown.enter.prevent="addItem"
+                >
+                  <template #prepend>
+                    <qrcode-scan
+                      @code-scanned="barcodeScanned"
+                    />
+                  </template>
+                </v-text-field>
               </v-col>
 
               <v-col
@@ -319,6 +366,50 @@ const closeFormConfirmation = () => {
               text="Закрыть"
               variant="text"
               @click="closeForm"
+            />
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        v-model="successDialog"
+        max-width="700"
+        persistent
+      >
+        <v-card
+          title="Успешно"
+          :text="successMessage"
+          color="success"
+        >
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn
+              text="Закрыть"
+              variant="text"
+              @click="successDialog = !successDialog"
+            />
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        v-model="errorDialog"
+        max-width="700"
+        persistent
+      >
+        <v-card
+          title="Ошибка"
+          :text="errorMessage"
+          color="error"
+        >
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn
+              text="Закрыть"
+              variant="text"
+              @click="errorDialog = !errorDialog"
             />
           </v-card-actions>
         </v-card>

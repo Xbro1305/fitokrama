@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useNotificationStore } from '~/store/notification'
+import {a} from "unplugin-vue-router/types-DBiN4-4c";
 
 interface UserPayloadInterface {
   mail: string
@@ -14,7 +15,7 @@ export const useAuthStore = defineStore('auth', () => {
   const loginDate = ref(localStorage.getItem('loginDate'))
   const email = ref(localStorage.getItem('email'))
   const password = ref(localStorage.getItem('password'))
-  const role = ref(localStorage.getItem('role'))
+  const role = ref(localStorage.getItem('role') ?? '')
 
   const isAuthenticated = computed(() => {
     const date = new Date()
@@ -35,7 +36,9 @@ export const useAuthStore = defineStore('auth', () => {
 
     if (data.value) {
       if (data.value.error) {
-        console.log(data.value.error)
+        const { showError } = useNotificationStore()
+
+        showError(data.value.error)
       }
       else if (data.value.role) {
         const date = new Date()
@@ -49,7 +52,12 @@ export const useAuthStore = defineStore('auth', () => {
         localStorage.setItem('password', password.value)
         localStorage.setItem('role', data.value.role)
 
-        navigateTo('/print')
+        if (window.navigator.userAgent === 'adminpage configuration') {
+          navigateTo('/print')
+        }
+        else {
+          navigateTo('/')
+        }
       }
     }
     else if (error) {
@@ -59,5 +67,15 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { isAuthenticated, login, role, email, password }
+  const logout = async () => {
+    loginDate.value = null
+    localStorage.removeItem('loginDate')
+    localStorage.removeItem('email')
+    localStorage.removeItem('password')
+    localStorage.removeItem('role')
+
+    await navigateTo('/login')
+  }
+
+  return { isAuthenticated, login, logout, role, email, password }
 })

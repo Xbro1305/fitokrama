@@ -3,15 +3,29 @@ import { useAuthStore } from '~/store/auth'
 
 const { role } = useAuthStore()
 
-const items = [
+interface Props {
+  to: string
+  prependIcon: string
+  disabled: boolean
+}
+
+interface Item {
+  title: string
+  props: Props
+}
+
+const items = [] as Array<Item>
+
+items.push(
   {
     title: 'Автопечать',
     props: {
       to: '/print',
       prependIcon: 'mdi-printer',
+      disabled: window.navigator.userAgent !== 'adminpage configuration',
     },
   },
-]
+)
 
 if (role) {
   items.push({
@@ -19,6 +33,7 @@ if (role) {
     props: {
       to: '/',
       prependIcon: 'mdi-archive',
+      disabled: window.navigator.userAgent === 'adminpage configuration',
     },
   })
 }
@@ -29,6 +44,7 @@ if (['main', 'store'].includes(role)) {
     props: {
       to: '/assembly_order',
       prependIcon: 'mdi-archive-arrow-down',
+      disabled: window.navigator.userAgent === 'adminpage configuration',
     },
   })
 
@@ -37,6 +53,7 @@ if (['main', 'store'].includes(role)) {
     props: {
       to: '/assembly_post',
       prependIcon: 'mdi-archive-arrow-down',
+      disabled: window.navigator.userAgent === 'adminpage configuration',
     },
   })
 }
@@ -47,6 +64,7 @@ if (['main', 'postman'].includes(role)) {
     props: {
       to: '/send_post',
       prependIcon: 'mdi-archive-arrow-up',
+      disabled: window.navigator.userAgent === 'adminpage configuration',
     },
   })
 }
@@ -57,6 +75,7 @@ if (['main', 'buyer', 'manager'].includes(role)) {
     props: {
       to: '/products',
       prependIcon: 'mdi-archive',
+      disabled: window.navigator.userAgent === 'adminpage configuration',
     },
   })
 }

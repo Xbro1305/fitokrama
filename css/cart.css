@@ -124,6 +124,11 @@
     position: relative;
     margin-right: 10px;
     width: 40px;
+    display: flex;
+}
+
+.old-price sup {
+    padding-top: 2px;
 }
 
 .old-price::before {
@@ -134,7 +139,6 @@
     width: 100%;
     height: 1px;
     background-color: red;
-    transform: rotate(-45deg);
 }
 
 .new-price {
@@ -143,10 +147,19 @@
     font-weight: bold;
     min-width: 90px;
     max-width: 130px;
+    display: flex;
+    gap: 3px;
 }
 
 .new-price .currency {
     font-size: 18px !important;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 2px;
+}
+
+.new-price sup {
+    padding-top: 2.5px;
 }
 
 .total-price .currency {
@@ -178,6 +191,7 @@
     font-size: 16px;
     margin: 0 5px;
     -moz-appearance: textfield;
+    height: 30px;
 }
 
 .quantity-input::-webkit-outer-spin-button,
@@ -193,6 +207,10 @@
     width: 130px;
     display: flex;
     justify-content: flex-end;
+}
+
+.total-price sup {
+    padding-top: 1.5px;
 }
 
 .cart-summary {
