@@ -164,7 +164,7 @@
     margin: 0 auto; /* Центровка поисковой строки */
 }
 
-.search-input {
+.SI {
     width: calc(100% - 40px);
 
     padding: 10px;
@@ -182,7 +182,7 @@
     outline: none; /* Убираем внутреннюю рамку */
 }
 
-.search-input:focus {
+.SI:focus {
     outline: none; /* Убираем внутреннюю рамку при фокусе */
 }
 

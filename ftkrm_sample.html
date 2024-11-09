@@ -186,7 +186,7 @@
                         <input
                             type="text"
                             placeholder="Поиск"
-                            class="search-input"
+                            class="SI"
                         />
                         <button class="search-button">
                             <img
@@ -1486,11 +1486,11 @@
                     }
                 });
 
-            const SI = document.querySelector(".search-input");
+            const SI = document.querySelector(".SI");
             if (SI)
                 SI.addEventListener("input", () => {
                     let searchValue =
-                        document.querySelector(".search-input").value;
+                        document.querySelector(".SI").value;
 
                     fetch(
                         "https://fitokrama.by/search.php?search=" + searchValue
