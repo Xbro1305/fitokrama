@@ -1662,11 +1662,8 @@
                               res.cart_count != 0 ? "flex" : "none")
                         : "";
 
-
-                   if( window.innerWidth < 475 && res?.cart_count > 0)
-                    document?.querySelector(
-                              "#addedToCartModal"
-                          ).style.display = "flex"
+            if (window.innerWidth < 475 && res?.cart_count > 0)
+                document.querySelector("#addedToCartModal").style.display = "flex";
 
 
                     document?.querySelector(".modalMobMsg")?.innerHTML =
