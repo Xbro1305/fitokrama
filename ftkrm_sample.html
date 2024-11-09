@@ -196,7 +196,7 @@
                             />
                         </button>
                     </section>
-                    <div class="search-results"></div>
+                    <div class="search-results" style="display: flex"></div>
                 </div>
 
                 <div class="account-buttons">
@@ -1485,38 +1485,50 @@
 
             const SI = document.querySelector(".search-input");
             if (SI)
-                SI.addEventListener("input", () => {
-                    let searchValue =
-                        document.querySelector(".search-input").value;
+                SI.addEventListener("input", () =>  {
+                let searchValue = document.querySelector(".search-input").value;
 
-                    if (searchValue.length < 3) {
-                        document.querySelector(
-                            ".search-results"
-                        ).style.display = "none";
-                        return;
-                    }
+                fetch("https://fitokrama.by/search.php?search=" + searchValue)
+                    .then((response) => response.json())
+                    .then((res) => {
+                        document.querySelector(".search-results").style.display="flex"
+                        document.querySelector(".search-results").innerHTML =
+                            JSON.stringify(res) != "[]"
+                                ? res
+                                      ?.map((i) => {
+                                          return `
+                                 <a href="${i.art}">
+                    <img src="./goods_pics/${i.pic_name}" alt="" />
+                    <section>
+                        <h1>${i.name}</h1>
+                        <div class="srchPrices">
+                            <p>
+                                 ${i.price.split(".")[0]},
+                                <sup>
+                                ${i.price.split(".")[1]}
+                                </sup>руб.</p>
+                            <p>
+                                ${i.price_old.split(".")[0]},
+                                <sup>
+                                ${i.price_old.split(".")[1]}
+                                </sup>
+                                <span></span>
+                            </p>
+                        </div>
+                    </section>
+                </a>`;
+                                      })
+                                      .join(" ")
+                                : "Ничего не найдено";
+                    })
+                    .catch((error) => console.error(error));
+            }
 
-                    fetch(
-                        "https://fitokrama.by/search.php?search=" + searchValue
-                    )
-                        .then((response) => response.json())
-                        .then((data) => {
-                            let resultsContainer =
-                                document.querySelector(".search-results");
-                            resultsContainer.innerHTML = "";
-                            data.forEach((item) => {
-                                let resultItem = document.createElement("div");
-                                resultItem.className = "search-result-item";
-                                resultItem.textContent = item.name;
-                                resultItem.onclick = () => {
-                                    window.location.href = item.art;
-                                };
-                                resultsContainer.appendChild(resultItem);
-                            });
-                            resultsContainer.style.display = "block";
-                        })
-                        .catch((error) => console.error(error));
-                });
+            );
+            SI.addEventListener("blur",()=>{
+                        document.querySelector(".search-results").style.display="none"
+
+            })
 
             function goToPage(page) {
                 window.location.href =
