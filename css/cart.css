@@ -503,7 +503,7 @@
 
     .cart-content .quantity-selector {
         transform: scale(0.8);
-        margin-left: -20px;
+        margin-left: -18px;
     }
 
     .cart-content .currency {
