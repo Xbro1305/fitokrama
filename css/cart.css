@@ -376,7 +376,7 @@
 
     .cart-item-info {
         display: grid !important;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, auto);
     }
 
     .old-price {
@@ -483,4 +483,24 @@
 .but_option p {
     transform: rotate(-90deg);
     width: fit-content;
+}
+
+@media (max-width: 600px) {
+    .product-name {
+        font-size: 12px;
+    }
+
+    .new-price,
+    .total-price {
+        font-size: 16px;
+    }
+
+    .new-price sup,
+    .total-price sup {
+        font-size: 12px;
+    }
+
+    .cart-content .currency{
+        font-size: 14px;
+    }
 }
