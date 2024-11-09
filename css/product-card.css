@@ -410,7 +410,7 @@
 .old-pr {
     display: flex;
     color: #ff0000;
-    font-size: 16px;
+    font-size: 24px;
     position: relative;
 }
 
@@ -418,7 +418,7 @@
     color: #ff0000;
 }
 
-.new-pr sup {
+.old-pr sup {
     padding-top: 3px;
     margin-right: 2px;
     font-size: 16px;
