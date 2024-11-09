@@ -124,6 +124,11 @@
     position: relative;
     margin-right: 10px;
     width: 40px;
+    display: flex;
+}
+
+.old-price sup {
+    padding-top: 2px;
 }
 
 .old-price::before {
@@ -142,10 +147,19 @@
     font-weight: bold;
     min-width: 90px;
     max-width: 130px;
+    display: flex;
+    gap: 3px;
 }
 
 .new-price .currency {
     font-size: 18px !important;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 2px;
+}
+
+.new-price sup {
+    padding-top: 2.5px;
 }
 
 .total-price .currency {
