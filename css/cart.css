@@ -460,6 +460,10 @@
         padding-bottom: 4px;
     }
 
+    .total-price {
+        margin-left: 0;
+    }
+
     .new-price sup {
         padding-top: 1.5px;
     }
@@ -487,7 +491,8 @@
         margin-top: -2px;
     }
 
-    .PC,.EC{
+    .PC,
+    .EC {
         width: 19px !important;
         height: 19px !important;
     }
