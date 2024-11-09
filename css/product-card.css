@@ -71,23 +71,16 @@
 
 .product-description {
     font-size: 14px;
-
-    color: #666;
-
+    color: #374e42;
     margin: 0 0 20px;
-
     text-align: left !important;
-
     width: 100%;
 }
 
 .product-prices {
     display: flex;
-
     align-items: center;
-
     margin-bottom: 20px;
-
     flex-wrap: wrap;
 }
 
