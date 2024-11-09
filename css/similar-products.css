@@ -60,6 +60,10 @@
     flex: 1;
 }
 
+.similar-products .old-pr{
+    margin: 0;
+}
+
 .similar-products .old-price {
     font-size: 24px;
 
