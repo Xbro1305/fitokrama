@@ -493,15 +493,17 @@
     .new-price,
     .total-price {
         font-size: 16px !important;
-    }
-
-    .new-price {
-        margin: 0 !important;
+        margin-left: 0;
     }
 
     .new-price sup,
     .total-price sup {
         font-size: 12px !important;
+    }
+
+    .cart-content .quantity-selector {
+        transform: scale(0.8);
+        margin-left: -20px;
     }
 
     .cart-content .currency {
