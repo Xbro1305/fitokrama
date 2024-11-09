@@ -43,7 +43,7 @@
         ), 0
     ) AS qty_fr
 FROM goods g
-WHERE g.goods_groups_id IS NOT NULL;
+WHERE g.goods_groups_id IS NOT NULL AND price>0;
 ";
 	/*if ($cat!=NULL) $que = $que . "WHERE cat='$cat'";
 	if ($subcat!=NULL) $que = $que . "WHERE subcat='$subcat'";*/
@@ -68,6 +68,14 @@ WHERE g.goods_groups_id IS NOT NULL;
 		$similargood_1 = str_replace('[goodspics]', $sgood['pic_name'], $similargood_1);
 		$similargood_1 = str_replace('[goodoldprice]', $sgood['price_old'], $similargood_1);
 		$similargood_1 = str_replace('[goodactprice]', $sgood['price'], $similargood_1);
+		
+		$similargood_1 = str_replace('[good_old_price_rub]', f2_rub($sgood['price_old']), $similargood_1);
+		$similargood_1 = str_replace('[good_old_price_kop]', f2_kop($sgood['price_old']), $similargood_1);
+		$similargood_1 = str_replace('[good_price_rub]', f2_rub($sgood['price']), $similargood_1);
+		$similargood_1 = str_replace('[good_price_kop]', f2_kop($sgood['price']), $similargood_1);
+		
+		
+		
 		if ($sgood['qty']-$sgood['qty_fr']<3) $similargood_1 = str_replace('[low_qty]', '', $similargood_1); 
 										else  $similargood_1 = str_replace('[low_qty]', '', $similargood_1); 
 	}
