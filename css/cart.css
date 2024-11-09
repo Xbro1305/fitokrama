@@ -487,19 +487,19 @@
 
 @media (max-width: 600px) {
     .product-name {
-        font-size: 12px !important;
+        font-size: 14px !important;
     }
 
     .new-price,
     .total-price {
-        font-size: 16px !important;
+        font-size: 18px !important;
         margin-left: 0 !important;
         margin-top: auto !important;
     }
 
     .new-price sup,
     .total-price sup {
-        font-size: 12px !important;
+        font-size: 14px !important;
     }
 
     .cart-content .quantity-selector {
@@ -508,7 +508,7 @@
     }
 
     .cart-content .currency {
-        font-size: 14px !important;
+        font-size: 16px !important;
     }
 
     .cart-content .product-image {
