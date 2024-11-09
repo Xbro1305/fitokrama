@@ -1485,18 +1485,25 @@
 
             const SI = document.querySelector(".search-input");
             if (SI)
-                SI.addEventListener("input", () =>  {
-                let searchValue = document.querySelector(".search-input").value;
+                SI.addEventListener("input", () => {
+                    let searchValue =
+                        document.querySelector(".search-input").value;
 
-                fetch("https://fitokrama.by/search.php?search=" + searchValue)
-                    .then((response) => response.json())
-                    .then((res) => {
-                        document.querySelector(".search-results").style.display="flex"
-                        document.querySelector(".search-results").innerHTML =
-                            JSON.stringify(res) != "[]"
-                                ? res
-                                      ?.map((i) => {
-                                          return `
+                    fetch(
+                        "https://fitokrama.by/search.php?search=" + searchValue
+                    )
+                        .then((response) => response.json())
+                        .then((res) => {
+                            document.querySelector(
+                                ".search-results"
+                            ).style.display = "flex";
+                            document.querySelector(
+                                ".search-results"
+                            ).innerHTML =
+                                JSON.stringify(res) != "[]"
+                                    ? res
+                                          ?.map((i) => {
+                                              return `
                                  <a href="${i.art}">
                     <img src="./goods_pics/${i.pic_name}" alt="" />
                     <section>
@@ -1517,18 +1524,16 @@
                         </div>
                     </section>
                 </a>`;
-                                      })
-                                      .join(" ")
-                                : "Ничего не найдено";
-                    })
-                    .catch((error) => console.error(error));
-            }
-
-            );
-            SI.addEventListener("blur",()=>{
-                        document.querySelector(".search-results").style.display="none"
-
-            })
+                                          })
+                                          .join(" ")
+                                    : "Ничего не найдено";
+                        })
+                        .catch((error) => console.error(error));
+                });
+            SI.addEventListener("blur", () => {
+                document.querySelector(".search-results").style.display =
+                    "none";
+            });
 
             function goToPage(page) {
                 window.location.href =
@@ -1666,7 +1671,7 @@
                     .catch((error) => console.error(error));
             }
 
-             fetch("/cart_correct.php")
+            fetch("/cart_correct.php")
                 .then((res) => res.json())
                 .then((res) => {
                     res.cart_count > 0
@@ -1674,13 +1679,15 @@
                               res.cart_count != 0 ? "flex" : "none")
                         : "";
 
-            if (window.innerWidth < 475 && res?.cart_count > 0)
-                document.querySelector("#addedToCartModal").style.display = "flex";
+                    if (window.innerWidth < 475 && res?.cart_count > 0)
+                        document.querySelector(
+                            "#addedToCartModal"
+                        ).style.display = "flex";
 
-
-                    document.querySelector(".modalMobMsg")?.innerHTML =
+                    document.querySelector(".modalMobMsg").innerHTML =
                         res?.cart_count;
-                }).catch((err)=>console.log(err))
+                })
+                .catch((err) => console.log(err));
 
             document
                 .querySelector(".mobsrch")
