@@ -209,6 +209,10 @@
     justify-content: flex-end;
 }
 
+.total-price sup {
+    padding-top: 1.5px;
+}
+
 .cart-summary {
     display: flex;
     justify-content: flex-end;
