@@ -42,9 +42,12 @@ if (window.navigator.userAgent === 'adminpage configuration') {
         sleep(200).then(() => {
           printWindow?.document.close()
           printWindow?.focus()
-          printWindow?.print()
+          // printWindow?.print()
         })
       }
+    }
+    else if (data && data.value && data.value.massage) {
+      // Это ок, нет ничего для печати
     }
     else if (error) {
       showError('Ошибка соединения с сервером')
