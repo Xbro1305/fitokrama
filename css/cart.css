@@ -367,6 +367,12 @@
     display: flex;
 }
 
+@media (max-width: 1024px) {
+    .total-price {
+        margin: 0 !important;
+    }
+}
+
 @media (max-width: 768px) {
     .suggestionbox {
         left: 0;
