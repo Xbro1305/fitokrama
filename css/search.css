@@ -98,6 +98,49 @@
     width: 80px;
 }
 
+.search-results a img {
+    max-width: 80px;
+    width: 80px;
+}
+
+.search-results {
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    width: 80%;
+    background: #fff;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: calc(100vh - 200px);
+}
+
+.search-results > :last-child {
+    border-bottom: none;
+}
+
+.search-results > a {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid #acabab;
+}
+
+.search-results a section {
+    width: calc(100% - 100px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 5px;
+}
+
+.search-results a section h1 {
+    width: 100%;
+    text-align: left;
+    font-size: 15px;
+}
+
 .searchCont a section {
     max-width: 230px;
     width: calc(100% - 100px);
@@ -112,7 +155,6 @@
     width: 100%;
     text-align: left;
     font-size: 14px;
-    color: #000;
 }
 
 .srchPrices {

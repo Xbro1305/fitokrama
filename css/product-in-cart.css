@@ -46,6 +46,7 @@
     align-items: flex-start;
 
     position: relative;
+    width: calc(100% - 70px);
 }
 
 .product-name {
@@ -62,7 +63,7 @@
 
     justify-content: space-between;
 
-    width: 100%;
+    width: calc(100%);
 }
 
 .cart-item-info .product-name {
@@ -98,6 +99,7 @@
     position: relative;
 
     overflow: hidden;
+    display: flex;
 }
 
 .cart-item-info .old-price sup {
@@ -105,6 +107,7 @@
 
     vertical-align: super;
     color: red;
+    padding-top: 2px;
 }
 
 .cart-item-info .old-price::before {
@@ -121,8 +124,6 @@
     height: 1px;
 
     background-color: red;
-
-    transform: rotate(-45deg); /* Диагональное зачеркивание */
 }
 
 .cart-item-info .new-price {
@@ -135,6 +136,8 @@
     position: relative;
 
     margin-left: 20px;
+    display: flex;
+    gap: 2px;
 }
 
 .cart-item-info .new-price sup {
@@ -143,12 +146,16 @@
     vertical-align: super;
 
     color: rgb(97, 129, 98) !important;
+    padding-top: 2px;
 }
 
 .cart-item-info .new-price .currency {
     font-size: 16px;
 
     color: rgb(97, 129, 98);
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 2px;
 }
 
 .quantity-selector {
@@ -176,6 +183,7 @@
 }
 
 .quantity-input {
+    height: 30px;
     width: 50px;
 
     text-align: center;
@@ -204,8 +212,19 @@
     font-size: 24px;
 
     font-weight: bold;
-
-    color: black;
-
     margin-left: 20px;
+}
+
+.total-price sup {
+    padding-top: 1.5px;
+}
+
+@media (max-width: 1025px) {
+    .cart-item .product-prices > div {
+        margin: 0 !important;
+    }
+
+    .cart-item .product-prices {
+        gap: 10px;
+    }
 }

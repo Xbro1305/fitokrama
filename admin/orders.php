@@ -26,7 +26,8 @@
 
     function tst()
     {
-        $json_in = json_decode(file_get_contents('php://input'),TRUE);
+        $link = firstconnect();
+		$json_in = json_decode(file_get_contents('php://input'),TRUE);
         [$staff_id, $staff_name, $staff_role] = staff_auth($json_in['email'], $json_in['password']);
 
         if (!$staff_role) {
@@ -35,12 +36,13 @@
             ]));
         }
 
-        $from = $json_in['date_from'];
+        $orders = array();
+		$from = $json_in['date_from'];
         $to = $json_in['date_to'];
-
+		
+		
         $que = "SELECT * FROM `orders` WHERE datetime_create>='$from' AND datetime_create<='$to'";
-        $link = firstconnect();
-        $records = ExecSQL($link, $que);
+		$records = ExecSQL($link, $que);
 		foreach ($records as $order1)
 			$orders[] = all_about_order($order1['number']);
 
