@@ -29,9 +29,21 @@ function send_message_telegram_infobot_by_to_id($text,$id) // отправить
 	
 	if ($tx=='/testprint')	// необходимо сделать тестовую отправку на браузер автопечати
 	{
+		$html = file_get_contents('pages/order_print_page.html'); // берем шаблон листа на распечатку
+		$html = str_replace("[order_number]",'000000',$html);
 		
-		
-		
+		$html_goods = '';
+		$html = cut_fragment($html, '<!-- GOOD_BEGIN -->', '<!-- GOOD_END -->','[goods_table]',$html_good_1);
+		$html_goods .= $html_good_1;
+			$html_goods = str_replace("[good_name]",'Товар № 1',$html_goods);
+			$html_goods = str_replace("[good_qty]",'1',$html_goods);		
+		$html_goods .= $html_good_1;
+			$html_goods = str_replace("[good_name]",'Товар № 2',$html_goods);
+			$html_goods = str_replace("[good_qty]",'2',$html_goods);		
+		$html = str_replace("[goods_table]",$html_goods,$html);
+		file_put_contents('test_order_print_page.html',$html);	
+		send_message_telegram_infobot_by_to_id("Тестовая страница печати сформирована!",$ids);		
+		exit (json_encode(['status'=>'ok', 'message'=> 'ok']));
 	}
 	
 	$text = "обратное сообщение на сообщение ".$tx;

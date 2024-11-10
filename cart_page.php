@@ -215,6 +215,7 @@
 				{
 					$html_methods=str_replace('[plate_color]', '#B1D1B2 ', $html_methods); 
 					$html_methods=str_replace('[plate_text]', 'бесплатная доставка', $html_methods); 
+					$html_methods=str_replace('[pb]', '32', $html_methods); 
 				}
 				
 				
@@ -223,10 +224,12 @@
 				{
 					$html_methods=str_replace('[plate_color]', '#ffaaa6', $html_methods); 
 					$html_methods=str_replace('[plate_text]', 'на дом!', $html_methods); 
+					$html_methods=str_replace('[pb]', '32', $html_methods); 
 				}
 
 				$html_methods=str_replace('[plate_color]', '', $html_methods); 
 				$html_methods=str_replace('[plate_text]', '', $html_methods); 
+				//$html_methods=str_replace('[pb]', '', $html_methods); 
 
 				$html_methods = str_replace('<!-- METHOD_1_BEGIN -->', '', $html_methods);
 				$html_methods = str_replace('<!-- METHOD_1_END -->', '', $html_methods);

@@ -13,10 +13,12 @@
 	if (isset($json_in['goodart']))  $good_art = $json_in['goodart'];;
 	if (isset($json_in['qty']))  $qty = 		$json_in['qty'];
 	
+	if (is_null($good_art) or $good_art=='') die (json_encode(['error'=>'Incorrect goodart ']));
+	
 	$price =	$json_in['price'];
 	
 	$this_good = ExecSQL($link,"SELECT * FROM goods WHERE art=$good_art")[0];
-	
+	if (is_null($this_good)) die (json_encode(['error'=>'Incorrect goodart ']));
 	
 	
 	$old_price = $this_good['price_old'];

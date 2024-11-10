@@ -7,15 +7,85 @@ use PHPMailer\PHPMailer\Exception;
 
 function ExecSQL($link,$query)
 {
+    $startTime = microtime(true);
+
 	$dataset = $link->query($query);
+    $endTime = microtime(true);
+    $executionTime = $endTime - $startTime;
+
     if ($dataset === false)
-        file_put_contents('debug_query_errors', date("Y-m-d H:i:s").'  '.$link->error.'   '.$query.PHP_EOL, FILE_APPEND);
+		{
+			$lastElement = end(debug_backtrace());
+
+		    $callerFile = $lastElement['file'] ?? 'unknown';
+			$callerFunction = $lastElement['function'] ?? 'unknown';
+			$callerLine = $lastElement['line'] ?? 'unknown'; 
+						
+			file_put_contents('debug_query_errors', date("Y-m-d H:i:s")."  Вызов из $callerFile, строка $callerLine: ".$link->error.'   '.$query.PHP_EOL, FILE_APPEND);
+		}
+	$lastElement = end(debug_backtrace());
+		
+    $callerFile = $lastElement['file'] ?? 'unknown';
+	$callerFunction = $lastElement['function'] ?? 'unknown';
+	$callerLine = $lastElement['line'] ?? 'unknown'; 
+	
+	if ($executionTime>0.01)
+	file_put_contents('debug_query', date("Y-m-d H:i:s")."  Вызов из $callerFile, строка $callerLine. Длит. ".number_format($executionTime, 4).PHP_EOL.$query.PHP_EOL, FILE_APPEND);
+
+
 
 	$answer = array();
     if (is_object($dataset)) { while (($row = $dataset->fetch_assoc()) != false) { $answer[] = $row;}}
      else { $answer = $link->insert_id; }
     return $answer;
 }
+
+function ExecSQL_PR ($link, $query, $params = []) {
+    $stmt = $link->prepare($query);
+    if ($stmt === false) {
+        $lastElement = end(debug_backtrace());
+        $callerFile = $lastElement['file'] ?? 'unknown';
+        $callerFunction = $lastElement['function'] ?? 'unknown';
+        $callerLine = $lastElement['line'] ?? 'unknown';
+        file_put_contents('debug_query_errors', date("Y-m-d H:i:s") . " Ошибка подготовки запроса. Вызов из $callerFile, строка $callerLine: " . $link->error . ' ' . $query . PHP_EOL, FILE_APPEND);
+        return false;
+    }
+
+    if (!empty($params)) {
+        $types = str_repeat('s', count($params)); 
+        $stmt->bind_param($types, ...$params);
+    }
+
+    // Выполнение запроса
+    if (!$stmt->execute()) {
+        // Логируем ошибку выполнения
+        $lastElement = end(debug_backtrace());
+        $callerFile = $lastElement['file'] ?? 'unknown';
+        $callerFunction = $lastElement['function'] ?? 'unknown';
+        $callerLine = $lastElement['line'] ?? 'unknown';
+        file_put_contents('debug_query_errors', date("Y-m-d H:i:s") . " Ошибка выполнения запроса. Вызов из $callerFile, строка $callerLine: " . $stmt->error . ' ' . $query . PHP_EOL, FILE_APPEND);
+        return false;
+    }
+
+    // Обработка результатов
+    $answer = [];
+    $result = $stmt->get_result();
+    if ($result !== false) {
+        // Записываем все строки в массив
+        while ($row = $result->fetch_assoc()) {
+            $answer[] = $row;
+        }
+    } else {
+        // Возвращаем идентификатор последней вставленной записи, если это запрос INSERT
+        $answer = $link->insert_id;
+    }
+
+    // Закрываем подготовленное выражение
+    $stmt->close();
+    return $answer;
+}
+
+
 
 function firstconnect ()
 {

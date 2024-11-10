@@ -1,0 +1,39 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<div style="display: flex; align-items: flex-start;">
+			<div style="margin-right: 20px; text-align: center;">
+				<div style="font-size: 48px; font-weight: bold;">
+					[order_number]
+				</div>
+					<img src="data:image/png;base64,[qr_data]" 
+					alt="QR Code">
+			</div>
+			<div>
+				<table border="1" cellspacing="0" cellpadding="10" style="border-collapse: collapse;">
+					<tbody>
+					<!-- GOOD_BEGIN -->
+						<tr>
+							<td style="font-size: 18px; font-weight: bold;">
+								[good_name]
+							</td>
+							<td style="font-size: 18px; text-align: center;">
+								[good_qty]
+							</td>
+						</tr>
+					<!-- GOOD_END -->
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.print();
+        window.onafterprint = function () {
+            window.close();
+        };
+    });
+</script>

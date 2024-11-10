@@ -56,7 +56,7 @@ function yandex_check_price($address, $qty, $weight) {
 	$dayOfWeek = date('N'); // номер дня недели (1 для понедельника, 7 для воскресенья)
 	$currentTime = date('H:i'); // время в формате ЧЧ:ММ
 
-	if ($dayOfWeek < 1 || $dayOfWeek > 5 || $currentTime < '09:00' || $currentTime > '23:30') 
+	if ($dayOfWeek < 1 || $dayOfWeek > 5 || $currentTime < '09:00' || $currentTime > '16:30') 
 		return NULL;			//	в эти дни и это время доставка не осуществляется
     
 	$data = array();

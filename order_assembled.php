@@ -128,5 +128,6 @@
 	ExecSQL($link,$que);
 	$message = "Сформировано отправление $track_number. Распечатайте наклейку!";
 
+	if (file_exists($label_filename)) $label_content = file_get_contents($label_filename);
 
-    exit(json_encode(['message'=>$message,'html_for_print'=>$label_filename,'post_code'=>$post_code, 'track_number'=>$track_number], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    exit(json_encode(['message'=>$message,'label_filename'=>$label_filename,'html_for_print'=>$label_content,'post_code'=>$post_code, 'track_number'=>$track_number], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
