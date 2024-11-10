@@ -46,6 +46,7 @@
     align-items: flex-start;
 
     position: relative;
+    width: calc(100% - 70px);
 }
 
 .product-name {
@@ -62,7 +63,7 @@
 
     justify-content: space-between;
 
-    width: 100%;
+    width: calc(100%);
 }
 
 .cart-item-info .product-name {
@@ -216,4 +217,14 @@
 
 .total-price sup {
     padding-top: 1.5px;
+}
+
+@media (max-width: 1025px) {
+    .cart-item .product-prices > div {
+        margin: 0 !important;
+    }
+
+    .cart-item .product-prices {
+        gap: 10px;
+    }
 }
