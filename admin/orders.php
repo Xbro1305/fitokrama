@@ -41,8 +41,8 @@
         $to = $json_in['date_to'];
 		
 		
-        $que = "SELECT * FROM `orders` WHERE datetime_create>='$from' AND datetime_create<='$to'";
-		$records = ExecSQL($link, $que);
+        $que = "SELECT * FROM `orders` WHERE datetime_create>=? AND datetime_create<=?";
+		$records = Exec_PR_SQL($link, $que,[$from,$to]);
 		foreach ($records as $order1)
 			$orders[] = all_about_order($order1['number']);
 

@@ -14,10 +14,10 @@
 		[$lat,$lon] = geocoding_by_yandex($address);
 		echo "      # $address   $lat,$lon".PHP_EOL;
 		
-		$que = "UPDATE delivery_points SET lat=$lat, lon=$lon WHERE id=".$dp['id'].';';
+		$que = "UPDATE delivery_points SET lat=?, lon=? WHERE id=?";
 		echo $que.PHP_EOL;
 	
-	//ExecSQL($link,$que);
+	// Exec_PR_SQL($link,$que,[$lat,$lon,$dp['id']]);
 		
 		
 		
