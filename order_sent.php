@@ -41,11 +41,11 @@
 
 	if (is_null($lng) OR $lng==0 OR $lng=='' OR is_null($lat) OR $lat==0 OR $lat=='' )	die (json_encode(['error'=>'Необходимы координаты!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-	$que = "SELECT * FROM orders WHERE post_code='$qrcode'";
+	$que = "SELECT * FROM orders WHERE post_code=?";
 
-	$orders = ExecSQL($link,$que);
+	$orders = Exec_PR_SQL($link,$que,[$qrcode]);
 	if (strlen($qrcode)<5 OR count($orders)==0) die (json_encode(['error'=>'Это не почтовый QR-код!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-	if (count($orders)>1) die (json_encode(['error'=>'Код не укальный!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+	if (count($orders)!==1) die (json_encode(['error'=>'Код не укальный!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 	$order = all_about_order($orders[0]['number']);
 	$order_id = $order['id'];
 
@@ -53,7 +53,7 @@
 
 	$maplink = "https://yandex.ru/maps/?whatshere[point]=$lng,$lat&whatshere[zoom]=17";
 
-	$delivery_partners = ExecSQL($link,"SELECT * FROM delivery_partners WHERE id={$order['delivery_method']}");
+	$delivery_partners = Exec_PR_SQL($link,"SELECT * FROM delivery_partners WHERE id=?",[$order['delivery_method']]);
 	if (!count($delivery_partners)>0) die (json_encode(['error'=>'Не удается установить способ почтового отправления. '], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
 	$delivery_partner = $delivery_partners[0];
@@ -68,11 +68,12 @@
 
 	// меняем статус заказа!
 
-	$que = "UPDATE `orders` SET datetime_sent=CURRENT_TIMESTAMP() WHERE id=$order_id";
+	$que = "UPDATE `orders` SET datetime_sent=CURRENT_TIMESTAMP() WHERE id=?";
 	//echo $que.PHP_EOL;
-	// ExecSQL($link,$que); //////// !!!!!!!!!!!!!!!!!!!!!!!! пока заглушка
-	$que = "INSERT INTO `orders_steps` (`order_id`,`datetime`,`status`,`report`) VALUES ($order_id,CURRENT_TIMESTAMP(),'sent','$staff_name: $maplink');";
-	// ExecSQL($link,$que); //////// !!!!!!!!!!!!!!!!!!!!!!!! пока заглушка
+	// Exec_PR_SQL($link,$que,[$order_id]); //////// !!!!!!!!!!!!!!!!!!!!!!!! пока заглушка
+	$que = "INSERT INTO `orders_steps` (`order_id`, `datetime`, `status`, `report`) VALUES (?, CURRENT_TIMESTAMP(), 'sent', CONCAT(?, ' : ', ?))";
+	// Exec_PR_SQL($link, $que, [$order_id, $staff_name, $maplink]);  //////// !!!!!!!!!!!!!!!!!!!!!!!! пока заглушка
+	
 
 	send_telegram_info_group("🫡 Заказ $order_number отправлен с расстояния $dist м. ВРЕМЕННО СТАТУС не меняется. Точка отправки: $maplink");
 

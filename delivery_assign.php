@@ -28,11 +28,8 @@ GLOBAL $data;
 	$delivery_method = $meth['method_id'];
 	$delivery_price = $meth['price'];
 
-	$que = "UPDATE clients SET datetime_last=CURRENT_TIMESTAMP(), delivery_method=$delivery_method, delivery_submethod='$submethod_id', delivery_price=$delivery_price WHERE id=$client_id";
-	ExecSQL($link,$que);
-	
-	
-
+	$que = "UPDATE clients SET datetime_last=CURRENT_TIMESTAMP(), delivery_method=?, delivery_submethod=?, delivery_price=? WHERE id=?";
+	Exec_PR_SQL($link,$que,[$delivery_method,$submethod_id,$delivery_price,$client_id]);
 
 	$cart = cart_by_session_id_and_username ($session_id,$username);
 	

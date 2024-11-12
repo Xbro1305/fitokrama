@@ -40,8 +40,17 @@ function ExecSQL($link,$query)
     return $answer;
 }
 
-function ExecSQL_PR ($link, $query, $params = []) {
-    $stmt = $link->prepare($query);
+function Exec_PR_SQL ($link, $query, $params = []) {
+    
+	$lastElement = end(debug_backtrace());
+		
+    $callerFile = $lastElement['file'] ?? 'unknown';
+	$callerFunction = $lastElement['function'] ?? 'unknown';
+	$callerLine = $lastElement['line'] ?? 'unknown'; 
+	file_put_contents('debug_q', date("Y-m-d H:i:s")."  Вызов из $callerFile, строка $callerLine. ".PHP_EOL.'--- '.$query.PHP_EOL.'--- '.json_encode($params).PHP_EOL, FILE_APPEND);
+
+	
+	$stmt = $link->prepare($query);
     if ($stmt === false) {
         $lastElement = end(debug_backtrace());
         $callerFile = $lastElement['file'] ?? 'unknown';
@@ -63,7 +72,7 @@ function ExecSQL_PR ($link, $query, $params = []) {
         $callerFile = $lastElement['file'] ?? 'unknown';
         $callerFunction = $lastElement['function'] ?? 'unknown';
         $callerLine = $lastElement['line'] ?? 'unknown';
-        file_put_contents('debug_query_errors', date("Y-m-d H:i:s") . " Ошибка выполнения запроса. Вызов из $callerFile, строка $callerLine: " . $stmt->error . ' ' . $query . PHP_EOL, FILE_APPEND);
+        file_put_contents('debug_query_pr_errors', date("Y-m-d H:i:s") . " Ошибка выполнения запроса. Вызов из $callerFile, строка $callerLine: " . $stmt->error . ' ' . $query . PHP_EOL, FILE_APPEND);
         return false;
     }
 
@@ -153,15 +162,16 @@ function cart_by_session_id_and_username ($session_id,$username)
 		FROM
 			clients
 		WHERE
-			client_email = '$username' OR session_id = '$session_id';
+			client_email = ? OR session_id = ?;
 		";
-	$cart = ExecSQL($link,$que)[0];
+	$cart = Exec_PR_SQL($link,$que,[$username,$session_id])[0];
 
 	if ($cart==NULL)
 	{
-		$query_add = "INSERT INTO clients (session_id, datetime_last) VALUES ('$session_id', CURRENT_TIMESTAMP());";
-		ExecSQL($link, $query_add);
-		$cart = ExecSQL($link,$que)[0];
+		$query_add = "INSERT INTO clients (session_id, datetime_last) VALUES (?, CURRENT_TIMESTAMP());";
+		Exec_PR_SQL($link, $query_add,[$session_id]);
+		
+		$cart = Exec_PR_SQL($link,$que,[$username,$session_id])[0];
 	}
 
 	$client_id = $cart['client_id'];
@@ -189,12 +199,12 @@ function cart_by_session_id_and_username ($session_id,$username)
 		JOIN
 			goods ON goods.art = carts_goods.good_art
 		WHERE
-		    client_id = $client_id
+		    client_id = ?
 		    AND carts_goods.qty > 0
 		ORDER BY
 			carts_goods.id;
 	";
-	$cart['goods'] = ExecSQL($link,$que);
+	$cart['goods'] = Exec_PR_SQL($link,$que,[$client_id]);
 	$cart['cart_count'] = count($cart['goods']);
 
 
@@ -471,7 +481,7 @@ if ($sum_goods==0 || is_null($sum_goods))
 function info_about_delivery_by_id ($delivery_method,$delivery_submethod)
 {
 	GLOBAL $link;
-	$delivery_partner = ExecSQL($link,"SELECT * FROM `delivery_partners` WHERE `id`='$delivery_method'");
+	$delivery_partner = Exec_PR_SQL($link,"SELECT * FROM `delivery_partners` WHERE `id`=?",[$delivery_method]);
 
 	if (is_null($delivery_partner)) return NULL;
 
@@ -480,7 +490,7 @@ function info_about_delivery_by_id ($delivery_method,$delivery_submethod)
 	$delivery_text = $delivery_partner[0]['name'];
 
 	$que = "SELECT * FROM `delivery_points` WHERE CONCAT('$delivery_prefix','-',`unique_id`)='$delivery_submethod'";
-	$sub_delivery = ExecSQL($link,$que);
+	$sub_delivery = Exec_PR_SQL($link,$que,[]);
 
 
 	if (count($sub_delivery)>0)	$delivery_text .= ' '.$sub_delivery[0]['address'].' '.$sub_delivery[0]['name']. ' '.$sub_delivery[0]['comment'];
@@ -493,11 +503,20 @@ function info_about_delivery_by_id ($delivery_method,$delivery_submethod)
 function orders_short_info($client_id = null, $selection = null) // кратко требуются ли действия клиентов по ранее сделанным заказам
 {
 	GLOBAL $link;
-	$reddottext = '';
+	$query = "
+		SELECT
+			CASE
+				WHEN datetime_delivery IS NOT NULL AND datetime_finish IS NULL AND datetime_cancel IS NULL THEN 'Посылка ждет вас!'
+				WHEN datetime_paid IS NULL AND datetime_cancel IS NULL THEN 'Необходимо оплатить!'
+				ELSE ''
+			END AS reddottext
+		FROM `orders`
+		WHERE client_id = ?
+		LIMIT 1;
+	";
 
-
-	if (count(ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id AND datetime_delivery IS NOT NULL AND datetime_finish IS NULL AND datetime_cancel IS NULL "))>0) $reddottext = 'Посылка ждёт вас!';
-	if (count(ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id AND datetime_paid IS NULL AND  datetime_cancel IS NULL "))>0) $reddottext = 'Необходимо оплатить!';
+	$result = Exec_PR_SQL($link, $query, [$client_id]);
+	$reddottext = $result[0]['reddottext'] ?? '';
 
 	return $reddottext;
 }
@@ -508,8 +527,8 @@ function all_about_order($order_number,$type=NULL) // подробности п�
 {
 	GLOBAL $link;
 
-	$que = "SELECT * FROM `orders` WHERE number='$order_number' LIMIT 1";
-	$orders = ExecSQL($link,$que);
+	$que = "SELECT * FROM `orders` WHERE number=? LIMIT 1";
+	$orders = Exec_PR_SQL($link,$que,[$order_number]);
 	if (count($orders)==0) return NULL;
 	$order = $orders[0];
 		list($order['delivery_logo'], $order['delivery_text']) = info_about_delivery_by_id($order['delivery_method'],$order['delivery_submethod']);
@@ -517,15 +536,16 @@ function all_about_order($order_number,$type=NULL) // подробности п�
 		if ($type=='all_info')
 			$que = "SELECT good_art,name,pic_name,barcode,orders_goods.price,orders_goods.qty,0 AS qty_as FROM `orders_goods`
 				JOIN goods ON goods.art=orders_goods.good_art
-				WHERE order_id={$order['id']};";
-			else $que = "SELECT good_art,name,pic_name,orders_goods.price,orders_goods.qty FROM `orders_goods`
+				WHERE order_id=?;";
+			else 
+			$que = "SELECT good_art,name,pic_name,orders_goods.price,orders_goods.qty FROM `orders_goods`
 				JOIN goods ON goods.art=orders_goods.good_art
-				WHERE order_id={$order['id']};";
+				WHERE order_id=?;";
 
-		$order['goods'] = ExecSQL($link,$que);
+		$order['goods'] = Exec_PR_SQL($link,$que,[$order['id']]);
 
-		$order['paid'] = ExecSQL($link,"SELECT SUM(`sum`) AS paid FROM `payments` WHERE order_id={$order['id']};")[0]['paid'];
-		$order['steps'] = ExecSQL($link,"SELECT datetime,status FROM `orders_steps` WHERE order_id={$order['id']} ORDER BY datetime;");
+		$order['paid'] = Exec_PR_SQL($link,"SELECT SUM(`sum`) AS paid FROM `payments` WHERE order_id=?;",[$order['id']])[0]['paid'];
+		$order['steps'] = Exec_PR_SQL($link,"SELECT datetime,status FROM `orders_steps` WHERE order_id=? ORDER BY datetime;",[$order['id']]);
 		if ($order['paid'] == NULL) $order['paid'] = 0;
 
 		if ($order['datetime_cancel']!=NULL)
@@ -638,8 +658,8 @@ function generateTable($headers, $data) {
 function staff_auth($login, $password)
 {
     GLOBAL $link;
-    $que = "SELECT * FROM `staff` WHERE `staff_email`='$login' LIMIT 1;";
-    $staffs = ExecSQL($link, $que);
+    $que = "SELECT * FROM `staff` WHERE `staff_email`=? LIMIT 1;";
+    $staffs = Exec_PR_SQL($link, $que,[$login]);
 
     if (count($staffs) === 0) {
         die (json_encode(['error' => 'Authorization error']));
@@ -652,8 +672,8 @@ function staff_auth($login, $password)
     $staff_role = $staffs[0]['role'];
     $staff_name = $staffs[0]['staff_name'];
     $staff_id = $staffs[0]['id'];
-    $que = "UPDATE staff set datetime_last=CURRENT_TIMESTAMP() WHERE id=$staff_id";
-    ExecSQL($link, $que);
+    $que = "UPDATE staff set datetime_last=CURRENT_TIMESTAMP() WHERE id=?";
+    Exec_PR_SQL($link, $que,[$staff_id]);
 
     return [$staff_id, $staff_name, $staff_role];
 }

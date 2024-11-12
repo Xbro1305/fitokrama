@@ -61,7 +61,7 @@ function check_payment_by_order ($order,$payid)	// проверяет стату
 	
 	if (!is_null($payid))
 	{
-		$orders = ExecSQL($link,"SELECT * FROM orders WHERE epos_id='$payid' OR hutki_billId='$payid' OR alfa_orderId='$payid'");
+		$orders = Exec_PR_SQL($link,"SELECT * FROM orders WHERE epos_id=? OR hutki_billId=? OR alfa_orderId=?",[$payid,$payid,$payid]);
 		if (count($orders)==0) exit(json_encode(['status'=>'error', 'error'=>'Incorrect order_number']));	
 		$order = $orders[0];
 		if ($order['epos_id']==$payid) 		[$payment_method,$payment_report,$sum] = epos_check($order['epos_id']);
@@ -82,22 +82,22 @@ function check_payment_by_order ($order,$payid)	// проверяет стату
 	if ($payment_method!='erip') erip_kill($order['hutki_billId']);
 	if ($payment_method!='alfa') alfa_kill($order['alfa_orderId']);
 	
-	$payment_records = ExecSQL($link,"SELECT * FROM payments WHERE order_id={$order['id']} AND payment_method='$payment_method'");
+	$payment_records = Exec_PR_SQL($link,"SELECT * FROM payments WHERE order_id=? AND payment_method=?",[$order['id'],$payment_method]);
 	
 	if (count($payment_records)==0) // нет записи об оплате
 	{
 		$que = "INSERT INTO payments (order_id,sum,datetime,payment_method,payment_report)
-				VALUES ({$order['id']},$sum,CURRENT_TIMESTAMP,'$payment_method','$payment_report')";
-		ExecSQL($link,$que);
+				VALUES (?,?,CURRENT_TIMESTAMP,?,?)";
+		Exec_PR_SQL($link,$que,[$order['id'], $sum, $payment_method, $payment_report ]);
 	}
 	if ($order['datetime_paid']==NULL)
 	{
-		$paid_amount = ExecSQL($link,"SELECT SUM(`sum`) AS paid FROM `payments` WHERE order_id={$order['id']}")[0]['paid'];
+		$paid_amount = Exec_PR_SQL($link,"SELECT SUM(`sum`) AS paid FROM `payments` WHERE order_id=?",[$order['id']])[0]['paid'];
 		if ($paid_amount>=$order['sum']) 
 		{
-			$que = "UPDATE orders SET datetime_paid = CURRENT_TIMESTAMP WHERE id={$order['id']}";		
-			ExecSQL($link,$que);
-			// !!!!!!!!!!!!!!!!!! Заказ оплачен. Какие-то еще действия?
+			$que = "UPDATE orders SET datetime_paid = CURRENT_TIMESTAMP WHERE id=?";		
+			Exec_PR_SQL($link,$que,[$order['id']]);
+			// !!!!!!!!!!!!!!!!!! Заказ оплачен. Какие-то еще действия? может, письмо выслать?
 		}
 	send_warning_telegram("check_payment_by_order Видим оплату по заказу {$order['number']} в сумме $sum методом $payment_method. Отмечаем заказ как оплаченный.");	
 		
@@ -111,7 +111,7 @@ if ($method=='check_payment_by_order') // проверить оплату по �
 {
 	$order_number = $_GET['order_number'];
 	if ($order_number=='' or is_null($order_number)) exit(json_encode(['status'=>'error', 'error'=>'Incorrect order_number']));	
-	$orders = ExecSQL($link,"SELECT * FROM orders WHERE number=$order_number");
+	$orders = Exec_PR_SQL($link,"SELECT * FROM orders WHERE number=?",[$order_number]);
 	if (count($orders)==0) exit(json_encode(['status'=>'error', 'error'=>'Incorrect order_number']));	
 		
 	$sum = check_payment_by_order ($orders[0],NULL);
@@ -142,7 +142,7 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
         WHERE m.order_number = o.number 
           AND m.type = 'NOT_PAID_EMAIL' ) ";
 		  
-	$orders_30 = ExecSQL($link,$que);
+	$orders_30 = Exec_PR_SQL($link,$que,[]);
 	
 	foreach ($orders_30 as $order)
 	{
@@ -192,18 +192,16 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 			email, 
 			text 
 		) VALUES (
-			'{$order['number']}',
-			'{$order['client_id']}',
+			?, ?,
 			CURRENT_TIMESTAMP,
 			'NOT_PAID_EMAIL',
-			'{$order['client_email']}',
-			'$doc_sl' );
+			?, ? );
 		";
 		
-		$ins_id = ExecSQL($link,$que);
+		$ins_id = Exec_PR_SQL($link,$que,[ $order['number'], $order['client_id'], $order['client_email'], $doc_sl ] );
 		$rep = mail_sender($order['client_email'], "⚡️ Заказ не оплачен! ☘", $doc);		
-		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report='$rep' WHERE id=$ins_id;";
-		ExecSQL($link,$que);		
+		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report=? WHERE id=?;";
+		Exec_PR_SQL($link,$que,[$rep,$ins_id]);		
 
 	}
 	
@@ -220,7 +218,7 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
         WHERE m.order_number = o.number 
           AND m.type = 'NOT_PAID_PHONE' ) ";
 		  
-	$orders_90 = ExecSQL($link,$que);
+	$orders_90 = Exec_PR_SQL($link,$que,[]);
 	
 	foreach ($orders_90 as $order)
 	{
@@ -239,18 +237,16 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 			phone, 
 			text 
 		) VALUES (
-			'{$order['number']}',
-			'{$order['client_id']}',
+			?, ?, 
 			CURRENT_TIMESTAMP,
 			'NOT_PAID_PHONE',
-			'{$order['client_phone']}',
-			'$doc_sl' );
+			?, ? )
 		";
 		
-		$ins_id = ExecSQL($link,$que);
+		$ins_id = Exec_PR_SQL($link,$que,[$order['number'], $order['client_id'] , $order['client_phone'] , $doc_sl ]);
 		$rep = send_sms_smstrafficby ($order['client_phone'], $doc);
-		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report='$rep' WHERE id=$ins_id;";
-		ExecSQL($link,$que);
+		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report=? WHERE id=?;";
+		Exec_PR_SQL($link,$que,[$rep,$ins_id]);
 	}	
 	
 	
@@ -260,7 +256,7 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
     AND o.datetime_paid IS NULL
 	AND o.datetime_create < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 120 MINUTE) ";
 		  
-	$orders_120 = ExecSQL($link,$que);
+	$orders_120 = Exec_PR_SQL($link,$que,[]);
 	
 	foreach ($orders_120 as $order)
 	{
@@ -283,18 +279,16 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 			email, 
 			text 
 		) VALUES (
-			'{$order['number']}',
-			'{$order['client_id']}',
+			?, ?, 
 			CURRENT_TIMESTAMP,
 			'NOT_PAID_ORDER_CANCEL',
-			'{$order['client_email']}',
-			'$doc_sl' );
+			?, ? );
 		";
 		
-		$ins_id = ExecSQL($link,$que);
+		$ins_id = Exec_PR_SQL($link,$que,[ $order['number'],	$order['client_id'], $order['client_email'], $doc_sl ]);
 		$rep = mail_sender($order['client_email'], "⚡️ Заказ не оплачен! ☘", $doc);		
-		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report='$rep' WHERE id=$ins_id;";
-		ExecSQL($link,$que);
+		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report=? WHERE id=?;";
+		Exec_PR_SQL($link,$que,[$rep,$ins_id]);
 		
 		
 
@@ -303,10 +297,10 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 		$order = all_about_order($order_number);
 		
 		
-		$goods_client =  ExecSQL($link,"SELECT * FROM `carts_goods` WHERE `client_id`=$client_id");
+		$goods_client =  Exec_PR_SQL($link,"SELECT * FROM `carts_goods` WHERE `client_id`=?",[$client_id]);
 		foreach ($order['goods'] as $good_1)
 		{
-			$this_good_now = ExecSQL($link,"SELECT art,price,price_old FROM goods WHERE art={$good_1['good_art']};");
+			$this_good_now = Exec_PR_SQL($link,"SELECT art,price,price_old FROM goods WHERE art=?;",[$good_1['good_art']]);
 			if (count($this_good_now)==0) continue;
 			$price 		= $this_good_now[0]['price'];
 			$price_old 	= $this_good_now[0]['price_old'];
@@ -317,22 +311,24 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 			{
 				$qty_from_cart = $goods_client[$goods_client_index]['qty'];
 				$qty = MAX ($good_1['qty'],$qty_from_cart);
-				$que = "UPDATE `carts_goods` SET `price`=$price, `old_price`=$price_old, `qty`=$qty
-				WHERE `client_id`=$client_id AND `good_art`={$good_1['good_art']};";
+				$que = "UPDATE `carts_goods` SET `price`=?, `old_price`=?, `qty`=?
+				WHERE `client_id`=? AND `good_art`=?;";
+				Exec_PR_SQL($link,$que,[$price,$price_old,$qty,$client_id,$good_1['good_art']]);
 			}
 			else
 			{
 				$qty = $good_1['qty'];
 				$que = "INSERT INTO `carts_goods` (`client_id`, `good_art`, `price`, `old_price`, `qty`) 
-					VALUES ($client_id,{$good_1['good_art']},$price,$price_old,$qty);";
+					VALUES (?,?,?,?,?);";
+				Exec_PR_SQL($link,$que,[$client_id,$good_1['good_art'],$price,$price_old,$qty]);
 			}				
 			
-			ExecSQL($link,$que);
+			
 			
 		}
 
-		$que = "UPDATE orders SET datetime_cancel=CURRENT_TIMESTAMP WHERE number=$order_number ";
-		ExecSQL($link,$que);
+		$que = "UPDATE orders SET datetime_cancel=CURRENT_TIMESTAMP WHERE number=? ";
+		Exec_PR_SQL($link,$que,[$order_number]);
 
 	}
 	

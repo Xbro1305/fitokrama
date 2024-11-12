@@ -25,7 +25,7 @@
 	if ($cart_count>0) $doc = str_replace('[cart_count]', $cart_count, $doc); else $doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
 	
 	
-	$orders = ExecSQL($link,"SELECT * FROM `orders` WHERE client_id=$client_id ORDER BY datetime_create ");
+	$orders = Exec_PR_SQL($link,"SELECT * FROM `orders` WHERE client_id=? ORDER BY datetime_create",[$client_id]);
 	
 	$html_orders = '';
 

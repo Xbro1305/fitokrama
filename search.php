@@ -24,8 +24,28 @@
 	//[$session_id, $username] = enterregistration ();
 
 	//$search = mb_substr($_GET['search'], 0, 7);
+
 	$search = $_GET['search'];
-	$que = "SELECT name, CONCAT('https://fitokrama.by/art_page.php?art=',art) as art, pic_name, price,price_old FROM goods WHERE (name like '%$search%' or art='$search' or barcode='$search') AND goods_groups_id IS NOT NULL AND price>0 ORDER BY prod_30 DESC LIMIT 20;";
-	$res = ExecSQL($link,$que);
+	if (preg_match('/(--|;|DROP|UNION)/i', $search))
+		file_put_contents('suspicious_queries.log', date("Y-m-d H:i:s") . " HTTP_COOKIE : {$_SERVER['HTTP_COOKIE']}  HTTP_X_CLIENT_IP : {$_SERVER['HTTP_X_CLIENT_IP']} Подозрительный запрос: $search" . PHP_EOL, FILE_APPEND);
+
+	$search = trim($search); // Удаляем лишние пробелы
+	$search = htmlspecialchars($search, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); // Экранируем HTML-специальные символы
+	if (mb_strlen($search) > 100) $search = $search = mb_substr($search, 0, 100);
+
+
+
+	$que = "SELECT name, CONCAT('https://fitokrama.by/art_page.php?art=', art) as art, pic_name, price, price_old 
+			FROM goods 
+			WHERE (name LIKE ? OR art = ? OR barcode = ?) 
+			AND goods_groups_id IS NOT NULL 
+			AND price > 0 
+			ORDER BY prod_30 DESC 
+			LIMIT 20";
+
+	// Подготавливаем параметры для запроса
+	
+	$res = Exec_PR_SQL($link, $que, ['%'.$search .'%', $search, $search]);
+
 	//$res[]['query']=$que;
 	exit( json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));

@@ -84,14 +84,14 @@ function refresh_dpd_data() { //обновление базы пунктов в�
 		echo (json_encode(['status'=>'error', 'message'=> 'DPD refresh calcelled']));
 	}
 	
-	$patner_id = 2;
-	$patner_prefix = 'DPD';
-	$datetieme_refresh_start = date('Y-m-d H:i:s');	//	запомнить момент начала обновления
+	$partner_id = 2;
+	$partner_prefix = 'DPD';
+	$datetime_refresh_start = date('Y-m-d H:i:s');	//	запомнить момент начала обновления
 	//die (json_encode($all_dpd_points['parcelShop']));
 	foreach ($all_dpd_points['parcelShop'] as $dpd_point)
 	{
 		$parcelShopType = $dpd_point['parcelShopType']; // П или ПВП
-		$unique_id = $patner_prefix.'-'.$dpd_point['code'];
+		$unique_id = $partner_prefix.'-'.$dpd_point['code'];
 		$address = $dpd_point['address']['cityName'].','.$dpd_point['address']['streetAbbr'].' '.$dpd_point['address']['street'].', '.$dpd_point['address']['houseNo'];
 		$descript = $dpd_point['address']['descript'];
 		$lat = $dpd_point['geoCoordinates']['latitude'];
@@ -115,29 +115,50 @@ function refresh_dpd_data() { //обновление базы пунктов в�
 				}
 			}
 		//$comment = $dpd_point['']['operation'];
-		$que = "INSERT INTO `delivery_points` (unique_id, datetime_updated, actual_until_datetime,partner_id,address,name,comment,lat,lng,specific_json)
-				VALUES ('$unique_id', CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),$patner_id,'$address','$descript', '$shed', $lat, $lng, '$specific_json')
-				ON DUPLICATE KEY UPDATE
-					datetime_updated = CURRENT_TIMESTAMP,
-					actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
-					partner_id = $patner_id,
-					address = '$address',
-					name = '$descript',
-					comment  = '$shed',
-					lat = $lat,
-					lng = $lng,
-					specific_json = '$specific_json'
-					";	
-					
-		ExecSQL($link,$que);
-		
+		$que = "INSERT INTO `delivery_points` (
+			unique_id, datetime_updated, actual_until_datetime, partner_id, address, name, comment, lat, lng, specific_json
+		) VALUES (
+			?, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR), ?, ?, ?, ?, ?, ?, ?
+		) ON DUPLICATE KEY UPDATE
+			datetime_updated = CURRENT_TIMESTAMP,
+			actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
+			partner_id = ?,
+			address = ?,
+			name = ?,
+			comment = ?,
+			lat = ?,
+			lng = ?,
+			specific_json = ?";
+
+		$params = [
+			$unique_id,
+			$partner_id,
+			$address,
+			$descript,
+			$shed,
+			$lat,
+			$lng,
+			$specific_json,
+			$partner_id,
+			$address,
+			$descript,
+			$shed,
+			$lat,
+			$lng,
+			$specific_json
+		];
+
+		Exec_PR_SQL($link, $que, $params);	
 	}
-	$que = "SELECT * FROM `delivery_points` WHERE datetime_updated<'$datetieme_refresh_start' AND actual_until_datetime>CURRENT_TIMESTAMP AND partner_id=$patner_id";	
-	$deactivated = count(ExecSQL($link,$que));
-	$que = "SELECT * FROM `delivery_points` WHERE datetime_updated>='$datetieme_refresh_start' AND actual_until_datetime>CURRENT_TIMESTAMP AND partner_id=$patner_id";	
-	$activated = count(ExecSQL($link,$que));
-	$que = "UPDATE `delivery_points` SET actual_until_datetime=CURRENT_TIMESTAMP WHERE datetime_updated<'$datetieme_refresh_start' AND partner_id=$patner_id";	// под конец деактивировать необновленные
-	ExecSQL($link,$que);
+	
+	$que = "SELECT COUNT(*) as deactivated_count FROM `delivery_points` WHERE datetime_updated < ? AND actual_until_datetime > CURRENT_TIMESTAMP AND partner_id = ?";
+	$deactivated = Exec_PR_SQL($link, $que, [$datetime_refresh_start, $partner_id])[0]['deactivated_count'];
+
+	$que = "SELECT COUNT(*) as activated_count FROM `delivery_points` WHERE datetime_updated >= ? AND actual_until_datetime > CURRENT_TIMESTAMP AND partner_id = ?";
+	$activated = Exec_PR_SQL($link, $que, [$datetime_refresh_start, $partner_id])[0]['activated_count'];
+
+	$que = "UPDATE `delivery_points` SET actual_until_datetime=CURRENT_TIMESTAMP WHERE datetime_updated<? AND partner_id=?";	// под конец деактивировать необновленные
+	Exec_PR_SQL($link,$que,[$datetime_refresh_start,$partner_id]);
 	if ($deactivated>0) send_warning_telegram('DPD: деактивировано '.$deactivated.' пунктов.');
 	exit (json_encode(['status'=>'ok', 'message'=> "Activated $activated points, Deactivated $deactivated points"])); 
 }

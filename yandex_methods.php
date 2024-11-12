@@ -75,7 +75,7 @@ function yandex_check_price($address, $qty, $weight) {
 
 function yandex_get_lable($order_number,$track_number)	// сформировать наклейку
 {				
-	$sticker_data = ExecSQL($link,"SELECT * FROM orders WHERE number='$order_number'")[0];
+	$sticker_data = Exec_PR_SQL($link,"SELECT * FROM orders WHERE number=?",[$order_number])[0];
 	$sticker_data['senderdata'] = 'Отправитель: Офис-склад Фитокрама. Улица Леонида Беды, 2Б, Минск, офис 316. Тел. +375445975005';
 	
 	$doc = file_get_contents('post_stickers/yandex_sticker.html'); // берем шаблон стикера

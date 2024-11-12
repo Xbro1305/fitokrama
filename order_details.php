@@ -32,7 +32,13 @@ if ($staff_role !== 'store' && $staff_role !== 'main') {
     ]));
 }
 
-$orders = ExecSQL($link, "SELECT * FROM `orders` WHERE `number`='{$json_in['number']}' AND `datetime_paid` IS NOT NULL AND `datetime_assembly` IS NULL AND `datetime_cancel` IS NULL LIMIT 1");
+if (!isset($json_in['number']) || empty($json_in['number'])) {
+    die(json_encode(['error' => 'Order number is missing']));
+}
+
+
+$que = "SELECT * FROM `orders` WHERE `number`=? AND `datetime_paid` IS NOT NULL AND `datetime_assembly` IS NULL AND `datetime_cancel` IS NULL LIMIT 1";
+$orders = Exec_PR_SQL($link,$que,[$json_in['number']]);
 
 if (count($orders) === 0) {
     die (json_encode([

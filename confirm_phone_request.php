@@ -5,8 +5,8 @@
 	$link = firstconnect ();
 	[$session_id, $username, $cart, $client_id] = enterregistration ();	
 	
-	$que = "SELECT * FROM phone_confirm WHERE client_id=$client_id AND datetime>DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 58 second)";
-	$last_record = ExecSQL($link,$que);
+	$que = "SELECT * FROM phone_confirm WHERE client_id=? AND datetime>DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 58 second)";
+	$last_record = Exec_PR_SQL($link,$que,[$client_id]);
 	if (count($last_record)>0) 
 		die (json_encode(['status'=>'error', 'message'=> 'too_fast']));	
 	
@@ -31,8 +31,8 @@
 			$text = str_replace('[code]', $code, $text);
 			$rep = send_sms_mysim ($phone, $text);
 		}
-	$que = "INSERT INTO phone_confirm (client_id,phone,code,datetime,report) VALUES ($client_id,'$phone',$code,CURRENT_TIMESTAMP(),'$rep');";
-	ExecSQL($link,$que);
+	$que = "INSERT INTO phone_confirm (client_id,phone,code,datetime,report) VALUES (?,?,?,CURRENT_TIMESTAMP(),?);";
+	Exec_PR_SQL($link,$que,[$client_id,$phone,$code,$rep]);
 
 
 

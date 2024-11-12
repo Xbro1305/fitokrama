@@ -44,7 +44,7 @@ function problem_notifications ()				//	сгенерировать предуп�
 				`datetime_finish` IS NULL 
 				AND `datetime_cancel` IS NULL 
 				AND `datetime_paid` IS NOT NULL";	
-	$parcels = ExecSQL($link,$que);
+	$parcels = Exec_PR_SQL($link,$que,[]);
 	$problem_text_for_staff_number = 0;
 	$problem_text_for_client_email_number = 0;
 	$problem_text_for_client_phone_number = 0;
@@ -129,9 +129,9 @@ function problem_notifications ()				//	сгенерировать предуп�
 			}
 		
 		if (is_null($problem_type)) continue;	// нет проблемы - идем дальше
-		$que = "SELECT * FROM `problem_reports` WHERE order_id=$order_id AND problem_type='$problem_type' AND datetime>DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY)"; // есть ли уже такое действие моложе 1 дня?
+		$que = "SELECT * FROM `problem_reports` WHERE order_id=? AND problem_type=? AND datetime>DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY)"; // есть ли уже такое действие моложе 1 дня?
 		//die($que);
-		$reports = ExecSQL($link,$que);
+		$reports = Exec_PR_SQL($link,$que,[$order_id,$problem_type]);
 		if (count($reports)>0)  continue;	// есть свежая отметка по этой проблеме - идем дальше
 		
 		$email_subject = '🌿 '.$client_name.'! Требуется ваше внимание 🌿';
@@ -142,8 +142,8 @@ function problem_notifications ()				//	сгенерировать предуп�
 		
 		// делаем запись в журнале
 		$que = "INSERT INTO `problem_reports` (`problem_type`,`datetime`,`problem_text_for_staff`,`problem_text_for_client_email`,`problem_text_for_client_sms`,`order_id`, `report_sender`) 
-				VALUES ('$problem_type',CURRENT_TIMESTAMP(),'$problem_text_for_staff','$problem_text_for_client_email','$problem_text_for_client_sms',$order_id, '$report_sender')";
-		ExecSQL($link,$que);
+				VALUES (?,CURRENT_TIMESTAMP(),?,?,?,?,? )";
+		Exec_PR_SQL($link,$que,[$problem_type,$problem_text_for_staff,$problem_text_for_client_email,$problem_text_for_client_sms,$order_id,$report_sender]);
 		
 	}
 	return (['status'=>'ok', 'message'=>"Сформировано $problem_text_for_staff_number сообщений сотрудникам, $problem_text_for_client_email_number писем клиентам, $problem_text_for_client_phone_number СМС клиентам."]);
@@ -187,7 +187,7 @@ function parcel_update ()
 				AND `datetime_cancel` IS NULL 
 				AND `datetime_paid` IS NOT NULL
 				AND `track_number` IS NOT NULL";	
-	$parcels = ExecSQL($link,$que);	
+	$parcels = Exec_PR_SQL($link,$que,[]);	
 	foreach ($parcels as $parcel)
 	{
 		$order_number 	= $parcel['number'];
@@ -200,17 +200,16 @@ function parcel_update ()
 		$delivery_method	= $parcel['delivery_method'];	
 		$delivery_submethod	= $parcel['delivery_submethod'];	
 		
-		if ($delivery_method==1)
-			$parcel_status = yandex_tracker($track_number,$post_code);
-		
-		if ($delivery_method==2 || $delivery_method==4 || $delivery_method==5)
-			$parcel_status = dpd_tracker($track_number,$post_code);
-		
-		if ($delivery_method==3)
-			$parcel_status = europost_tracker($track_number,$post_code);
-		
-		if ($delivery_method==6)
-			$parcel_status = belpost_tracker($track_number,$post_code);
+		switch ($delivery_method) 
+		{
+			case 1: $parcel_status = yandex_tracker($track_number, $post_code); break;
+			case 2:
+			case 4:
+			case 5: $parcel_status = dpd_tracker($track_number, $post_code); break;
+			case 3: $parcel_status = europost_tracker($track_number, $post_code); break;
+			case 6: $parcel_status = belpost_tracker($track_number, $post_code); break;
+		}
+
 		
 		echo "post_code=$post_code, track_number=$track_number => parcel_status=$parcel_status".PHP_EOL;
 		//выполнить какие-то действия

@@ -72,7 +72,7 @@ if ($method == 'update_qty_control')
         AND o.datetime_create > NOW() - INTERVAL 30 DAY
     );
 	";
-	ExecSQL($link,$que);
+	Exec_PR_SQL($link,$que,[]);
 	exit('qty_control updated');
 }
 

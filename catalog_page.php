@@ -47,7 +47,7 @@ WHERE g.goods_groups_id IS NOT NULL AND price>0;
 ";
 	/*if ($cat!=NULL) $que = $que . "WHERE cat='$cat'";
 	if ($subcat!=NULL) $que = $que . "WHERE subcat='$subcat'";*/
-	$goods = ExecSQL($link,$que);
+	$goods = Exec_PR_SQL($link,$que,[]);
 
 	$doc = 		 preg_replace('/<!\s*--\s*\[CHANGE_FROM\]\s*--\s*>.*?<!\s*--\s*\[CHANGE_TO\]\s*--\s*>/s', '' , $doc);
 	$cart_count = $cart['cart_count'];

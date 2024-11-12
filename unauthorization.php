@@ -12,8 +12,8 @@
 	setcookie('jwt_staff', '', time() - 3600, '/', '', false, true);
 	header('Content-Type: application/json');
 	
-	$que = "UPDATE clients SET client_email='', datetime_email_confirmed=NULL,email_confirm_detailed='unauth ' WHERE id=$client_id";
-	ExecSQL($link,$que);
+	$que = "UPDATE clients SET client_email='', datetime_email_confirmed=NULL,email_confirm_detailed='unauth ' WHERE id=?";
+	Exec_PR_SQL($link,$que,[$client_id]);
 	
 	$cart = cart_by_session_id_and_username($session_id,$username);	
 	

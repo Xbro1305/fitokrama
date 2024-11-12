@@ -110,13 +110,13 @@ function refresh_europochta_data() 			//обновление базы пункт
 		die (json_encode(['status'=>'error', 'message'=> 'europochta refresh calcelled']));
 	}
 	
-	$patner_id = 3;
-	$patner_prefix = 'EUR';
-	$datetieme_refresh_start = date('Y-m-d H:i:s');	//	запомнить момент начала обновления
+	$partner_id = 3;
+	$partner_prefix = 'EUR';
+	$datetime_refresh_start = date('Y-m-d H:i:s');	//	запомнить момент начала обновления
 	
 	foreach ($europochta_points as $europochta_point)
 	{
-		$unique_id = $patner_prefix.'-'.$europochta_point['WarehouseId'];
+		$unique_id = $partner_prefix.'-'.$europochta_point['WarehouseId'];
 		$address = $europochta_point['Address7Name'].','.$europochta_point['Address6Name'].','.$europochta_point['Address4NamePrefix'].' '.$europochta_point['Address4Name'].', '.$europochta_point['Address3Name'];
 		$descript = $europochta_point['WarehouseName'];
 		$lat = $europochta_point['Latitude'];
@@ -125,25 +125,37 @@ function refresh_europochta_data() 			//обновление базы пункт
 		
 		//$comment = $europochta_point['']['operation'];
 		$que = "INSERT INTO `delivery_points` (unique_id, datetime_updated, actual_until_datetime,partner_id,address,name,comment,lat,lng)
-				VALUES ('$unique_id', CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),$patner_id,'$address','$descript', '$shed', $lat, $lng)
+				VALUES (?, CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),?,?,?,?,?,?)
 				ON DUPLICATE KEY UPDATE
 					datetime_updated = CURRENT_TIMESTAMP,
 					actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
-					partner_id = $patner_id,
-					address = '$address',
-					name = '$descript',
-					comment  = '$shed',
-					lat = $lat,
-					lng = $lng ";
+					partner_id = ?,
+					address = ?,
+					name = ?,
+					comment  = ?,
+					lat = ?,
+					lng = ? ";
 					
-		ExecSQL($link,$que);
+		Exec_PR_SQL($link,$que,[$unique_id,$partner_id,$address,$descript,$shed,$lat,$lng,$partner_id,$address,$descript,$shed,$lat,$lng]);
 	}
-	$que = "SELECT * FROM `delivery_points` WHERE datetime_updated<'$datetieme_refresh_start' AND actual_until_datetime>CURRENT_TIMESTAMP AND partner_id=$patner_id";	
-	$deactivated = count(ExecSQL($link,$que));
-	$que = "SELECT * FROM `delivery_points` WHERE datetime_updated>='$datetieme_refresh_start' AND actual_until_datetime>CURRENT_TIMESTAMP AND partner_id=$patner_id";	
-	$activated = count(ExecSQL($link,$que));
-	$que = "UPDATE `delivery_points` SET actual_until_datetime=CURRENT_TIMESTAMP WHERE datetime_updated<'$datetieme_refresh_start' AND partner_id=$patner_id";	// под конец деактивировать необновленные
-	ExecSQL($link,$que);
+	// Подсчет деактивированных точек
+	$que = "SELECT COUNT(*) AS deactivated_count 
+			FROM `delivery_points` 
+			WHERE datetime_updated < ? 
+			AND actual_until_datetime > CURRENT_TIMESTAMP 
+			AND partner_id = ?";
+	$deactivated = Exec_PR_SQL($link, $que, [$datetime_refresh_start, $partner_id])[0]['deactivated_count'];
+
+	// Подсчет активированных точек
+	$que = "SELECT COUNT(*) AS activated_count 
+			FROM `delivery_points` 
+			WHERE datetime_updated >= ? 
+			AND actual_until_datetime > CURRENT_TIMESTAMP 
+			AND partner_id = ?";
+	$activated = Exec_PR_SQL($link, $que, [$datetime_refresh_start, $partner_id])[0]['activated_count'];
+	
+	$que = "UPDATE `delivery_points` SET actual_until_datetime=CURRENT_TIMESTAMP WHERE datetime_updated<? AND partner_id=?";	// под конец деактивировать необновленные
+	Exec_PR_SQL($link,$que,[$datetime_refresh_start,$partner_id]);
 	if ($deactivated>0) send_warning_telegram('europochta: деактивировано '.$deactivated.' пунктов.');
 	exit (json_encode(['status'=>'ok', 'message'=> "Activated $activated points, Deactivated $deactivated points"])); 
 }
@@ -154,8 +166,9 @@ function eur_calculator($delivery_city,$weight,$volume,$selfDelivery,$client_add
 	//echo (json_encode([$delivery_city,$weight,$volume,$selfDelivery,$client_address])).PHP_EOL;
 	
 	
-	$que = "SELECT * FROM `delivery_points` WHERE partner_id=3 AND address LIKE '%$delivery_city%' LIMIT 1;";
-	$eur_points = ExecSQL($link,$que);
+	$que = "SELECT * FROM `delivery_points` WHERE partner_id=3 AND address LIKE ? LIMIT 1;";
+	$eur_points = Exec_PR_SQL($link, $que, ['%' . $delivery_city . '%']);
+	
 	if (count($eur_points)>0) $WarehouseIdFinish = preg_replace('/\D/', '', $eur_points [0]['unique_id']);
 						 else $WarehouseIdFinish = 72130020; // непонятный город - Узда 
 		

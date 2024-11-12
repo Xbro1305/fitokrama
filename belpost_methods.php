@@ -81,13 +81,13 @@ function refresh_belpochta_data() 			//обновление базы пункт�
 		die (json_encode(['status'=>'error', 'message'=> 'belpochta refresh calcelled']));
 	}
 	
-	$patner_id = 6;
-	$patner_prefix = 'BPS';
-	$datetieme_refresh_start = date('Y-m-d H:i:s');	//	запомнить момент начала обновления
+	$partner_id = 6;
+	$partner_prefix = 'BPS';
+	$datetime_refresh_start = date('Y-m-d H:i:s');	//	запомнить момент начала обновления
 	
 	foreach ($belpochta_points as $belpochta_point)
 	{
-		$unique_id = $patner_prefix.'-'.$belpochta_point['postcode'];
+		$unique_id = $partner_prefix.'-'.$belpochta_point['postcode'];
 		$address = $belpochta_point['address'];
 		$descript = $belpochta_point['name'].' Белпочта';
 		$lat = $belpochta_point['latitude'];
@@ -95,26 +95,61 @@ function refresh_belpochta_data() 			//обновление базы пункт�
 		$shed = '';// $belpochta_point['Info1'];  !!!!!!!!!!!!!!!! расписание не анализируем
 		
 		//$comment = $belpochta_point['']['operation'];
-		$que = "INSERT INTO `delivery_points` (unique_id, datetime_updated, actual_until_datetime,partner_id,address,name,comment,lat,lng)
-				VALUES ('$unique_id', CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),$patner_id,'$address','$descript', '$shed', $lat, $lng)
-				ON DUPLICATE KEY UPDATE
-					datetime_updated = CURRENT_TIMESTAMP,
-					actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
-					partner_id = $patner_id,
-					address = '$address',
-					name = '$descript',
-					comment  = '$shed',
-					lat = $lat,
-					lng = $lng ";
-					
-		ExecSQL($link,$que);
-	}
-	$que = "SELECT * FROM `delivery_points` WHERE datetime_updated<'$datetieme_refresh_start' AND actual_until_datetime>CURRENT_TIMESTAMP AND partner_id=$patner_id";	
-	$deactivated = count(ExecSQL($link,$que));
-	$que = "SELECT * FROM `delivery_points` WHERE datetime_updated>='$datetieme_refresh_start' AND actual_until_datetime>CURRENT_TIMESTAMP AND partner_id=$patner_id";	
-	$activated = count(ExecSQL($link,$que));
-	$que = "UPDATE `delivery_points` SET actual_until_datetime=CURRENT_TIMESTAMP WHERE datetime_updated<'$datetieme_refresh_start' AND partner_id=$patner_id";	// под конец деактивировать необновленные
-	ExecSQL($link,$que);
+		// Обновляем или вставляем данные в таблицу `delivery_points`
+		$que = "
+			INSERT INTO `delivery_points` 
+			(unique_id, datetime_updated, actual_until_datetime, partner_id, address, name, comment, lat, lng)
+			VALUES (?, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR), ?, ?, ?, ?, ?, ?)
+			ON DUPLICATE KEY UPDATE
+				datetime_updated = CURRENT_TIMESTAMP,
+				actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
+				partner_id = ?,
+				address = ?,
+				name = ?,
+				comment = ?,
+				lat = ?,
+				lng = ?
+		";
+
+		$params = [
+			$unique_id, $partner_id, $address, $descript, $shed, $lat, $lng,
+			$partner_id, $address, $descript, $shed, $lat, $lng
+		];
+
+		Exec_PR_SQL($link, $que, $params);
+
+		// Подсчёт количества деактивированных пунктов
+		$que = "
+			SELECT COUNT(*) 
+			FROM `delivery_points` 
+			WHERE datetime_updated < ? 
+			AND actual_until_datetime > CURRENT_TIMESTAMP 
+			AND partner_id = ?
+		";
+		$params = [$datetime_refresh_start, $partner_id];
+		$deactivated = Exec_PR_SQL($link, $que, $params)[0]['COUNT(*)'];
+
+		// Подсчёт количества активированных пунктов
+		$que = "
+			SELECT COUNT(*) 
+			FROM `delivery_points` 
+			WHERE datetime_updated >= ? 
+			AND actual_until_datetime > CURRENT_TIMESTAMP 
+			AND partner_id = ?
+		";
+		$params = [$datetime_refresh_start, $partner_id];
+		$activated = Exec_PR_SQL($link, $que, $params)[0]['COUNT(*)'];
+
+		// Деактивируем устаревшие пункты
+		$que = "
+			UPDATE `delivery_points` 
+			SET actual_until_datetime = CURRENT_TIMESTAMP 
+			WHERE datetime_updated < ? 
+			AND partner_id = ?
+		";
+		$params = [$datetime_refresh_start, $partner_id];
+		Exec_PR_SQL($link, $que, $params);
+
 	if ($deactivated>0) send_warning_telegram('belpochta: деактивировано '.$deactivated.' пунктов.');
 	exit (json_encode(['status'=>'ok', 'message'=> "Activated $activated points, Deactivated $deactivated points"])); 
 }

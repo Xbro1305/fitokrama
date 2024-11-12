@@ -42,7 +42,7 @@
 	FROM goods g
 	WHERE g.goods_groups_id IS NOT NULL AND price>0
 	LIMIT 12000;";
-	$goods = ExecSQL($link,$que);
+	$goods = Exec_PR_SQL($link,$que,[]);
 
 	$doc = 		 preg_replace('/<!\s*--\s*\[CHANGE_FROM\]\s*--\s*>.*?<!\s*--\s*\[CHANGE_TO\]\s*--\s*>/s', '' , $doc);
 	$cart_count = $cart['cart_count'];

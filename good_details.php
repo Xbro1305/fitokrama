@@ -32,7 +32,7 @@ if ($staff_role !== 'buyer' && $staff_role !== 'main' && $staff_role !== 'manage
     ]));
 }
 
-$goods = ExecSQL($link, "SELECT * FROM `goods` WHERE `art`='{$json_in['art']}' LIMIT 1");
+$goods = Exec_PR_SQL($link, "SELECT * FROM `goods` WHERE `art`=? LIMIT 1",[$json_in['art']]);
 
 if (count($goods) === 0) {
     die (json_encode([

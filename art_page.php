@@ -20,7 +20,7 @@
 	$doc = cut_fragment($doc, '<!-- BANNERS_PAGE_BEGIN -->','<!-- BANNERS_PAGE_END -->','');
 	
 	$art = $_GET['art'];
-	$good = ExecSQL($link,"SELECT g.*,
+	$que = "SELECT g.*,
     COALESCE(
         (
             (SELECT r.qty FROM register_qty r WHERE r.art = g.art) 
@@ -38,8 +38,8 @@
     ) AS qty_fr
 	FROM goods g
 	WHERE g.goods_groups_id IS NOT NULL AND price>0
-	AND art='$art'")[0];
-	
+	AND art=?";
+	$good = Exec_PR_SQL($link,$que,[$art])[0];
 	
 	if (($good==NULL) or count($good)==0)
 	{
@@ -105,7 +105,7 @@
 	FROM goods g
 	WHERE g.goods_groups_id IS NOT NULL
 	ORDER BY RAND () LIMIT 3 ";
-	$similar_goods = ExecSQL($link,$que);
+	$similar_goods = Exec_PR_SQL($link,$que,[]);
 
 	foreach ($similar_goods as $sgood)
 	{

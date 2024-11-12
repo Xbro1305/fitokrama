@@ -21,7 +21,7 @@
 					  AND datetime_assembly IS NULL 
 					  AND datetime_cancel IS NULL 
 					  AND datetime_order_print IS NULL;	";
-		$orders = ExecSQL($link,$que);
+		$orders = Exec_PR_SQL($link,$que,[]);
 		if (count($orders)>0) 
 			{	
 				send_telegram_info_group('☠️ Внимание! Количество нераспечатанных заданий на сборку сроком более 10 минут: '.count($orders),$ids);

@@ -19,8 +19,8 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 	
 	if (is_null($address)) $address = $cart['client_address'];
 	
-	$que = "SELECT `methods` FROM `delivery_methods_saved` WHERE `address`='$address' AND `datetime_until`>CURRENT_TIMESTAMP AND sum_goods=".$cart['sum_goods'];
-	$delivery_methods_saved = ExecSQL($link,$que);
+	$que = "SELECT `methods` FROM `delivery_methods_saved` WHERE `address`=? AND `datetime_until`>CURRENT_TIMESTAMP AND sum_goods=?";
+	$delivery_methods_saved = Exec_PR_SQL($link,$que,[$address,$cart['sum_goods']]);
 	if (count($delivery_methods_saved)>0)
 	{
 		$methods_json = $delivery_methods_saved[0]['methods'];
@@ -47,7 +47,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 	
 	$methods ['lat'] = $lat;
 	$methods ['lng'] = $lng;
-	$methods ['methods'] = ExecSQL($link,'SELECT id AS method_id, name, logo, prefix, gratis_delivery_by_sum FROM `delivery_partners` WHERE `available`=TRUE ORDER by `priority`;');
+	$methods ['methods'] = Exec_PR_SQL($link,'SELECT id AS method_id, name, logo, prefix, gratis_delivery_by_sum FROM `delivery_partners` WHERE `available`=TRUE ORDER by `priority`;',[]);
 
 	foreach ($methods['methods'] as &$method)
 	{
@@ -102,18 +102,18 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 				$que = "
 					WITH distances AS (
 						SELECT 
-							CONCAT('{$method['prefix']}-', unique_id) AS point_id,
+							CONCAT(?, '-', unique_id) AS point_id,
 							address,
 							name,
 							comment,
 							lat,
 							lng,
-							ROUND(6371000 * ACOS(COS(RADIANS($lat)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS($lng)) + SIN(RADIANS($lat)) * SIN(RADIANS(dp.lat)))) AS distance,
+							ROUND(6371000 * ACOS(COS(RADIANS(?)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(dp.lat)))) AS distance,
 							specific_json
 						FROM 
 							delivery_points dp
 						WHERE
-							partner_id = $method_id
+							partner_id = ?
 							AND lat BETWEEN -90 AND 90 
 							AND lng BETWEEN -180 AND 180
 							AND actual_until_datetime > CURRENT_TIMESTAMP
@@ -136,7 +136,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 						distance
 					LIMIT 3";
 				
-				$method['points'] = ExecSQL($link,$que);
+				$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'],$lat,$lng,$lat,$method_id]);
 				$count_DPD_postomat = count($method['points']);
 			}
 			if ($method_id==3)	//	это Европочта - пункт выдачи
@@ -152,18 +152,18 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 				$que = "
 					WITH distances AS (
 						SELECT 
-							CONCAT('{$method['prefix']}-', unique_id) AS point_id,
+							CONCAT(?, '-', unique_id) AS point_id,
 							address,
 							name,
 							comment,
 							lat,
 							lng,
-							ROUND(6371000 * ACOS(COS(RADIANS($lat)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS($lng)) + SIN(RADIANS($lat)) * SIN(RADIANS(dp.lat)))) AS distance,
+							ROUND(6371000 * ACOS(COS(RADIANS(?)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(dp.lat)))) AS distance,
 							specific_json
 						FROM 
 							delivery_points dp
 						WHERE
-							partner_id = $method_id
+							partner_id = ?
 							AND lat BETWEEN -90 AND 90 
 							AND lng BETWEEN -180 AND 180
 							AND actual_until_datetime > CURRENT_TIMESTAMP
@@ -185,7 +185,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 						distance
 					LIMIT 3";
 				
-				$method['points'] = ExecSQL($link,$que);
+				$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'],$lat,$lng,$lat,$method_id]);
 			}
 			if ($method_id==7)	//	это Европочта - доставка до дверей!
 			{
@@ -258,13 +258,13 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 				$que = "
 					WITH distances AS (
 						SELECT 
-							CONCAT('{$method['prefix']}-', unique_id) AS point_id,
+							CONCAT(?, '-', unique_id) AS point_id,
 							address,
 							name,
 							comment,
 							lat,
 							lng,
-							ROUND(6371000 * ACOS(COS(RADIANS($lat)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS($lng)) + SIN(RADIANS($lat)) * SIN(RADIANS(dp.lat)))) AS distance,
+							ROUND(6371000 * ACOS(COS(RADIANS(?)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(dp.lat)))) AS distance,
 							specific_json
 						FROM 
 							delivery_points dp
@@ -292,7 +292,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 					ORDER BY 
 						distance
 					LIMIT 3";
-				$method['points'] = ExecSQL($link,$que);	
+				$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'],$lat,$lng,$lat]);	
 
 			
 			}
@@ -309,18 +309,18 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 				$que = "
 					WITH distances AS (
 						SELECT 
-							CONCAT('{$method['prefix']}-', unique_id) AS point_id,
+							CONCAT(?, '-', unique_id) AS point_id,
 							address,
 							name,
 							comment,
 							lat,
 							lng,
-							ROUND(6371000 * ACOS(COS(RADIANS($lat)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS($lng)) + SIN(RADIANS($lat)) * SIN(RADIANS(dp.lat)))) AS distance,
+							ROUND(6371000 * ACOS(COS(RADIANS(?)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(dp.lat)))) AS distance,
 							specific_json
 						FROM 
 							delivery_points dp
 						WHERE
-							partner_id = $method_id
+							partner_id = ?
 							AND lat BETWEEN -90 AND 90 
 							AND lng BETWEEN -180 AND 180
 							AND actual_until_datetime > CURRENT_TIMESTAMP
@@ -342,7 +342,7 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 						distance
 					LIMIT 3";
 				
-				$method['points'] = ExecSQL($link,$que);
+				$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'],$lat,$lng,$lat,$method_id]);	
 			}
 			
 		if ($method['gratis_delivery_by_sum']==1 && $cart['sum_goods']>=$min_sum_gratis_delivery )
@@ -361,23 +361,21 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 
 	//$methods_json = preg_replace('/[[:cntrl:]]/', '', $methods_json);
 
-	$que = "SELECT `id` FROM `delivery_methods_saved` WHERE `address`='$address' AND sum_goods=".$cart['sum_goods'];
-	$delivery_methods_saved = ExecSQL($link,$que);
+	$que = "SELECT `id` FROM `delivery_methods_saved` WHERE `address`=? AND sum_goods=?";
+	$delivery_methods_saved = Exec_PR_SQL($link,$que,[$address,$cart['sum_goods']]);
 	if (count($delivery_methods_saved)>0)
-		$que = "UPDATE `delivery_methods_saved` SET 
+		Exec_PR_SQL($link, "UPDATE `delivery_methods_saved` SET 
 					`datetime_until` = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 10 MINUTE),
-					`methods` = '$methods_json' 
-				WHERE `address`='$address' AND sum_goods={$cart['sum_goods']}; ";
+					`methods` = ?
+				WHERE `address`=? AND sum_goods=?; ",[$methods_json,$address,$cart['sum_goods']]);
 		else
-		$que = "INSERT INTO `delivery_methods_saved` 
+		Exec_PR_SQL($link, "INSERT INTO `delivery_methods_saved` 
 				(`address`,`datetime_until`,`methods`, `sum_goods`)
 				VALUES 
-				('$address',
+				(?,
 				DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 10 MINUTE),
-				'$methods_json',
-				{$cart['sum_goods']});";		
-
-	ExecSQL($link,$que);
+				?,
+				?);",[$address,$methods_json,$cart['sum_goods']]);		
 		
 	return $methods;
 	

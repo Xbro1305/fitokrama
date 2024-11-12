@@ -32,7 +32,7 @@ if ($staff_role !== 'buyer' && $staff_role !== 'main' && $staff_role !== 'manage
     ]));
 }
 
-$goods = ExecSQL($link, "SELECT * FROM `goods` WHERE `art`='{$json_in['product']['art']}' LIMIT 1");
+$goods = Exec_PR_SQL($link, "SELECT * FROM `goods` WHERE `art`=? LIMIT 1",[$json_in['product']['art']]);
 
 if (count($goods) === 0) {
     die (json_encode([
@@ -41,22 +41,39 @@ if (count($goods) === 0) {
 }
 
 $sql = "UPDATE `goods` SET
-                `name`='{$json_in['product']['name']}',
-                `description_short`='{$json_in['product']['description_short']}',
-                `description_full`='{$json_in['product']['description_full']}',
-                `price`='{$json_in['product']['price']}',
-                `price_old`='{$json_in['product']['price_old']}',
-                `qty`='{$json_in['product']['qty']}',
-                `barcode`='{$json_in['product']['barcode']}',
-                `producer`='{$json_in['product']['producer']}',
-                `producer_country`='{$json_in['product']['producer_country']}',
-                `cat`='{$json_in['product']['cat']}',
-                `subcat`='{$json_in['product']['subcat']}',
-                `koef_ed_izm`='{$json_in['product']['koef_ed_izm']}',
-                `ed_izm_name`='{$json_in['product']['ed_izm_name']}'
-                WHERE `art`='{$json_in['product']['art']}' LIMIT 1";
+    `name` = ?,
+    `description_short` = ?,
+    `description_full` = ?,
+    `price` = ?,
+    `price_old` = ?,
+    `qty` = ?,
+    `barcode` = ?,
+    `producer` = ?,
+    `producer_country` = ?,
+    `cat` = ?,
+    `subcat` = ?,
+    `koef_ed_izm` = ?,
+    `ed_izm_name` = ?
+    WHERE `art` = ? LIMIT 1";
 
-ExecSQL($link, $sql);
+$params = [
+    $json_in['product']['name'],
+    $json_in['product']['description_short'],
+    $json_in['product']['description_full'],
+    $json_in['product']['price'],
+    $json_in['product']['price_old'],
+    $json_in['product']['qty'],
+    $json_in['product']['barcode'],
+    $json_in['product']['producer'],
+    $json_in['product']['producer_country'],
+    $json_in['product']['cat'],
+    $json_in['product']['subcat'],
+    $json_in['product']['koef_ed_izm'],
+    $json_in['product']['ed_izm_name'],
+    $json_in['product']['art']
+];
+
+Exec_PR_SQL($link, $sql, $params);
 
 exit(json_encode([
     'message' => 'Товар успешно обновлён',

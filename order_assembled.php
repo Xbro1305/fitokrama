@@ -54,21 +54,21 @@
 
 	if ($order['status']!='in_process_assembly') die (json_encode(['error'=>'The order is not in assembling state']));
 
-	$que = "UPDATE `orders_goods` SET `qty_as`=0 WHERE `order_id`=$order_id;";
-	ExecSQL($link,$que);
+	$que = "UPDATE `orders_goods` SET `qty_as`=0 WHERE `order_id`=?;";
+	Exec_PR_SQL($link,$que,[$order_id]);
 	$diff_text = '';
 
 
 	foreach ($goods as $good_1)
 	{
-		$que = "SELECT * FROM `orders_goods` WHERE `order_id`=$order_id AND `good_art`={$good_1['good_art']};";
-		$ress = ExecSQL($link,$que);
+		$que = "SELECT * FROM `orders_goods` WHERE `order_id`=? AND `good_art`=?;";
+		$ress = Exec_PR_SQL($link,$que,[$order_id,$good_1['good_art']]);
 		if (count($ress)==0) $diff_text .= "Арт. {$good_1['good_art']} - Δ {$good_1['qty_as']} (надо 0, собрано {$good_1['qty_as']})!; ";
-		$que = "UPDATE `orders_goods` SET `qty_as`=`qty_as`+{$good_1['qty_as']} WHERE `order_id`=$order_id AND `good_art`={$good_1['good_art']};";
-		ExecSQL($link,$que);
+		$que = "UPDATE `orders_goods` SET `qty_as`=`qty_as`+? WHERE `order_id`=? AND `good_art`=?;";
+		Exec_PR_SQL($link,$que,[$good_1['qty_as'],$order_id,$good_1['good_art']]);
 	}
-	$que = "SELECT good_art,`qty_as`-`qty` as delta,`qty_as`,`qty` FROM `orders_goods`  WHERE `order_id`=$order_id AND `qty_as`<>`qty`;";
-	$diff = ExecSQL($link,$que);
+	$que = "SELECT good_art,`qty_as`-`qty` as delta,`qty_as`,`qty` FROM `orders_goods`  WHERE `order_id`=? AND `qty_as`<>`qty`;";
+	$diff = Exec_PR_SQL($link,$que,[$order_id]);
 
 	foreach ($diff as $diff_1)
 		$diff_text .= "Арт. {$diff_1['good_art']} - Δ {$diff_1['delta']} (надо {$diff_1['qty']}, собрано {$diff_1['qty_as']}); ";
@@ -77,19 +77,19 @@
 	$message = 'Заказ $order_number собран! Распечатайте, наклейте наклейку и передайте на отправку'; // !!!!!!!!!!!!!!!!!!!!!!
 
 	$delivery_method = $order['delivery_method'];
-	$delivery_partners = ExecSQL($link,"SELECT * FROM delivery_partners WHERE id=$delivery_method");
+	$delivery_partners = Exec_PR_SQL($link,"SELECT * FROM delivery_partners WHERE id=?",[$delivery_method]);
 
 	if (!count($delivery_partners)>0) die (json_encode(['error'=>'Не удается отметить заказ как собранный из-за проблем с формированием почтовой квитанции. '], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 	$delivery_partner = $delivery_partners[0];
 
 	// меняем статус заказа!
 
-	$que = "UPDATE `orders` SET datetime_assembly=CURRENT_TIMESTAMP() WHERE id=$order_id";
+	$que = "UPDATE `orders` SET datetime_assembly=CURRENT_TIMESTAMP() WHERE id=?";
 	//echo $que.PHP_EOL;
-	// ExecSQL($link,$que); //////// !!!!!!!!!!!!!!!!!!!!!!!! пока заглушка
-	$que = "INSERT INTO `orders_steps` (`order_id`,`datetime`,`status`,`report`) VALUES ($order_id,CURRENT_TIMESTAMP(),'assembled','$staff_name');";
+	// Exec_PR_SQL($link,$que,[$order_id]); //////// !!!!!!!!!!!!!!!!!!!!!!!! пока заглушка
+	$que = "INSERT INTO `orders_steps` (`order_id`,`datetime`,`status`,`report`) VALUES (?,CURRENT_TIMESTAMP(),'assembled',?);";
 	//echo $que.PHP_EOL;
-	// ExecSQL($link,$que); //////// !!!!!!!!!!!!!!!!!!!!!!!! пока заглушка
+	// Exec_PR_SQL($link,$que,[$order_id,$staff_name]); //////// !!!!!!!!!!!!!!!!!!!!!!!! пока заглушка
 
 	if (!$test) send_telegram_info_group("🫡 Заказ $order_number собран. ВРЕМЕННО СТАТУС не меняется.");
 
@@ -123,9 +123,9 @@
 
 	if (is_null($internal_postcode)) $internal_postcode='FTKRM...';
 
-	$que = "UPDATE `orders` SET track_number='$track_number', post_code='$post_code', internal_postcode='$internal_postcode' WHERE id=$order_id";
-	//send_warning_telegram($que);
-	ExecSQL($link,$que);
+	$que = "UPDATE `orders` SET track_number=?, post_code=?, internal_postcode= WHERE id=?";
+	Exec_PR_SQL($link,$que,[$track_number,$post_code,$internal_postcode,$order_id]);
+
 	$message = "Сформировано отправление $track_number. Распечатайте наклейку!";
 
 	if (file_exists($label_filename)) $label_content = file_get_contents($label_filename);

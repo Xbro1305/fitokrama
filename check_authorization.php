@@ -37,11 +37,13 @@ function checkEmailAuthorization($getdata)
 	$longcode = $getdata['longcode'];
 	
 	if (isset($longcode) AND ($longcode!=NULL) AND (strlen($longcode)>5))
-		$que = "SELECT * FROM email_confirm WHERE longcode='$longcode' AND datetime>DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 24 hour)";
+		$record = Exec_PR_SQL($link, "SELECT * FROM email_confirm WHERE longcode=? AND datetime>DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 24 hour)"
+					,[$longcode]);
 	else
-		$que = "SELECT * FROM email_confirm WHERE client_id=$client_id AND code='$code' AND datetime>DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 24 hour)";
+		$record = Exec_PR_SQL($link, "SELECT * FROM email_confirm WHERE client_id=? AND code=? AND datetime>DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 24 hour)"
+					,[$client_id,$code]);
 	
-	$record = ExecSQL($link,$que);
+	
 	
 	if (count($record)==0) 
 		die (json_encode(['status'=>'error', 'message'=> 'Неверный код!']));	
@@ -242,32 +244,32 @@ function checkAppleAuthorization($postparams) {
 		die (json_encode(['status'=>'error', 'message'=> 'Error DATA']));						
 								
 	$message = 'Отлично, мы вас запомнили!';
-	$anothers = ExecSQL($link,"SELECT * from clients WHERE client_email='$username'");
+	$anothers = Exec_PR_SQL($link,"SELECT * from clients WHERE client_email=?",[$username]);
 	if (count($anothers)>0)			// есть другие корзины этого пользователя
 	{
 		foreach ($anothers as $another_1)	// перебираем все такие корзины
 		{
-			$que = "SELECT * FROM carts_goods WHERE client_id=".$another_1['id'];
-			$res = ExecSQL($link,$que);
+			$que = "SELECT * FROM carts_goods WHERE client_id=?";
+			$res = Exec_PR_SQL($link,$que,[$another_1['id']]);
 			if (count($res)>0) $message = $message.' Обратите внимание: корзина дополнена ранее сохраненными товарами!';
 						
-			$que = "UPDATE carts_goods SET client_id=$client_id WHERE client_id=".$another_1['id'];
-			ExecSQL($link,$que);
-			$que = "UPDATE clients SET client_email='".$username.'-перенесен'."' WHERE id=".$another_1['id'];
-			ExecSQL($link,$que);
+			$que = "UPDATE carts_goods SET client_id=? WHERE client_id=?";
+			Exec_PR_SQL($link,$que,[$client_id,$another_1['id']]);
+			$que = "UPDATE clients SET client_email=? перенесен WHERE id=?";
+			Exec_PR_SQL($link,$que,[$username,$another_1['id']]);
 		}
 	}
   
   $jwt = jwt_create($username);
-  $que = "UPDATE clients SET client_email='$username', datetime_email_confirmed=CURRENT_TIMESTAMP(), email_confirm_detailed = '$email_confirm_detailed' WHERE id=$client_id";
-  ExecSQL($link,$que);
+  $que = "UPDATE clients SET client_email=?, datetime_email_confirmed=CURRENT_TIMESTAMP(), email_confirm_detailed = ? WHERE id=?";
+  Exec_PR_SQL($link,$que,[$username,$email_confirm_detailed,$client_id]);
   
-  $que = "SELECT * FROM staff WHERE staff_email='$username' AND role IS NOT NULL LIMIT 1";
-  $staffs = ExecSQL($link,$que);
+  $que = "SELECT * FROM staff WHERE staff_email=? AND role IS NOT NULL LIMIT 1";
+  $staffs = Exec_PR_SQL($link,$que,[$username]);
   if (count($staffs)>0)	// видим сотрудника компании
   {
-	$que = "UPDATE staff SET datetime_last=CURRENT_TIMESTAMP() WHERE id=".$staffs[0]['id'];
-	ExecSQL($link,$que);
+	$que = "UPDATE staff SET datetime_last=CURRENT_TIMESTAMP() WHERE id=?";
+	Exec_PR_SQL($link,$que,[$staffs[0]['id']]);
 	$staff_level = $staffs[0]['role'];
     $jwt_staff = jwt_create_staff($username,$staff_level);
 	setcookie('jwt_staff', $jwt_staff, time() + (30 * 24 * 60 * 60), '/');

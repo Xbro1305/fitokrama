@@ -6,7 +6,7 @@
 
 	
 	$link = firstconnect ();
-	$dps = ExecSQL($link,"SELECT * FROM delivery_points WHERE lat=0 OR lon=0");
+	$dps = Exec_PR_SQL($link,"SELECT * FROM delivery_points WHERE lat=0 OR lon=0",[]);
 	foreach ($dps as $dp)
 	{	
 		$address = $dp['address'];

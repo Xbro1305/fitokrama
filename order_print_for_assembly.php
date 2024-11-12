@@ -42,9 +42,9 @@
 	
 
 
-	$orders = ExecSQL($link,"SELECT * FROM `orders` WHERE datetime_paid IS NOT NULL AND datetime_assembly IS NULL AND datetime_cancel IS NULL AND datetime_order_print IS NULL ORDER BY datetime_assembly_order,datetime_create LIMIT 1");
+	$orders = Exec_PR_SQL($link,"SELECT * FROM `orders` WHERE datetime_paid IS NOT NULL AND datetime_assembly IS NULL AND datetime_cancel IS NULL AND datetime_order_print IS NULL ORDER BY datetime_assembly_order,datetime_create LIMIT 1",[]);
 	if (count($orders)==0) exit (json_encode(['massage'=>'no_for_print']));
-	ExecSQL($link,"UPDATE `orders` SET datetime_order_print=CURRENT_TIMESTAMP() WHERE id=".$orders[0]['id']);	
+	Exec_PR_SQL($link,"UPDATE `orders` SET datetime_order_print=CURRENT_TIMESTAMP() WHERE id=?",[$orders[0]['id']]);	
 	$order = all_about_order($orders[0]['number']);
 	$order['qrcode']='002-/'.$order['number'];
 	$qrTempDir = sys_get_temp_dir(); // Используем временную директорию для хранения QR-кода

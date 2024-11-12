@@ -5,8 +5,8 @@
 	$link = firstconnect ();
 	[$session_id, $username, $cart, $client_id] = enterregistration ();	
 	
-	$que = "SELECT * FROM email_confirm WHERE client_id=$client_id AND datetime>DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 58 second)";
-	$last_record = ExecSQL($link,$que);
+	$que = "SELECT * FROM email_confirm WHERE client_id=? AND datetime>DATE_SUB(CURRENT_TIMESTAMP,INTERVAL 58 second)";
+	$last_record = Exec_PR_SQL($link,$que,[$client_id]);
 	if (count($last_record)>0) 
 		die (json_encode(['status'=>'error', 'message'=> 'too_fast']));	
 	
@@ -30,13 +30,16 @@
 		
 	$rep = mail_sender($email, '🌿 Код подтверждения Fitokrama - noreply', $text);
 	
-	$que = "INSERT INTO email_confirm (client_id,email,code,longcode,datetime,report) VALUES ($client_id,'$email',$code,'$longcode',CURRENT_TIMESTAMP(),'$rep');";
+	$que = "INSERT INTO email_confirm (client_id,email,code,longcode,datetime,report) VALUES (?,?,?,?,CURRENT_TIMESTAMP(),?);";
 	
-	ExecSQL($link,$que);
+	Exec_PR_SQL($link,$que,[$client_id,$email,$code,$longcode,$rep]);
 	
 	
 
 
-	if (!is_null($rep))
-	exit (json_encode(['status'=>'ok', 'message'=> 'Код выслан на почту.']));	
-	else exit;
+	if ($rep) 
+		exit(json_encode(['status' => 'ok', 'message' => 'Код выслан на почту.']));
+	else
+		exit(json_encode(['status' => 'error', 'message' => 'Failed to send email.']));
+}
+

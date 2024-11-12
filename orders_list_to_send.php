@@ -31,11 +31,11 @@
 	if ($staff_role!='store' && $staff_role!='main') die (json_encode(['error'=>'No rights']));
 
 	$que = "SELECT id,name,prefix,logo,sending_point_address,sending_point_lat,sending_point_lng FROM `delivery_partners`";
-	$delivery_partners = ExecSQL($link,$que);
+	$delivery_partners = Exec_PR_SQL($link,$que,[]);
 	foreach ($delivery_partners as $key=>&$delivery_partner)
 	{
-		$que = "SELECT number FROM `orders` WHERE delivery_method={$delivery_partner['id']} AND datetime_paid IS NOT NULL AND datetime_assembly IS NOT NULL AND datetime_cancel IS NULL AND datetime_sent IS NULL ORDER BY datetime_assembly_order,datetime_create";
-		$orders = ExecSQL($link,$que);
+		$que = "SELECT number FROM `orders` WHERE delivery_method=? AND datetime_paid IS NOT NULL AND datetime_assembly IS NOT NULL AND datetime_cancel IS NULL AND datetime_sent IS NULL ORDER BY datetime_assembly_order,datetime_create";
+		$orders = Exec_PR_SQL($link,$que,[$delivery_partner['id']]);
 		$delivery_partner['orders'] = $orders;
 
 	}
