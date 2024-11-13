@@ -13,7 +13,10 @@
 	
 	$doc = actual_by_auth($username,$reddottext,$doc,$cart['sum_goods']);
 	
-	 
+ 	$doc = str_replace('[meta_description_content]', 'Интернет-магзин товаров для здоровья. Лучшие цены и быстрая доставка. Удобнее, чем в рознице.', $doc);
+	$doc = str_replace('[meta_keywords_content]', 'Доставка, низкие цены, быстро, точно, в наличии, косметика, БАД, биологически активные добавки, для здоровья', $doc);
+	$doc = str_replace('[meta_robots_content]', 'index, follow', $doc);
+
 	$doc = cut_fragment($doc, '<!-- GOOD_1_BEGIN -->', '<!-- GOOD_1_END -->','[similargoods]',$tmpts_similargoods);
 	$doc = cut_fragment($doc, '<!-- GOOD_PAGE_BEGIN -->', '<!-- GOOD_PAGE_END -->','');
 	$doc = cut_fragment($doc, '<!-- CART_BEGIN -->', '<!-- CART_END -->','');

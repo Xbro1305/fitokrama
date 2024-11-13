@@ -21,8 +21,9 @@
 	$doc = actual_by_auth($username,$reddottext,$doc,$cart['sum_goods']);
 	$doc = str_replace('[pagename]', $page, $doc);
 
-	
-
+ 	$doc = str_replace('[meta_description_content]', '', $doc);
+	$doc = str_replace('[meta_keywords_content]', '', $doc);
+	$doc = str_replace('[meta_robots_content]', 'noindex, noarchive', $doc);
 	
 	$doc = cut_fragment($doc, '<!-- GOOD_PAGE_BEGIN -->', '<!-- GOOD_PAGE_END -->','[pagetext]');
 	$doc = cut_fragment($doc, '<!-- SIMILAR_GOODS_BEGIN -->', '<!-- SIMILAR_GOODS_END -->','');

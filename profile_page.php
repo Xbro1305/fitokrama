@@ -18,6 +18,11 @@
 	$doc = cut_fragment($doc, '<!--PAYMENT_PAGE_BEGIN -->','<!--PAYMENT_PAGE_END -->','');
 	$doc = cut_fragment($doc, '<!-- BANNERS_PAGE_BEGIN -->','<!-- BANNERS_PAGE_END -->','');
 	
+ 	$doc = str_replace('[meta_description_content]', '', $doc);
+	$doc = str_replace('[meta_keywords_content]', '', $doc);
+	$doc = str_replace('[meta_robots_content]', 'noindex, noarchive', $doc);
+
+	
 	$doc = str_replace('[client_email]', $cart['client_email'], $doc);
 	$doc = cut_fragment($doc,'<!-- ORDER_1_BEGIN -->','<!-- ORDER_1_END -->','[orders_table]',$html_order_1);
 	

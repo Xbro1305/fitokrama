@@ -39,7 +39,7 @@
 
 
 
-	$que = "SELECT name, CONCAT('https://fitokrama.by/art_page.php?art=', art) as art, pic_name, price, price_old 
+	$que = "SELECT name, CONCAT('https://fitokrama.by/art_page.php/', `name_human`) as art, pic_name, price, price_old 
 			FROM goods 
 			WHERE (name LIKE ? OR art = ? OR barcode = ?) 
 			AND goods_groups_id IS NOT NULL 

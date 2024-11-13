@@ -23,7 +23,6 @@
 	if (is_null($art))
 	{
 		$human_name = explode("/", $_SERVER["SCRIPT_URL"])[2];
-
 		if (!is_null($human_name)) 
 		{
 			$que = "SELECT art FROM goods WHERE name_human = ?";
@@ -53,7 +52,7 @@
 	FROM goods g
 	WHERE g.goods_groups_id IS NOT NULL AND price>0
 	AND art=?";
-	if (!is_null($art)) $good = Exec_PR_SQL($link,$que,[$art],true)[0];
+	if (!is_null($art)) $good = Exec_PR_SQL($link,$que,[$art])[0];
 	
 	if (($good==NULL) or count($good)==0)
 	{
@@ -68,6 +67,47 @@
 
 	$cart_count = $cart ['cart_count'];
 	if ($cart_count>0) $doc = str_replace('[cart_count]', $cart_count, $doc); else $doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
+
+
+	$doc = str_replace('[meta_description_content]', $good['description_short'], $doc);
+	$doc = str_replace('[meta_keywords_content]', $good['meta_keywords_content'], $doc);
+	$doc = str_replace('[meta_robots_content]', 'index, follow', $doc);
+	
+	$art_page_metadata  =   '<link rel="canonical" href="https://fitokrama.by/art_page.php/'.$good['name_human'].'">';
+	$art_page_metadata .=	'<meta property="og:title" content="'.$good['name'].' | Фитокрама">';
+	$art_page_metadata .=	'<meta property="og:description" content="'.$good['description_short'].'">';
+	$art_page_metadata .=	'<meta property="og:image" content="https://fitokrama.by/goods_pics/'.$good['pic_name'].'">';
+	$art_page_metadata .=	'<meta property="og:url" content="https://fitokrama.by/art_page.php/'.$good['name_human'].'">';
+	$art_page_metadata .=	'<meta property="twitter:card" content="https://fitokrama.by/art_page.php/'.$good['name_human'].'">';
+	$art_page_metadata .=	'<meta property="twitter:title" content="'.$good['name'].' | Фитокрама">';
+	$art_page_metadata .=	'<meta property="twitter:description" content="'.$good['description_short'].'">';
+	$art_page_metadata .=	'<meta property="twitter:image" content="https://fitokrama.by/goods_pics/'.$good['pic_name'].'">';
+	
+	$script_descr = [
+		'@context' => 'https://schema.org',
+		'@type' => 'Product',
+		'name' => $good['name'],
+		'image' => 'https://fitokrama.by/goods_pics/' . $good['pic_name'],
+		'description' => $good['description_short'],
+		'sku' => $good['barcode'],
+		'brand' => [
+			'@type' => 'Brand',
+			'name' => 'Фитокрама'
+		],
+		'offers' => [
+			'@type' => 'Offer',
+			'url' => 'https://fitokrama.by/art_page.php/' . $good['name_human'],
+			'priceCurrency' => 'BYN',
+			'price' => $good['price'],
+			'itemCondition' => 'https://schema.org/NewCondition',
+			'availability' => 'https://schema.org/InStock'
+		]
+	];
+
+	$art_page_metadata .= '<script type="application/ld+json">'.json_encode($script_descr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).'</script>';
+
+	
+	$doc = str_replace('<!-- art_page_metadata -->', $art_page_metadata, $doc);
 
 
 	$doc = str_replace('[pagename]', 'Фитокрама - '.$good['name'], $doc);
@@ -148,4 +188,7 @@
 	}
 	
 	$doc = str_replace('[similargoods]', $similargood_1, $doc);			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику
+	file_put_contents($good['name_human'].'.html', $doc);
+
+
 	exit ($doc);
