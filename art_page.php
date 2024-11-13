@@ -20,6 +20,20 @@
 	$doc = cut_fragment($doc, '<!-- BANNERS_PAGE_BEGIN -->','<!-- BANNERS_PAGE_END -->','');
 	
 	$art = $_GET['art'];
+	if (is_null($art))
+	{
+		$human_name = explode("/", $_SERVER["SCRIPT_URL"])[2];
+
+		if (!is_null($human_name)) 
+		{
+			$que = "SELECT art FROM goods WHERE name_human = ?";
+			$goods = Exec_PR_SQL($link, $que,[$human_name]);
+			if (count($goods)>0) $art = $goods[0]['art'];
+		}
+	}
+
+	
+	
 	$que = "SELECT g.*,
     COALESCE(
         (
@@ -39,13 +53,17 @@
 	FROM goods g
 	WHERE g.goods_groups_id IS NOT NULL AND price>0
 	AND art=?";
-	$good = Exec_PR_SQL($link,$que,[$art])[0];
+	if (!is_null($art)) $good = Exec_PR_SQL($link,$que,[$art],true)[0];
 	
 	if (($good==NULL) or count($good)==0)
 	{
 		$doc = cut_fragment($doc, '<!-- GOOD_PAGE_BEGIN -->', '<!-- GOOD_PAGE_END -->','oops... Товар отсутствует... ');
 		$doc = cut_fragment($doc, '<!-- SIMILAR_GOODS_BEGIN -->', '<!-- SIMILAR_GOODS_END -->','');
+		$doc = str_replace('[pagename]', 'Фитокрама', $doc);
+		
+		file_put_contents('debu_doc.html', $doc );
 		die($doc);
+		
 	}
 
 	$cart_count = $cart ['cart_count'];
@@ -55,6 +73,7 @@
 	$doc = str_replace('[pagename]', 'Фитокрама - '.$good['name'], $doc);
 	$doc = str_replace('[goodart]', $good['art'], $doc);
 	$doc = str_replace('[goodname]', $good['name'], $doc);
+	$doc = str_replace('[name_human]', $good['name_human'], $doc);
 	$doc = str_replace('[gooddef1]', $good['description_short'], $doc);
 	$doc = str_replace('[gooddef2]', $good['description_full'], $doc);
 	$doc = str_replace('[goodspics]', $good['pic_name'], $doc);
@@ -104,6 +123,7 @@
     ) AS qty_fr
 	FROM goods g
 	WHERE g.goods_groups_id IS NOT NULL
+	AND price>0
 	ORDER BY RAND () LIMIT 3 ";
 	$similar_goods = Exec_PR_SQL($link,$que,[]);
 
@@ -111,6 +131,7 @@
 	{
 		$similargood_1 = $similargood_1.$tmpts_similargoods;
 		$similargood_1 = str_replace('[goodart]', $sgood['art'], $similargood_1);
+		$similargood_1 = str_replace('[name_human]', $sgood['name_human'], $similargood_1);
 		$similargood_1 = str_replace('[goodname]', $sgood['name'], $similargood_1);
 		$similargood_1 = str_replace('[gooddef1]', $sgood['description_short'], $similargood_1);
 		$similargood_1 = str_replace('[goodspics]', $sgood['pic_name'], $similargood_1);

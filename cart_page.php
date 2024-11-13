@@ -93,6 +93,8 @@
 		
 		$html_goods = str_replace('[good_pic]'			, './'.$good_1['pic_name'], $html_goods);
 		$html_goods = str_replace('[good_name]'			, $good_1['name'], $html_goods);
+		$html_goods = str_replace('[name_human]'		, $good_1['name_human'], $html_goods);
+		
 		if ($good_1['old_price']!=NULL)
 		{
 			$html_goods = str_replace('[good_old_price_rub]', f2_rub($good_1['old_price']), $html_goods);

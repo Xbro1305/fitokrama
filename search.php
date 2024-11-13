@@ -26,12 +26,16 @@
 	//$search = mb_substr($_GET['search'], 0, 7);
 
 	$search = $_GET['search'];
-	if (preg_match('/(--|;|DROP|UNION)/i', $search))
+	if (preg_match('/(--|#|\/\*|\*\/|;|UNION|SELECT|INSERT|UPDATE|DELETE|DROP|TRUNCATE|EXEC|XP_|SLEEP|BENCHMARK|WAITFOR|INTO OUTFILE|LOAD_FILE|OR 1=1|AND 1=1)/i', $search)) 
+	{
 		file_put_contents('suspicious_queries.log', date("Y-m-d H:i:s") . " HTTP_COOKIE : {$_SERVER['HTTP_COOKIE']}  HTTP_X_CLIENT_IP : {$_SERVER['HTTP_X_CLIENT_IP']} Подозрительный запрос: $search" . PHP_EOL, FILE_APPEND);
-
+		send_warning_telegram('search с IP '.$_SERVER['HTTP_X_CLIENT_IP'].': '.$search);
+		$search = '';
+	}
+		
 	$search = trim($search); // Удаляем лишние пробелы
 	$search = htmlspecialchars($search, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); // Экранируем HTML-специальные символы
-	if (mb_strlen($search) > 100) $search = $search = mb_substr($search, 0, 100);
+	if (mb_strlen($search) > 100) $search = mb_substr($search, 0, 100);
 
 
 

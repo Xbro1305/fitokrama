@@ -43,7 +43,7 @@
 		else 	Exec_PR_SQL($link,"UPDATE carts_goods SET qty=?, price=?, old_price=? WHERE id=?",[$qty,$price,$old_price,$carts_goods_id]);
 	
 	
-	Exec_PR_SQL($link,"UPDATE clients SET datetime_last=CURRENT_TIMESTAMP() WHERE client_id=?",[$client_id]);
+	Exec_PR_SQL($link,"UPDATE clients SET datetime_last=CURRENT_TIMESTAMP() WHERE id=?",[$client_id]);
 	
 	
 	$cart = cart_by_session_id_and_username($session_id,$username);

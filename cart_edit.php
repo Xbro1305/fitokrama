@@ -18,7 +18,24 @@
 	foreach (['client_name', 'client_telegram', 'client_phone', 'client_address', 'delivery_method', 'delivery_price', 'lat', 'lng'] as $param) {
 		if (isset($json_in[$param])) {
 			$cond .= ", $param = ?";
-			$params[] = $json_in[$param];
+	
+	$userdata = $json_in[$param];
+
+	if (preg_match('/(--|\/\*|\*\/|;|UNION|SELECT|INSERT|UPDATE|DELETE|DROP|TRUNCATE|EXEC|XP_|SLEEP|BENCHMARK|WAITFOR|INTO OUTFILE|LOAD_FILE|OR 1=1|AND 1=1)/i', $userdata))
+	{
+		file_put_contents('suspicious_queries.log', date("Y-m-d H:i:s") . " HTTP_COOKIE : {$_SERVER['HTTP_COOKIE']}  HTTP_X_CLIENT_IP : {$_SERVER['HTTP_X_CLIENT_IP']} Подозрительные данные клиента: $userdata" . PHP_EOL, FILE_APPEND);
+		send_warning_telegram('данные клиента с IP '.$_SERVER['HTTP_X_CLIENT_IP'].': '.$userdata);
+		$userdata = '';
+	}
+		
+	$userdata = trim($userdata); // Удаляем лишние пробелы
+	$userdata = htmlspecialchars($userdata, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); // Экранируем HTML-специальные символы
+	if (mb_strlen($userdata) > 100) $userdata = mb_substr($userdata, 0, 100);
+	
+	$params[] = $userdata;
+
+
+			
 		}
 	}
 

@@ -64,7 +64,7 @@ function qty_by_art ($art)			// вычисление текущего колич
 
 	
 	if (!$cart['sum']>0 OR !$cart['cart_count']>0 OR $cart['datetime_phone_confirmed']==NULL OR $cart['datetime_email_confirmed']==NULL)
-		exit (json_encode(['icon'=>'./logos/problem_red.png', 'error_text'=>'Ошибка оформления заказа. Не указаные некоторые необходимые данные.', 'data'=>json_encode([$cart['sum'],$cart['cart_count'],$cart['datetime_phone_confirmed'],$cart['datetime_email_confirmed']])], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+		exit (json_encode(['icon'=>'https://fitokrama.by/logos/problem_red.png', 'error_text'=>'Ошибка оформления заказа. Не указаные некоторые необходимые данные.', 'data'=>json_encode([$cart['sum'],$cart['cart_count'],$cart['datetime_phone_confirmed'],$cart['datetime_email_confirmed']])], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 	
 	// контроль, нет ли необходимости скорректировать количества
 	$good_shortage = false;		// флаг нехватки товара
@@ -79,7 +79,7 @@ function qty_by_art ($art)			// вычисление текущего колич
 			$good_shortage = true;					 // корзина скорректрована
 		}
 	}
-	if ($good_shortage) exit (json_encode(['icon'=>'./logos/problem_red.png', 'error_text'=>'Из-за большого спроса мы были вынуждены скорректировать корзину. Нажмите кнопку "КУПИТЬ" еще раз!']));
+	if ($good_shortage) exit (json_encode(['icon'=>'https://fitokrama.by/logos/problem_red.png', 'error_text'=>'Из-за большого спроса мы были вынуждены скорректировать корзину. Нажмите кнопку "КУПИТЬ" еще раз!']));
 	
 	
 	// переносим корзину в orders
@@ -187,10 +187,10 @@ function qty_by_art ($art)			// вычисление текущего колич
 	$goods =  Exec_PR_SQL($link,"SELECT * FROM `carts_goods` WHERE `client_id`=?",[$client_id]);
 	$que = "
 	INSERT INTO `orders_goods` (`order_id`, `good_art`, `price`, `qty`, `qty_as`) 
-	SELECT $order_id, `good_art`, `price`, `qty`, 0  
+	SELECT ?, `good_art`, `price`, `qty`, 0  
 		FROM `carts_goods`
 		WHERE `client_id` = ?";
-	Exec_PR_SQL($link,$que,[$client_id]);
+	Exec_PR_SQL($link,$que,[$order_id,$client_id]);
 	$que = "DELETE FROM `carts_goods` WHERE `client_id` = ?";
 	Exec_PR_SQL($link,$que,[$client_id]);
 	

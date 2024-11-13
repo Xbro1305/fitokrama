@@ -64,6 +64,8 @@ WHERE g.goods_groups_id IS NOT NULL AND price>0;
 		$similargood_1 = $similargood_1.$tmpts_similargoods;
 		$similargood_1 = str_replace('[goodart]', $sgood['art'], $similargood_1);
 		$similargood_1 = str_replace('[goodname]', $sgood['name'], $similargood_1);
+		$similargood_1 = str_replace('[name_human]', $sgood['name_human'], $similargood_1);
+		
 		$similargood_1 = str_replace('[gooddef1]', $sgood['description_short'], $similargood_1);
 		$similargood_1 = str_replace('[goodspics]', $sgood['pic_name'], $similargood_1);
 		$similargood_1 = str_replace('[goodoldprice]', $sgood['price_old'], $similargood_1);

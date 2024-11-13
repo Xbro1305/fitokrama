@@ -40,59 +40,63 @@ function ExecSQL($link,$query)
     return $answer;
 }
 
-function Exec_PR_SQL ($link, $query, $params = []) {
-    
-	$lastElement = end(debug_backtrace());
-		
-    $callerFile = $lastElement['file'] ?? 'unknown';
-	$callerFunction = $lastElement['function'] ?? 'unknown';
-	$callerLine = $lastElement['line'] ?? 'unknown'; 
-	file_put_contents('debug_q', date("Y-m-d H:i:s")."  Вызов из $callerFile, строка $callerLine. ".PHP_EOL.'--- '.$query.PHP_EOL.'--- '.json_encode($params).PHP_EOL, FILE_APPEND);
+function Exec_PR_SQL($link, $query, $params = [],$debugging=false) {
 
-	
-	$stmt = $link->prepare($query);
+
+    $startTime = microtime(true);
+
+    $stmt = $link->prepare($query);
     if ($stmt === false) {
-        $lastElement = end(debug_backtrace());
-        $callerFile = $lastElement['file'] ?? 'unknown';
-        $callerFunction = $lastElement['function'] ?? 'unknown';
-        $callerLine = $lastElement['line'] ?? 'unknown';
-        file_put_contents('debug_query_errors', date("Y-m-d H:i:s") . " Ошибка подготовки запроса. Вызов из $callerFile, строка $callerLine: " . $link->error . ' ' . $query . PHP_EOL, FILE_APPEND);
+        file_put_contents('debug_query_errors', date("Y-m-d H:i:s") . " Ошибка подготовки запроса. Вызов из $callerFile, строка $callerLine: " . $link->error . ' ' . $query . PHP_EOL . '--- ' . json_encode($params) . PHP_EOL, FILE_APPEND);
         return false;
     }
 
     if (!empty($params)) {
-        $types = str_repeat('s', count($params)); 
+        $types = str_repeat('s', count($params));
         $stmt->bind_param($types, ...$params);
     }
 
-    // Выполнение запроса
     if (!$stmt->execute()) {
-        // Логируем ошибку выполнения
-        $lastElement = end(debug_backtrace());
-        $callerFile = $lastElement['file'] ?? 'unknown';
-        $callerFunction = $lastElement['function'] ?? 'unknown';
-        $callerLine = $lastElement['line'] ?? 'unknown';
+		$lastElement = end(debug_backtrace());
+		$callerFile = $lastElement['file'] ?? 'unknown';
+		$callerLine = $lastElement['line'] ?? 'unknown';
         file_put_contents('debug_query_pr_errors', date("Y-m-d H:i:s") . " Ошибка выполнения запроса. Вызов из $callerFile, строка $callerLine: " . $stmt->error . ' ' . $query . PHP_EOL, FILE_APPEND);
         return false;
     }
+
+
+
+	$dataset = $link->query($query);
+
+    $endTime = microtime(true);
+    $executionTime = $endTime - $startTime;
+	if ($executionTime>0.005 || $debugging)
+	{
+		    $lastElement = end(debug_backtrace());
+			$callerFile = $lastElement['file'] ?? 'unknown';
+			$callerLine = $lastElement['line'] ?? 'unknown';
+			file_put_contents('debug_q', date("Y-m-d H:i:s") . "----$executionTime---- Вызов из $callerFile, строка $callerLine." . PHP_EOL . '-- ' . $query . PHP_EOL . '--- ' . json_encode($params) . PHP_EOL, FILE_APPEND);
+	}
+
+    // Получаем идентификатор последней вставленной строки
+    $insert_id = $link->insert_id;
 
     // Обработка результатов
     $answer = [];
     $result = $stmt->get_result();
     if ($result !== false) {
-        // Записываем все строки в массив
         while ($row = $result->fetch_assoc()) {
             $answer[] = $row;
         }
     } else {
-        // Возвращаем идентификатор последней вставленной записи, если это запрос INSERT
-        $answer = $link->insert_id;
+        $answer = $insert_id;
     }
 
     // Закрываем подготовленное выражение
     $stmt->close();
     return $answer;
 }
+
 
 
 
