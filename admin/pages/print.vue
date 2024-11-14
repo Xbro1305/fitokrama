@@ -14,13 +14,18 @@ const isUseragentCorrect = ref(false)
 const pausePrint = ref(false)
 
 let intervalId
-// const forPrint = ref([])
+let next_delay_sec = 0
 
 if (window.navigator.userAgent === 'adminpage configuration') {
   isUseragentCorrect.value = true
 
   intervalId = setInterval(() => {
     if (pausePrint.value) {
+      return
+    }
+
+    if (next_delay_sec > 0) {
+      next_delay_sec--
       return
     }
 
@@ -32,8 +37,11 @@ if (window.navigator.userAgent === 'adminpage configuration') {
       },
     })
 
+    if (data && data.value && data.value.next_delay_sec) {
+      next_delay_sec = data.value.next_delay_sec
+    }
+
     if (data && data.value && data.value.html_print) {
-      // forPrint.value.push(data.value.html_print)
       const html = data.value.html_print
 
       if (html) {
@@ -52,28 +60,12 @@ if (window.navigator.userAgent === 'adminpage configuration') {
     else if (error) {
       showError('Ошибка соединения с сервером')
     }
-  }, 15000)
+  }, 1000)
 }
 
 onUnmounted(() => clearInterval(intervalId))
 
 const sleep = (ms: number) => new Promise((r: never) => setTimeout(r, ms))
-
-/*
-const printClick = () => {
-  const html = forPrint.value.pop()
-
-  if (html) {
-    const printWindow = window.open('', '_blank')
-    printWindow?.document.write(html)
-    sleep(200).then(() => {
-      printWindow?.document.close()
-      printWindow?.focus()
-      printWindow?.print()
-    })
-  }
-}
-*/
 </script>
 
 <template>
