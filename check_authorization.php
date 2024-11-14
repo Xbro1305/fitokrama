@@ -272,7 +272,14 @@ function checkAppleAuthorization($postparams) {
 	Exec_PR_SQL($link,$que,[$staffs[0]['id']]);
 	$staff_level = $staffs[0]['role'];
     $jwt_staff = jwt_create_staff($username,$staff_level);
-	setcookie('jwt_staff', $jwt_staff, time() + (30 * 24 * 60 * 60), '/');
+	setcookie('jwt_staff', $jwt_staff, [
+    'expires' => time() + (30 * 24 * 60 * 60),
+    'path' => '/',
+    'secure' => true,       // Передавать только по HTTPS
+    'httponly' => true,     // Запретить доступ через JavaScript
+    'samesite' => 'Strict'  // Защита от CSRF
+]);
+
   } 
   
   

@@ -73,15 +73,16 @@
 	$doc = str_replace('[meta_keywords_content]', $good['meta_keywords_content'], $doc);
 	$doc = str_replace('[meta_robots_content]', 'index, follow', $doc);
 	
-	$art_page_metadata  =   '<link rel="canonical" href="https://fitokrama.by/art_page.php/'.$good['name_human'].'">';
-	$art_page_metadata .=	'<meta property="og:title" content="'.$good['name'].' | Фитокрама">';
+	$art_page_metadata 	=	'<meta property="og:title" content="'.$good['name'].' | Фитокрама">';
 	$art_page_metadata .=	'<meta property="og:description" content="'.$good['description_short'].'">';
 	$art_page_metadata .=	'<meta property="og:image" content="https://fitokrama.by/goods_pics/'.$good['pic_name'].'">';
 	$art_page_metadata .=	'<meta property="og:url" content="https://fitokrama.by/art_page.php/'.$good['name_human'].'">';
 	$art_page_metadata .=	'<meta property="twitter:card" content="https://fitokrama.by/art_page.php/'.$good['name_human'].'">';
 	$art_page_metadata .=	'<meta property="twitter:title" content="'.$good['name'].' | Фитокрама">';
 	$art_page_metadata .=	'<meta property="twitter:description" content="'.$good['description_short'].'">';
-	$art_page_metadata .=	'<meta property="twitter:image" content="https://fitokrama.by/goods_pics/'.$good['pic_name'].'">';
+	$art_page_metadata .=	'<meta property="twitter:card" content="summary_large_image">';
+	$art_page_metadata .=   '<link rel="canonical" href="https://fitokrama.by/art_page.php/'.$good['name_human'].'">';
+	
 	
 	$script_descr = [
 		'@context' => 'https://schema.org',
@@ -105,12 +106,10 @@
 	];
 
 	$art_page_metadata .= '<script type="application/ld+json">'.json_encode($script_descr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).'</script>';
-
-	
 	$doc = str_replace('<!-- art_page_metadata -->', $art_page_metadata, $doc);
 
 
-	$doc = str_replace('[pagename]', 'Фитокрама - '.$good['name'], $doc);
+	$doc = str_replace('[pagename]', ''.$good['name'].'| Фитокрама', $doc);
 	$doc = str_replace('[goodart]', $good['art'], $doc);
 	$doc = str_replace('[goodname]', $good['name'], $doc);
 	$doc = str_replace('[name_human]', $good['name_human'], $doc);
@@ -188,7 +187,7 @@
 	}
 	
 	$doc = str_replace('[similargoods]', $similargood_1, $doc);			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику
-	file_put_contents($good['name_human'].'.html', $doc);
+	//file_put_contents($good['name_human'].'.html', $doc);
 
 
 	exit ($doc);

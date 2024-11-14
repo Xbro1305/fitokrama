@@ -150,6 +150,11 @@ function refresh_dpd_data() { //обновление базы пунктов в�
 
 		Exec_PR_SQL($link, $que, $params);	
 	}
+	Exec_PR_SQL($link, "UPDATE delivery_points SET 
+    lat_radians = RADIANS(lat), 
+    lng_radians = RADIANS(lng), 
+    coordinates = ST_GeomFromText(CONCAT('POINT(', lng, ' ', lat, ')'));", []);
+
 	
 	$que = "SELECT COUNT(*) as deactivated_count FROM `delivery_points` WHERE datetime_updated < ? AND actual_until_datetime > CURRENT_TIMESTAMP AND partner_id = ?";
 	$deactivated = Exec_PR_SQL($link, $que, [$datetime_refresh_start, $partner_id])[0]['deactivated_count'];

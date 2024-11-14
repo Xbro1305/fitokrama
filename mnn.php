@@ -40,7 +40,7 @@ function ExecSQL($link,$query)
     return $answer;
 }
 
-function Exec_PR_SQL($link, $query, $params = [],$debugging=false) {
+function Exec_PR_SQL($link, $query, $params = [],$debugging=false,$ignore=false) {
 
 
     $startTime = microtime(true);
@@ -70,7 +70,7 @@ function Exec_PR_SQL($link, $query, $params = [],$debugging=false) {
 
     $endTime = microtime(true);
     $executionTime = $endTime - $startTime;
-	if ($executionTime>0.005 || $debugging)
+	if (($executionTime>0.004 || $debugging) && !$ignore)
 	{
 		    $lastElement = end(debug_backtrace());
 			$callerFile = $lastElement['file'] ?? 'unknown';
@@ -109,7 +109,9 @@ function firstconnect ()
 	//die (json_encode([$db_host,$db_user,$db_password,$db_name]));
 	$link = new mysqli($db_host, $db_user, $db_password,$db_name);
 	$link->set_charset('utf8mb4');
-	if ($link->connect_error) {   die(json_encode(['status'=>'error', 'message'=>'Connect error ' . $link->connect_error])); }
+	if ($link->connect_error) {   
+		send_warning_telegram('Connect DB error '. $link->connect_error);
+	die(json_encode(['status'=>'error', 'message'=>'Connect error '])); }
 	return $link;
 }
 
@@ -471,11 +473,14 @@ function actual_by_auth ($username,$reddottext,$doc,$sum_goods=0)	// дораб�
 		}	// красная точка на профиле
 	$doc = str_replace('[reddottext]'	, $reddottext, $doc);
 
-if ($sum_goods==0 || is_null($sum_goods))
+	if ($sum_goods==0 || is_null($sum_goods))
 		$doc = str_replace('[main_text]', "БЕСПЛАТНАЯ ДОСТАВКА до пункта выдачи ОТ $min_sum_gratis_delivery руб.", $doc);
 
 		if ($sum_goods>=$min_sum_gratis_delivery) $doc = str_replace('[main_text]', "✓ БЕСПЛАТНАЯ ДОСТАВКА до пункта выдачи!", $doc);
 		else $doc = str_replace('[main_text]', "Добавь товар на ".($min_sum_gratis_delivery-$sum_goods)." руб. для бесплатной доставки!", $doc);
+
+	
+
 
 
 	return $doc;
@@ -492,9 +497,11 @@ function info_about_delivery_by_id ($delivery_method,$delivery_submethod)
 	$delivery_logo = $delivery_partner[0]['logo'];
 	$delivery_prefix = $delivery_partner[0]['prefix'];
 	$delivery_text = $delivery_partner[0]['name'];
+	$delivery_submethod_cut = mb_substr($delivery_submethod, 4);
 
-	$que = "SELECT * FROM `delivery_points` WHERE CONCAT('$delivery_prefix','-',`unique_id`)='$delivery_submethod'";
-	$sub_delivery = Exec_PR_SQL($link,$que,[]);
+
+	$que = "SELECT * FROM `delivery_points` WHERE `unique_id`=? AND `partner_id`=?";
+	$sub_delivery = Exec_PR_SQL($link,$que,[$delivery_submethod_cut,$delivery_method]);
 
 
 	if (count($sub_delivery)>0)	$delivery_text .= ' '.$sub_delivery[0]['address'].' '.$sub_delivery[0]['name']. ' '.$sub_delivery[0]['comment'];

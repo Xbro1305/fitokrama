@@ -114,8 +114,10 @@ function qty_by_art ($art)			// вычисление текущего колич
 		}
 		else 
 		{
-			$que = "SELECT * FROM `delivery_points` WHERE CONCAT(?,'-',`unique_id`)=?";
-			$delivery_points = Exec_PR_SQL($link,$que,[$delivery_partner['prefix'],$cart['delivery_submethod']]);
+			$delivery_submethod_cut = mb_substr($cart['delivery_submethod'], 4);
+			$que = "SELECT * FROM `delivery_points` WHERE `partner_id`=? AND `unique_id`=?";
+			$delivery_points = Exec_PR_SQL($link, $que, [$cart['delivery_method'], $delivery_submethod_cut]);
+			
 			if (count($delivery_points)>0) 
 			{
 				$delivery_point = $delivery_points[0];

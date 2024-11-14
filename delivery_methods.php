@@ -12,6 +12,48 @@
 
 function delivery_methods ($address=NULL)				//	выдать методы доставки
 {
+	
+	$basic_query = "
+					WITH distances AS (
+					SELECT 
+						CONCAT(?, '-', unique_id) AS point_id,
+						address,
+						name,
+						comment,
+						lat,
+						lng,
+						ROUND(6371000 * ACOS(
+							COS(RADIANS(?)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS(?)) +
+							SIN(RADIANS(?)) * SIN(RADIANS(dp.lat))
+						)) AS distance,
+						specific_json
+					FROM 
+						delivery_points dp
+					WHERE
+						partner_id = ?
+						AND dp.lat BETWEEN ? AND ?
+						AND dp.lng BETWEEN ? AND ?
+						AND actual_until_datetime > CURRENT_TIMESTAMP
+						[specific_query]
+				)
+				SELECT 
+					point_id,
+					address,
+					name,
+					comment,
+					lat,
+					lng,
+					distance,
+					ROUND(distance / 5000 * 60) AS walking_time
+				FROM 
+					distances
+				WHERE 
+					distance < 30000
+				ORDER BY 
+					distance
+				LIMIT 3;
+				";
+	
 	GLOBAL $cart;
 	GLOBAL $link;
 	GLOBAL $session_id, $username, $cart, $client_id, $reddottext;
@@ -99,44 +141,10 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 					
 					$method['note'] = 'Дата доставки указана ориентировочно';
 
-				$que = "
-					WITH distances AS (
-						SELECT 
-							CONCAT(?, '-', unique_id) AS point_id,
-							address,
-							name,
-							comment,
-							lat,
-							lng,
-							ROUND(6371000 * ACOS(COS(RADIANS(?)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(dp.lat)))) AS distance,
-							specific_json
-						FROM 
-							delivery_points dp
-						WHERE
-							partner_id = ?
-							AND lat BETWEEN -90 AND 90 
-							AND lng BETWEEN -180 AND 180
-							AND actual_until_datetime > CURRENT_TIMESTAMP
-							AND JSON_CONTAINS(specific_json, '\"PUP\"')
-					)
-					SELECT 
-						point_id,
-						address,
-						name,
-						comment,
-						lat,
-						lng,
-						distance,
-						ROUND(distance / 5000 * 60) AS walking_time
-					FROM 
-						distances
-					WHERE 
-						distance < 30000
-					ORDER BY 
-						distance
-					LIMIT 3";
-				
-				$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'],$lat,$lng,$lat,$method_id]);
+				$specific_query = "AND JSON_CONTAINS(specific_json, '\"PUP\"')";
+				$que = str_replace('[specific_query]', $specific_query, $basic_query);
+				$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'], $lat, $lng, $lat, $method_id,($lat - 0.5), ($lat + 0.5), ($lng - 0.5), ($lng + 0.5)]);
+
 				$count_DPD_postomat = count($method['points']);
 			}
 			if ($method_id==3)	//	это Европочта - пункт выдачи
@@ -149,43 +157,9 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 					
 					$method['note'] = 'Время доставки указано ориентировочно';
 
-				$que = "
-					WITH distances AS (
-						SELECT 
-							CONCAT(?, '-', unique_id) AS point_id,
-							address,
-							name,
-							comment,
-							lat,
-							lng,
-							ROUND(6371000 * ACOS(COS(RADIANS(?)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(dp.lat)))) AS distance,
-							specific_json
-						FROM 
-							delivery_points dp
-						WHERE
-							partner_id = ?
-							AND lat BETWEEN -90 AND 90 
-							AND lng BETWEEN -180 AND 180
-							AND actual_until_datetime > CURRENT_TIMESTAMP
-					)
-					SELECT 
-						point_id,
-						address,
-						name,
-						comment,
-						lat,
-						lng,
-						distance,
-						ROUND(distance / 5000 * 60) AS walking_time
-					FROM 
-						distances
-					WHERE 
-						distance < 30000
-					ORDER BY 
-						distance
-					LIMIT 3";
-				
-				$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'],$lat,$lng,$lat,$method_id]);
+					$specific_query = "";
+					$que = str_replace('[specific_query]', $specific_query, $basic_query);
+					$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'], $lat, $lng, $lat, $method_id,($lat - 0.5), ($lat + 0.5), ($lng - 0.5), ($lng + 0.5)]);
 			}
 			if ($method_id==7)	//	это Европочта - доставка до дверей!
 			{
@@ -255,44 +229,9 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 					
 					$method['note'] = 'Дата доставки указана ориентировочно';
 
-				$que = "
-					WITH distances AS (
-						SELECT 
-							CONCAT(?, '-', unique_id) AS point_id,
-							address,
-							name,
-							comment,
-							lat,
-							lng,
-							ROUND(6371000 * ACOS(COS(RADIANS(?)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(dp.lat)))) AS distance,
-							specific_json
-						FROM 
-							delivery_points dp
-						WHERE
-							partner_id = 2
-							AND lat BETWEEN -90 AND 90 
-							AND lng BETWEEN -180 AND 180
-							AND actual_until_datetime > CURRENT_TIMESTAMP
-							AND JSON_CONTAINS(specific_json, '\"NDY\"')
-							AND NOT JSON_CONTAINS(specific_json, '\"PUP\"')
-					)
-					SELECT 
-						point_id,
-						address,
-						name,
-						comment,
-						lat,
-						lng,
-						distance,
-						ROUND(distance / 5000 * 60) AS walking_time
-					FROM 
-						distances
-					WHERE 
-						distance < 30000
-					ORDER BY 
-						distance
-					LIMIT 3";
-				$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'],$lat,$lng,$lat]);	
+					$specific_query = "AND JSON_CONTAINS(specific_json, '\"NDY\"')	AND NOT JSON_CONTAINS(specific_json, '\"PUP\"')";
+					$que = str_replace('[specific_query]', $specific_query, $basic_query);
+					$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'], $lat, $lng, $lat, $method_id,($lat - 0.5), ($lat + 0.5), ($lng - 0.5), ($lng + 0.5)]);
 
 			
 			}
@@ -306,43 +245,10 @@ function delivery_methods ($address=NULL)				//	выдать методы дос
 					
 					$method['note'] = 'Время доставки указано ориентировочно';
 
-				$que = "
-					WITH distances AS (
-						SELECT 
-							CONCAT(?, '-', unique_id) AS point_id,
-							address,
-							name,
-							comment,
-							lat,
-							lng,
-							ROUND(6371000 * ACOS(COS(RADIANS(?)) * COS(RADIANS(dp.lat)) * COS(RADIANS(dp.lng) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(dp.lat)))) AS distance,
-							specific_json
-						FROM 
-							delivery_points dp
-						WHERE
-							partner_id = ?
-							AND lat BETWEEN -90 AND 90 
-							AND lng BETWEEN -180 AND 180
-							AND actual_until_datetime > CURRENT_TIMESTAMP
-					)
-					SELECT 
-						point_id,
-						address,
-						name,
-						comment,
-						lat,
-						lng,
-						distance,
-						ROUND(distance / 5000 * 60) AS walking_time
-					FROM 
-						distances
-					WHERE 
-						distance < 30000
-					ORDER BY 
-						distance
-					LIMIT 3";
-				
-				$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'],$lat,$lng,$lat,$method_id]);	
+					$specific_query = "";
+					$que = str_replace('[specific_query]', $specific_query, $basic_query);
+					$method['points'] = Exec_PR_SQL($link,$que,[$method['prefix'], $lat, $lng, $lat, $method_id,($lat - 0.5), ($lat + 0.5), ($lng - 0.5), ($lng + 0.5)]);
+
 			}
 			
 		if ($method['gratis_delivery_by_sum']==1 && $cart['sum_goods']>=$min_sum_gratis_delivery )

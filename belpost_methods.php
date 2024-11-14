@@ -119,6 +119,12 @@ function refresh_belpochta_data() 			//обновление базы пункт�
 		Exec_PR_SQL($link, $que, $params);
 	}
 
+		Exec_PR_SQL($link, "UPDATE delivery_points SET 
+			lat_radians = RADIANS(lat), 
+			lng_radians = RADIANS(lng), 
+			coordinates = ST_GeomFromText(CONCAT('POINT(', lng, ' ', lat, ')'));", []);
+
+		
 		// Подсчёт количества деактивированных пунктов
 		$que = "
 			SELECT COUNT(*) 
