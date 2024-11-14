@@ -52,7 +52,7 @@ if (window.navigator.userAgent === 'adminpage configuration') {
     else if (error) {
       showError('Ошибка соединения с сервером')
     }
-  }, 1000)
+  }, 15000)
 }
 
 onUnmounted(() => clearInterval(intervalId))
