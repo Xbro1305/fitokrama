@@ -138,7 +138,13 @@ function refresh_europochta_data() 			//обновление базы пункт
 					
 		Exec_PR_SQL($link,$que,[$unique_id,$partner_id,$address,$descript,$shed,$lat,$lng,$partner_id,$address,$descript,$shed,$lat,$lng]);
 	}
+		Exec_PR_SQL($link, "UPDATE delivery_points SET 
+		lat_radians = RADIANS(lat), 
+		lng_radians = RADIANS(lng), 
+		coordinates = ST_GeomFromText(CONCAT('POINT(', lng, ' ', lat, ')'));", []);
+
 	// Подсчет деактивированных точек
+
 	$que = "SELECT COUNT(*) AS deactivated_count 
 			FROM `delivery_points` 
 			WHERE datetime_updated < ? 

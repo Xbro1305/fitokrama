@@ -1,6 +1,8 @@
 <?php
 	require_once '../phpqrcode/qrlib.php'; // Подключение библиотеки phpqrcode
 	include 'mnn.php';
+	
+	$next_delay_sec = 10;
 
     if (isset($_SERVER['HTTP_ORIGIN'])) {
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -35,15 +37,16 @@
 
 	if (file_exists('test_order_print_page.html')) // висит задание на печать тестовой страницы
 	{
+		//send_warning_telegram('1');
 		$html = file_get_contents('test_order_print_page.html'); 
 		unlink('test_order_print_page.html');
-		exit(json_encode(['html_print'=>$html]));
+		exit(json_encode(['html_print'=>$html, 'next_delay_sec'=>$next_delay_sec ]));
 	}
 	
 
 
 	$orders = Exec_PR_SQL($link,"SELECT * FROM `orders` WHERE datetime_paid IS NOT NULL AND datetime_assembly IS NULL AND datetime_cancel IS NULL AND datetime_order_print IS NULL ORDER BY datetime_assembly_order,datetime_create LIMIT 1",[]);
-	if (count($orders)==0) exit (json_encode(['massage'=>'no_for_print']));
+	if (count($orders)==0) exit (json_encode(['massage'=>'no_for_print',  'next_delay_sec'=>$next_delay_sec]));
 	Exec_PR_SQL($link,"UPDATE `orders` SET datetime_order_print=CURRENT_TIMESTAMP() WHERE id=?",[$orders[0]['id']]);	
 	$order = all_about_order($orders[0]['number']);
 	$order['qrcode']='002-/'.$order['number'];
@@ -67,4 +70,4 @@
 	
 	$html = str_replace("[goods_table]",$html_goods,$html);
 
-    exit(json_encode(['html_print'=>$html]));
+    exit(json_encode(['html_print'=>$html, 'next_delay_sec'=>$next_delay_sec ]));

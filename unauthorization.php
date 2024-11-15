@@ -6,10 +6,24 @@
 	[$session_id, $username, $cart, $client_id] = enterregistration ();	
 
 
-	setcookie('jwt', '', time() - 3600, '/', '', false, true);
-	header('Content-Type: application/json');
-	
-	setcookie('jwt_staff', '', time() - 3600, '/', '', false, true);
+	// Удаление cookie JWT
+	setcookie('jwt', '', [
+		'expires' => time() - 3600,
+		'path' => '/',
+		'secure' => true,
+		'httponly' => true,
+		'samesite' => 'Strict'
+	]);
+
+	// Удаление cookie JWT для сотрудника
+	setcookie('jwt_staff', '', [
+		'expires' => time() - 3600,
+		'path' => '/',
+		'secure' => true,
+		'httponly' => true,
+		'samesite' => 'Strict'
+	]);
+
 	header('Content-Type: application/json');
 	
 	$que = "UPDATE clients SET client_email='', datetime_email_confirmed=NULL,email_confirm_detailed='unauth ' WHERE id=?";
