@@ -19,7 +19,7 @@ let next_delay_sec = 0
 if (window.navigator.userAgent === 'adminpage configuration') {
   isUseragentCorrect.value = true
 
-  intervalId = setInterval(() => {
+  intervalId = setInterval(async () => {
     if (pausePrint.value) {
       return
     }
@@ -29,7 +29,7 @@ if (window.navigator.userAgent === 'adminpage configuration') {
       return
     }
 
-    const { data, error } = useFetch(`${backendUrl}/order_print_for_assembly.php`, {
+    const { data, error } = await useFetch(`${backendUrl}/order_print_for_assembly.php`, {
       method: 'POST',
       body: {
         staff_login: email,
