@@ -79,7 +79,12 @@ function qty_by_art ($art)			// вычисление текущего колич
 			$good_shortage = true;					 // корзина скорректрована
 		}
 	}
-	if ($good_shortage) exit (json_encode(['icon'=>'https://fitokrama.by/logos/problem_red.png', 'error_text'=>'Из-за большого спроса мы были вынуждены скорректировать корзину. Нажмите кнопку "КУПИТЬ" еще раз!']));
+	
+	if ($good_shortage) 
+	{
+		[$session_id, $username, $cart, $client_id] = enterregistration ();	
+		exit (json_encode(['icon'=>'https://fitokrama.by/logos/problem_red.png', 'error_text'=>'Из-за большого спроса мы были вынуждены скорректировать корзину. Нажмите кнопку "КУПИТЬ" еще раз!','cart'=>$cart]));
+	}
 	
 	
 	// переносим корзину в orders

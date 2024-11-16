@@ -17,6 +17,7 @@
 	$doc = cut_fragment($doc, '<!--ORDER_PAGE_BEGIN -->','<!--ORDER_PAGE_END -->','');
 	$doc = cut_fragment($doc, '<!--PAYMENT_PAGE_BEGIN -->','<!--PAYMENT_PAGE_END -->','');
 	$doc = cut_fragment($doc, '<!-- BANNERS_PAGE_BEGIN -->','<!-- BANNERS_PAGE_END -->','');
+	$doc = str_replace('[pagename]', 'Профиль', $doc);
 	
  	$doc = str_replace('[meta_description_content]', '', $doc);
 	$doc = str_replace('[meta_keywords_content]', '', $doc);

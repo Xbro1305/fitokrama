@@ -3,10 +3,11 @@
 	include_once  'alfa_methods.php';
 	include_once  'epos_methods.php';
 	include_once  'grosh_methods.php';
+	include_once  'send_email_detailed.php';
 	require_once '../phpqrcode/qrlib.php'; // Подключение библиотеки phpqrcode
 
 	
-	header('Content-Type: application/json');
+	//header('Content-Type: application/json');
 
 	$data = json_decode(file_get_contents("php://input"),TRUE);
 	$link = firstconnect ();
@@ -69,6 +70,10 @@ function check_payment_by_order ($order,$payid)	// проверяет стату
 		if ($order['alfa_orderId']==$payid) [$payment_method,$payment_report,$sum] = alfa_check($order['alfa_orderId']);
 	}
 	
+	//send_warning_telegram('73 epos_id '. $order['epos_id']);
+	//send_warning_telegram('74 hutki_billId '. $order['hutki_billId']);
+	//send_warning_telegram('75 alfa_orderId '. $order['alfa_orderId']);
+	
 	if (!is_null($order))
 	{
 		if ($sum==0) [$payment_method,$payment_report,$sum] = epos_check($order['epos_id']);
@@ -97,8 +102,9 @@ function check_payment_by_order ($order,$payid)	// проверяет стату
 		{
 			$que = "UPDATE orders SET datetime_paid = CURRENT_TIMESTAMP WHERE id=?";		
 			Exec_PR_SQL($link,$que,[$order['id']]);
-			// !!!!!!!!!!!!!!!!!! Заказ оплачен. Какие-то еще действия? может, письмо выслать?
+			send_email_detailed($order['number']);	// выслать письмо 
 		}
+	
 	send_warning_telegram("check_payment_by_order Видим оплату по заказу {$order['number']} в сумме $sum методом $payment_method. Отмечаем заказ как оплаченный.");	
 		
 	}
@@ -322,23 +328,9 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 					VALUES (?,?,?,?,?);";
 				Exec_PR_SQL($link,$que,[$client_id,$good_1['good_art'],$price,$price_old,$qty]);
 			}				
-			
-			
-			
 		}
-
 		$que = "UPDATE orders SET datetime_cancel=CURRENT_TIMESTAMP WHERE number=? ";
 		Exec_PR_SQL($link,$que,[$order_number]);
-
 	}
-	
-	
-	
-	
-	// сократить срок платежных ссылок до 2 часов
-	
-	
-	
-	
 	exit(json_encode(['status'=>'ok', 'message'=>'ok']));	
 }

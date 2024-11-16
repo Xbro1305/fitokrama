@@ -1,17 +1,16 @@
 <?php
-	require_once '../phpqrcode/qrlib.php'; // Подключение библиотеки phpqrcode
-	include 'mnn.php';
-
-
-
 	header("Access-Control-Allow-Origin: $http_origin");
-
+	header('Content-Type: text/html; charset=utf-8');
+	
+	require_once '../phpqrcode/qrlib.php'; // Подключение библиотеки phpqrcode
+	include_once 'mnn.php';
+	//include_once  'payment_received.php';
+	
 	$link = firstconnect ();
 	[$session_id, $username, $cart, $client_id, $reddottext] = enterregistration ();	
 	
 	$doc = file_get_contents('ftkrm_sample.html');
 	$doc = actual_by_auth($username,$reddottext,$doc,$cart['sum_goods']);
-	
 	
 	$doc = cut_fragment($doc, '<!-- SIMILAR_GOODS_BEGIN -->', '<!-- SIMILAR_GOODS_END -->','');
 	$doc = cut_fragment($doc, '<!-- GOOD_PAGE_BEGIN -->', '<!-- GOOD_PAGE_END -->','');
@@ -23,7 +22,6 @@
  	$doc = str_replace('[meta_description_content]', '', $doc);
 	$doc = str_replace('[meta_keywords_content]', '', $doc);
 	$doc = str_replace('[meta_robots_content]', 'noindex, noarchive', $doc);
-	
 	
 	$order_number = $_GET['order'];
 	$doc = str_replace('[pagename]', 'Подробности заказа '.$order_number, $doc);
@@ -42,11 +40,8 @@
 		$doc = cut_fragment($doc, '<!-- BUTTON_PAY_BEGIN -->','<!-- BUTTON_PAY_END -->',$insturction_receive);
 	}
 
-	if ($order['status']!='need_to_pay') 
-		$doc = cut_fragment($doc, '<!-- BUTTON_PAY_BEGIN -->','<!-- BUTTON_PAY_END -->','');
 		
-
-
+	
 	$doc = str_replace('[delivery_logo]' ,  $order['delivery_logo'], $doc);
 	$doc = str_replace('[delivery_text]', $order['delivery_text'], $doc);
 	
@@ -57,21 +52,26 @@
 	$doc = str_replace('[order_status]', $order['status_text'], $doc);
 	$doc = str_replace('[order_color]', $order['status_color'], $doc);
 	
+	if ($order['status']!='need_to_pay') 
+		$doc = cut_fragment($doc, '<!-- BUTTON_PAY_BEGIN -->','<!-- BUTTON_PAY_END -->','');
+	else
+	{
+		// !!!!!!!!!!!!!!! надо проверить оплату!!!!!!!
+		$paylink = $order['epos_link'];
+		$hutki_url = $order['hutki_url'];
+		$paycode = $epos_client_number.$order['number'];
+		//$payalfalink = $order['alfa_url'];
 	
-	$paylink = $order['epos_link'];
-	$hutki_url = $order['hutki_url'];
-	$paycode = $epos_client_number.$order['number'];
-	//$payalfalink = $order['alfa_url'];
-	
-	ob_start();
-	QRcode::png($hutki_url, null, QR_ECLEVEL_Q, 4);
-	$imageString = base64_encode(ob_get_clean());
-	
-	$doc = str_replace('[payqrpicture]', $imageString , $doc);
-	$doc = str_replace('[paylink]', $paylink, $doc);
-	$doc = str_replace('[paycode]', $paycode, $doc);
-	//$doc = str_replace('[payalfalink]', $payalfalink, $doc);
-	$doc = str_replace('[paylinktoapp]', $hutki_url, $doc);
+		ob_start();
+		QRcode::png($hutki_url, null, QR_ECLEVEL_Q, 4);
+		$imageString = base64_encode(ob_get_clean());
+		
+		$doc = str_replace('[payqrpicture]', $imageString , $doc);
+		$doc = str_replace('[paylink]', $paylink, $doc);
+		$doc = str_replace('[paycode]', $paycode, $doc);
+		//$doc = str_replace('[payalfalink]', $payalfalink, $doc);
+		$doc = str_replace('[paylinktoapp]', $hutki_url, $doc);
+	}
 	
 	
 	$doc = cut_fragment($doc,'<!-- ORDER_GOOD_1_BEGIN -->','<!-- ORDER_GOOD_1_END -->','[goods_table]',$html_good_1);
