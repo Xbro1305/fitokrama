@@ -60,7 +60,7 @@ function Exec_PR_SQL($link, $query, $params = [],$debugging=false,$ignore=false)
 		$lastElement = end(debug_backtrace());
 		$callerFile = $lastElement['file'] ?? 'unknown';
 		$callerLine = $lastElement['line'] ?? 'unknown';
-        file_put_contents('debug_query_pr_errors', date("Y-m-d H:i:s") . " Ошибка выполнения запроса. Вызов из $callerFile, строка $callerLine: " . $stmt->error . ' ' . $query . PHP_EOL, FILE_APPEND);
+        file_put_contents('debug_query_pr_errors', date("Y-m-d H:i:s") . " Ошибка выполнения запроса. Вызов из $callerFile, строка $callerLine: " . $stmt->error . ' ' . $query . PHP_EOL. '--- ' . json_encode($params) . PHP_EOL, FILE_APPEND);
         return false;
     }
 
@@ -70,7 +70,7 @@ function Exec_PR_SQL($link, $query, $params = [],$debugging=false,$ignore=false)
 
     $endTime = microtime(true);
     $executionTime = $endTime - $startTime;
-	if (($executionTime>0.004 || $debugging) && !$ignore)
+	if (($executionTime>0.006 || $debugging) && !$ignore)
 	{
 		    $lastElement = end(debug_backtrace());
 			$callerFile = $lastElement['file'] ?? 'unknown';
@@ -122,6 +122,8 @@ function enterregistration ()
     //$callerFile = basename($backtrace[0]['file']);
 
 	$username = jwt_check($_COOKIE['jwt']);
+	
+	
 	$session_id =  ($_COOKIE['session_id']); // если нет JWT-токена, то надо брать session_id
 
 
@@ -212,8 +214,13 @@ function cart_by_session_id_and_username ($session_id,$username)
 	";
 	$cart['goods'] = Exec_PR_SQL($link,$que,[$client_id]);
 	$cart['cart_count'] = count($cart['goods']);
+	
+	$cart['count_qty'] = array_reduce($cart['goods'], function ($carry, $item) {
+		return $carry + intval($item['qty']);
+	}, 0);
+	$cart['cart_count'] = $cart['count_qty'];
 
-
+	
 
 
 	$sum_goods = round(array_reduce($cart['goods'], function($carry, $item) {    return $carry + floatval($item['good_sum']);}, 0),2);
@@ -454,6 +461,7 @@ function jwt_create_staff($user_id,$staff_level)	// выпустить jwt-то�
 function actual_by_auth ($username,$reddottext,$doc,$sum_goods=0)	// доработка html-шаблона doc в зависимости от наличия авторизации $username
 {
 	GLOBAL $min_sum_gratis_delivery;
+	GLOBAL $cart;
 	if (strpos($username, 'https://t.me/') === 0 || strpos($username, '@') !== false) 		// пользователь авторизован
 	{
 		$doc = str_replace('account_logo.png', 'account_logo_auth.png', $doc);
@@ -474,14 +482,20 @@ function actual_by_auth ($username,$reddottext,$doc,$sum_goods=0)	// дораб�
 	$doc = str_replace('[reddottext]'	, $reddottext, $doc);
 
 	if ($sum_goods==0 || is_null($sum_goods))
-		$doc = str_replace('[main_text]', "БЕСПЛАТНАЯ ДОСТАВКА до пункта выдачи ОТ $min_sum_gratis_delivery руб.", $doc);
+		$doc = str_replace('[main_text]', "БЕСПЛАТНАЯ ДОСТАВКА до пункта ОТ $min_sum_gratis_delivery руб.", $doc);
 
 		if ($sum_goods>=$min_sum_gratis_delivery) $doc = str_replace('[main_text]', "✓ БЕСПЛАТНАЯ ДОСТАВКА до пункта выдачи!", $doc);
 		else $doc = str_replace('[main_text]', "Добавь товар на ".($min_sum_gratis_delivery-$sum_goods)." руб. для бесплатной доставки!", $doc);
 
+	$count_qty = $cart['count_qty'] ?? 0;
 	
-
-
+	if ($count_qty>0) 
+			$doc = str_replace('[cart_count]', $count_qty, $doc); 
+		else 
+		{ 
+			$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
+			$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
+		}
 
 	return $doc;
 

@@ -87,9 +87,6 @@ WHERE g.goods_groups_id IS NOT NULL AND price>0;
 	$goods = Exec_PR_SQL($link,$que,[]);
 
 	$doc = 		 preg_replace('/<!\s*--\s*\[CHANGE_FROM\]\s*--\s*>.*?<!\s*--\s*\[CHANGE_TO\]\s*--\s*>/s', '' , $doc);
-	$cart_count = $cart['cart_count'];
-	if ($cart_count>0) $doc = str_replace('[cart_count]', $cart_count, $doc); else $doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
-
 	
 	if ($cat!=NULL) $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', $cat, $doc);
 	 else if ($subcat!=NULL) $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', $subcat, $doc);

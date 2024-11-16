@@ -1,3 +1,15 @@
+function handleQRClick(modalId, paylink) {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        // На мобильных устройствах сразу переходим по ссылке
+        window.open(paylink, '_blank');
+    } else {
+        // На десктопе открываем модальное окно
+        openModal(modalId);
+    }
+}
+
 function openModal(modalId) {
   document.getElementById(modalId).style.display = "flex";
 }

@@ -26,10 +26,6 @@
 	$doc = str_replace('[client_email]', $cart['client_email'], $doc);
 	$doc = cut_fragment($doc,'<!-- ORDER_1_BEGIN -->','<!-- ORDER_1_END -->','[orders_table]',$html_order_1);
 	
-	$cart_count = $cart['cart_count'];
-	if ($cart_count>0) $doc = str_replace('[cart_count]', $cart_count, $doc); else $doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
-	
-	
 	$orders = Exec_PR_SQL($link,"SELECT * FROM `orders` WHERE client_id=? ORDER BY datetime_create",[$client_id]);
 	
 	$html_orders = '';

@@ -51,7 +51,10 @@
 
 .product-name {
     font-size: 18px;
-
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: manual;
     margin: 0 0 10px;
     text-align: left;
 }

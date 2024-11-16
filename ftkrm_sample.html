@@ -114,20 +114,22 @@
                     <a href="https://fitokrama.by/cart_page.php"> Корзина </a>
                 </div>
                 <div class="menuBottomSect">
-                    <a href="https://www.instagram.com/kovrochistka/">
+                    <a href="https://www.instagram.com/kovrochistka/ target="_blank" rel="noopener noreferrer"">
                         <img src="https://fitokrama.by/logos/instagram_icon.png" alt="Inst" />
                     </a>
 
-                    <a href="viber://chat?number=+375445975005">
-                        <img src="https://fitokrama.by/logos/viber_icon.png" alt="Viber" />
-                    </a>
+                    <a href="viber://chat?number=%2B375445975005" target="_blank" rel="noopener noreferrer">
+					<img src="https://fitokrama.by/logos/viber_icon.png" alt="Viber" />
+					</a>
 
-                    <a href="https://t.me/fitokrama">
-                        <img src="https://fitokrama.by/logos/telegram_icon.png" alt="Telegram" />
-                    </a>
+
+					<a href="https://t.me/fitokrama" target="_blank" rel="noopener noreferrer">
+						<img src="https://fitokrama.by/logos/telegram_icon.png" alt="Telegram" />
+					</a>
+
 
                     <a href="tel:+375445975005">
-                        <img src="https://fitokrama.by/logos/phone.svg" alt="" />
+                        <img src="https://fitokrama.by/logos/phone.png" alt="" />
                     </a>
                 </div>
             </div>
@@ -135,22 +137,23 @@
         <div class="top-bar">
             <section>
                 <div class="contact-info">
-                    <a href="https://www.instagram.com/kovrochistka/"
+                    <a href="https://www.instagram.com/kovrochistka/ target="_blank" rel="noopener noreferrer""
                         ><img src="https://fitokrama.by/logos/instagram_icon.png" alt="Instagram"
                     /></a>
 
-                    <a href="viber://chat?number=+375445975005"
-                        ><img src="https://fitokrama.by/logos/viber_icon.png" alt="Viber"
-                    /></a>
+                    <a href="viber://chat?number=%2B375445975005" target="_blank" rel="noopener noreferrer">
+					<img src="https://fitokrama.by/logos/viber_icon.png" alt="Viber" />
+					</a>
 
-                    <a href="https://t.me/fitokrama"
-                        ><img src="https://fitokrama.by/logos/telegram_icon.png" alt="Telegram"
-                    /></a>
+
+					<a href="https://t.me/fitokrama" target="_blank" rel="noopener noreferrer">
+						<img src="https://fitokrama.by/logos/telegram_icon.png" alt="Telegram" />
+					</a>
 
                     <a style="margin-right: 25px" href="tel:+375445975005"
                         ><img
                             style="height: 14px"
-                            src="https://fitokrama.by/logos/phone.svg"
+                            src="https://fitokrama.by/logos/phone.png"
                             alt=""
                         />
                         +375 44 597-50-05</a
@@ -283,19 +286,16 @@
         <link rel="stylesheet" href="https://fitokrama.by/css/cart_delivery.css" />
         <link rel="stylesheet" href="https://fitokrama.by/css/cart_payment.css" />
         <div class="cart-content">
-            <h3>
+            <h3 style="margin-bottom: 20px;">
                 ЗАКАЗ № [order_number] ОТ [order_date].
-                <p style="color: [order_color]">[order_status]</p>
+                <p style="color: [order_color]">[order_status]</p>				
             </h3>
             <!-- BUTTON_PAY_BEGIN -->
             <div class="payment-options">
-                <div class="payment-option" onclick="openModal('qrModal')">
-                    <img
-                        src="data:image/jpeg;base64,[payqrpicture]"
-                        alt="QR Code"
-                    />
-                    <p>Оплатить в банковском приложении</p>
-                </div>
+                <div class="payment-option" onclick="handleQRClick('qrModal', '[paylinktoapp]')">
+					<img src="data:image/jpeg;base64,[payqrpicture]" alt="QR Code" />
+					<p>Оплатить в банковском приложении</p>
+				</div>
                 <div
                     class="payment-option"
                     onclick="openCustomWindow('[paylink]')"
@@ -319,27 +319,23 @@
             </div>
 
             <div id="qrModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal('qrModal')"
-                        >&times;</span
-                    >
-                    <img
-                        src="data:image/jpeg;base64,[payqrpicture]"
-                        alt="QR Code"
-                        style="width: 300px; height: 300px"
-                    />
-                    <a
-                        href="[paylinktoapp]"
-                        onclick="window.open(this.href, '_blank', 'width=800,height=600'); return false;"
-                        style="
-                            display: block;
-                            text-align: center;
-                            margin-top: 10px;
-                        "
-                        >Оплатить в банковском приложении</a
-                    >
-                </div>
-            </div>
+				<div class="modal-content">
+					<span class="close" onclick="closeModal('qrModal')">&times;</span>
+					<img
+						src="data:image/jpeg;base64,[payqrpicture]"
+						alt="QR Code"
+						style="width: 300px; height: 300px"
+					/>
+					<a class="buy-button"
+						href="[paylinktoapp]"
+						onclick="window.open(this.href, '_blank', 'width=800,height=600'); return false;"
+						style="display: block; text-align: center; margin-top: 10px;"
+					>
+						Оплатить в банковском приложении
+					</a>
+				</div>
+			</div>
+
             <div id="messageModal" class="modal">
                 <div class="modal-content">
                     <span class="close" onclick="closeModal('messageModal')"
@@ -434,7 +430,7 @@
             <link rel="stylesheet" href="https://fitokrama.by/css/cart_payment.css" />
             <div class="cart-content orders">
                 <h2>Добро пожаловать в личный кабинет!</h2>
-                <h3>Клиент: [client_email]</h3>
+                <h3 style="margin-bottom: 20px;">Клиент: [client_email]</h3>
                 <!-- ORDER_1_BEGIN -->
                 <a href="[order_link]" class="cart-item">
                     <div class="product-info">
@@ -601,7 +597,7 @@
                         onclick="navigateTo([goodart])"
                     />
 
-                    <h4 class="product-name" onclick="navigateTo([goodart])">
+                    <h4 class="product-title" onclick="navigateTo([goodart])">
                         [goodname]
                     </h4>
 
@@ -722,7 +718,19 @@
         <link rel="stylesheet" href="https://fitokrama.by/css/cart_delivery.css" />
         <link rel="stylesheet" href="https://fitokrama.by/css/cart_payment.css" />
         <div class="cart-content">
-            <h3>КОРЗИНА</h3>
+		<!-- EMPTY_CART_BEGIN -->
+		<div class="empty-cart-container">
+			<h3>КОРЗИНА ПОКА ПУСТА</h3>
+			<img src="https://fitokrama.by/logos/empty_cart.png" alt="Пустая корзина" class="empty-cart-image">
+			<a href="https://fitokrama.by/catalog_page.php" class="buy-button">
+				КАТАЛОГ
+			</a>
+		</div>
+
+		
+		<!-- EMPTY_CART_END -->
+		
+            <h3 style="margin-bottom: 20px;">КОРЗИНА</h3>
             <!-- CART_GOOD_1_BEGIN -->
             <div class="cart-item">
                 <img

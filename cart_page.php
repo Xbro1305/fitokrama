@@ -27,15 +27,14 @@
 
 	$doc = actual_by_auth($username,$reddottext,$doc,$cart['sum_goods']);
 	
-		
 	if ($cart['goods']==NULL || count($cart['goods'])==0) 
 	{
-			
-		$doc = cut_fragment($doc, '<!-- CART_BEGIN -->', '<!-- CART_END -->','oops Корзина пуста');
-		$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
-		$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
+		$doc = cut_fragment($doc, '<!-- EMPTY_CART_END -->', '<!-- CART_END -->','');
 		exit ($doc);
 	}
+	
+	$doc = cut_fragment($doc, '<!-- EMPTY_CART_BEGIN -->', '<!-- EMPTY_CART_END -->','');
+	
 	
 	$doc = str_replace('[delivery_address]', $delivery_address, $doc);
 	$doc = str_replace('[delivery_logo]'	, $cart['delivery_logo'], $doc);
@@ -64,10 +63,7 @@
 	$doc = str_replace('[delivery_price_rub]', 	$cart['delivery_price_rub'], $doc);
 	$doc = str_replace('[delivery_price_kop]', 	$cart['delivery_price_kop'], $doc);
 	
-	if (is_null($cart)) 	$cart_count = 0;
-					else $cart_count = $cart ['cart_count'];
-	if ($cart_count>0)   $doc = str_replace('[cart_count]', $cart_count, $doc); 
-					else $doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
+	
 	
 	
 	if ($cart['datetime_email_confirmed']==NULL) 

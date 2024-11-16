@@ -32,9 +32,6 @@
 	
 	if ($order['client_id']!=$client_id && $order['client_id']!=NULL) die(json_encode(['status'=>'error', 'message'=>'Access error' ]));
 	
-	
-	$cart_count = $cart['cart_count'];
-	if ($cart_count>0) $doc = str_replace('[cart_count]', $cart_count, $doc); else $doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
 	$doc = str_replace('[order_number]', $order_number, $doc);
 	$doc = str_replace('[order_detailed]', json_encode($order), $doc);
 	$doc = str_replace('[order_date]', (new DateTime($order['datetime_create']))->format('d.m.Y H:i') , $doc);

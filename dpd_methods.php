@@ -116,20 +116,24 @@ function refresh_dpd_data() { //обновление базы пунктов в�
 			}
 		//$comment = $dpd_point['']['operation'];
 		$que = "INSERT INTO `delivery_points` (
-			unique_id, datetime_updated, actual_until_datetime, partner_id, address, name, comment, lat, lng, specific_json
-		) VALUES (
-			?, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR), ?, ?, ?, ?, ?, ?, ?
-		) ON DUPLICATE KEY UPDATE
-			datetime_updated = CURRENT_TIMESTAMP,
-			actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
-			partner_id = ?,
-			address = ?,
-			name = ?,
-			comment = ?,
-			lat = ?,
-			lng = ?,
-			specific_json = ?";
-
+					unique_id, datetime_updated, actual_until_datetime, 
+					partner_id, address, name, comment, lat, lng, specific_json, coordinates
+				) VALUES (
+					?, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR), 
+					?, ?, ?, ?, ?, ?, ?, ST_GeomFromText(CONCAT('POINT(', ?, ' ', ?, ')'))
+				) ON DUPLICATE KEY UPDATE
+					datetime_updated = CURRENT_TIMESTAMP,
+					actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
+					partner_id = ?,
+					address = ?,
+					name = ?,
+					comment = ?,
+					lat = ?,
+					lng = ?,
+					specific_json = ?,
+					lat_radians = RADIANS(lat),
+					lng_radians = RADIANS(lng),
+					coordinates = ST_GeomFromText(CONCAT('POINT(', lng, ' ', lat, ')'))";
 		$params = [
 			$unique_id,
 			$partner_id,
@@ -139,23 +143,18 @@ function refresh_dpd_data() { //обновление базы пунктов в�
 			$lat,
 			$lng,
 			$specific_json,
+			$lng, // для coordinates
+			$lat, // для coordinates
 			$partner_id,
 			$address,
 			$descript,
 			$shed,
 			$lat,
 			$lng,
-			$specific_json
+			$specific_json,
 		];
-
-		Exec_PR_SQL($link, $que, $params);	
+		Exec_PR_SQL($link, $que, $params,false,true);	
 	}
-	Exec_PR_SQL($link, "UPDATE delivery_points SET 
-    lat_radians = RADIANS(lat), 
-    lng_radians = RADIANS(lng), 
-    coordinates = ST_GeomFromText(CONCAT('POINT(', lng, ' ', lat, ')'));", []);
-
-	
 	$que = "SELECT COUNT(*) as deactivated_count FROM `delivery_points` WHERE datetime_updated < ? AND actual_until_datetime > CURRENT_TIMESTAMP AND partner_id = ?";
 	$deactivated = Exec_PR_SQL($link, $que, [$datetime_refresh_start, $partner_id])[0]['deactivated_count'];
 

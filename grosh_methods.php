@@ -1,6 +1,6 @@
 <?php
 	include_once  'mnn.php';
-	//header('Content-Type: application/json');
+	header('Content-Type: application/json');
 
 function hutkigrosh_new_POST($method, $dataJSON = null,$test=false) {
     GLOBAL $grosh_apiKey;
@@ -42,6 +42,10 @@ function hutkigrosh_new_GET($method,$test=false) {
 	GLOBAL $grosh_apiKey;
     $url = 'https://api.hgrosh.by/'.$method;
 	if ($test) echo ('URL --- '.$url.PHP_EOL);
+	if ($test) echo ('IP by url--- '.gethostbyname($url).PHP_EOL);
+	if ($test) curl_setopt($ch, CURLOPT_VERBOSE, true);
+
+	
 	$ch = curl_init();
     // Настройка URL и метода запроса
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -311,7 +315,7 @@ if ($method == 'check')
 if ($method == 'bills') 
 {
 	
-	$response = hutkigrosh_new_GET("invoicing/invoice?skip=0&take=10&beginDate=2024-10-01&endDate=2024-12-31&states=ACTIVE&queryType=EMPTY&sortType=BY_BEGIN_DATE&order=DESCENDING&api-version=2.0");
+	$response = hutkigrosh_new_GET("invoicing/invoice?skip=0&take=10&beginDate=2024-10-01&endDate=2024-12-31&states=ACTIVE&queryType=EMPTY&sortType=BY_BEGIN_DATE&order=DESCENDING&api-version=2.0",true);
 	echo json_encode($response).PHP_EOL.PHP_EOL;
 	die;
 }

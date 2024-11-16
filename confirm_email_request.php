@@ -41,5 +41,5 @@
 		exit(json_encode(['status' => 'ok', 'message' => 'Код выслан на почту.']));
 	else
 		exit(json_encode(['status' => 'error', 'message' => 'Failed to send email.']));
-}
+
 

@@ -10,8 +10,7 @@
 	$doc = file_get_contents('ftkrm_sample.html');
 	
 	$doc = actual_by_auth($username,$reddottext,$doc,$cart['sum_goods']);
-	
-	 
+		 
 	$doc = cut_fragment($doc, '<!-- GOOD_1_BEGIN -->', '<!-- GOOD_1_END -->','[similargoods]',$tmpts_similargoods);
 	$doc = cut_fragment($doc, '<!-- CART_BEGIN -->', '<!-- CART_END -->','');
 	$doc = cut_fragment($doc, '<!--ORDER_PAGE_BEGIN -->','<!--ORDER_PAGE_END -->','');
@@ -64,10 +63,6 @@
 		die($doc);
 		
 	}
-
-	$cart_count = $cart ['cart_count'];
-	if ($cart_count>0) $doc = str_replace('[cart_count]', $cart_count, $doc); else $doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
-
 
 	$doc = str_replace('[meta_description_content]', $good['description_short'], $doc);
 	$doc = str_replace('[meta_keywords_content]', $good['meta_keywords_content'], $doc);

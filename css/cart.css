@@ -27,6 +27,43 @@
     display: flex;
 }
 
+
+
+
+.buy-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #587552;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+@media screen and (min-width: 768px) {
+    .empty-cart-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .empty-cart-image {
+        flex: 0 0 auto;
+        max-width: 300px;
+        margin-left: auto; /* Прижимаем картинку к правому краю */
+        align-self: flex-start;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .empty-cart-image {
+        display: block;
+        margin: 20px auto; /* Центрируем картинку на мобильных */
+    }
+}
+
+
 .delivery-choosing-button {
     width: 20px;
     height: 20px;

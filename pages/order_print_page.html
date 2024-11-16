@@ -32,8 +32,10 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.print();
-        window.onafterprint = function () {
+
+        // Задержка перед закрытием окна
+        setTimeout(function () {
             window.close();
-        };
+        }, 500);
     });
 </script>

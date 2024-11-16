@@ -96,33 +96,49 @@ function refresh_belpochta_data() 			//обновление базы пункт�
 		
 		//$comment = $belpochta_point['']['operation'];
 		// Обновляем или вставляем данные в таблицу `delivery_points`
-		$que = "
-			INSERT INTO `delivery_points` 
-			(unique_id, datetime_updated, actual_until_datetime, partner_id, address, name, comment, lat, lng)
-			VALUES (?, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR), ?, ?, ?, ?, ?, ?)
-			ON DUPLICATE KEY UPDATE
-				datetime_updated = CURRENT_TIMESTAMP,
-				actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
-				partner_id = ?,
-				address = ?,
-				name = ?,
-				comment = ?,
-				lat = ?,
-				lng = ?
-		";
-
+		$que = "INSERT INTO `delivery_points` (
+					unique_id, datetime_updated, actual_until_datetime, 
+					partner_id, address, name, comment, lat, lng, lat_radians, lng_radians, coordinates
+				) VALUES (
+					?, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR), 
+					?, ?, ?, ?, ?, ?, RADIANS(?), RADIANS(?), ST_GeomFromText(CONCAT('POINT(', ?, ' ', ?, ')'))
+				)
+				ON DUPLICATE KEY UPDATE
+					datetime_updated = CURRENT_TIMESTAMP,
+					actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
+					partner_id = ?,
+					address = ?,
+					name = ?,
+					comment = ?,
+					lat = ?,
+					lng = ?,
+					lat_radians = RADIANS(lat),
+					lng_radians = RADIANS(lng),
+					coordinates = ST_GeomFromText(CONCAT('POINT(', lng, ' ', lat, ')'))";
 		$params = [
-			$unique_id, $partner_id, $address, $descript, $shed, $lat, $lng,
-			$partner_id, $address, $descript, $shed, $lat, $lng
+			$unique_id,      // unique_id
+			$partner_id,     // partner_id
+			$address,        // address
+			$descript,       // name
+			$shed,           // comment
+			$lat,            // lat
+			$lng,            // lng
+			$lat,            // для RADIANS(lat)
+			$lng,            // для RADIANS(lng)
+			$lng,            // для POINT(lng)
+			$lat,            // для POINT(lat)
+
+			// Для секции ON DUPLICATE KEY UPDATE:
+			$partner_id,     // partner_id
+			$address,        // address
+			$descript,       // name
+			$shed,           // comment
+			$lat,            // lat
+			$lng,            // lng
 		];
-
-		Exec_PR_SQL($link, $que, $params);
+			
+		Exec_PR_SQL($link, $que, $params,false,true);
 	}
-
-		Exec_PR_SQL($link, "UPDATE delivery_points SET 
-			lat_radians = RADIANS(lat), 
-			lng_radians = RADIANS(lng), 
-			coordinates = ST_GeomFromText(CONCAT('POINT(', lng, ' ', lat, ')'));", []);
 
 		
 		// Подсчёт количества деактивированных пунктов

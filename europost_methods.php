@@ -124,19 +124,32 @@ function refresh_europochta_data() 			//обновление базы пункт
 		$shed = $europochta_point['Info1'];
 		
 		//$comment = $europochta_point['']['operation'];
-		$que = "INSERT INTO `delivery_points` (unique_id, datetime_updated, actual_until_datetime,partner_id,address,name,comment,lat,lng)
-				VALUES (?, CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),?,?,?,?,?,?)
+		$que = "INSERT INTO `delivery_points` (
+					unique_id, datetime_updated, actual_until_datetime, 
+					partner_id, address, name, comment, lat, lng, coordinates
+				)
+				VALUES (
+					?, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR), 
+					?, ?, ?, ?, ?, ?, ST_GeomFromText(CONCAT('POINT(', ?, ' ', ?, ')'))
+				)
 				ON DUPLICATE KEY UPDATE
 					datetime_updated = CURRENT_TIMESTAMP,
 					actual_until_datetime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 HOUR),
 					partner_id = ?,
 					address = ?,
 					name = ?,
-					comment  = ?,
+					comment = ?,
 					lat = ?,
-					lng = ? ";
+					lng = ?,
+					lat_radians = RADIANS(?),
+					lng_radians = RADIANS(?),
+					coordinates = ST_GeomFromText(CONCAT('POINT(', ?, ' ', ?, ')'))";
 					
-		Exec_PR_SQL($link,$que,[$unique_id,$partner_id,$address,$descript,$shed,$lat,$lng,$partner_id,$address,$descript,$shed,$lat,$lng]);
+		Exec_PR_SQL($link, $que, [
+			$unique_id, $partner_id, $address, $descript, $shed, $lat, $lng, $lat, $lng, // INSERT
+			$partner_id, $address, $descript, $shed, $lat, $lng, $lat, $lng, $lng, $lat  // UPDATE
+		],false,true);
+
 	}
 		Exec_PR_SQL($link, "UPDATE delivery_points SET 
 		lat_radians = RADIANS(lat), 
@@ -358,7 +371,6 @@ function europost_tracker($track_number,$post_code)
 	$data['Number'] = $track_number;
 	$res = europochta_post('Postal.Tracking', $data);
 	file_put_contents('europost_tracker.txt', date('[Y-m-d H:i:s] ') . $track_number. PHP_EOL .' '.json_encode($res,JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND | LOCK_EX);
-	
 	/*if (!isset($res['Table'][0]['Number']))
 	{
 		send_warning_telegram('Европочта. Ошибка формирования заказа на отправку.'.$order_number.'  - '.json_encode($res));
