@@ -16,9 +16,11 @@
 
 
 $method = explode("/", $_SERVER ["SCRIPT_URL"])[2];	
-
+if ($method!='check_orders_not_paid') send_warning_telegram('payment_recieved '.$_SERVER ["SCRIPT_URL"]);
+		
 if ($method=='epos_incoming') // вызванный webhook при совершенной оплате
 	{
+		
 		file_put_contents('epos_log.txt', json_encode($data, FILE_APPEND | LOCK_EX).PHP_EOL.PHP_EOL );
 		
 		if (!isset($data['claimId'])) exit(json_encode(['status'=>'ok', 'message'=>'No_data']));	
@@ -55,39 +57,21 @@ if ($method=='alfa_incoming_ok' || $method=='alfa_incoming_no') // вызван�
 	exit(json_encode(['status'=>'ok', 'message'=>'ok']));	
 }
 
-function check_payment_by_order ($order,$payid)	// проверяет статус заказа
+
+function check_payment_one_order ($order)	// проверяет статус конкретного заказа
 {
 	GLOBAL $link;
+	if (!is_null($order['datetime_paid'])) return ('the order has already been paid');	// заказ был оплачен, нечего проверять
+
 	$sum = 0;
-	
-	if (!is_null($payid))
-	{
-		$orders = Exec_PR_SQL($link,"SELECT * FROM orders WHERE epos_id=? OR hutki_billId=? OR alfa_orderId=?",[$payid,$payid,$payid]);
-		if (count($orders)==0) exit(json_encode(['status'=>'error', 'error'=>'Incorrect order_number']));	
-		$order = $orders[0];
-		if ($order['epos_id']==$payid) 		[$payment_method,$payment_report,$sum] = epos_check($order['epos_id']);
-		if ($order['hutki_billId']==$payid) [$payment_method,$payment_report,$sum] = erip_check($order['hutki_billId']);
-		if ($order['alfa_orderId']==$payid) [$payment_method,$payment_report,$sum] = alfa_check($order['alfa_orderId']);
-	}
-	
-	//send_warning_telegram('73 epos_id '. $order['epos_id']);
-	//send_warning_telegram('74 hutki_billId '. $order['hutki_billId']);
-	//send_warning_telegram('75 alfa_orderId '. $order['alfa_orderId']);
-	
-	if (!is_null($order))
-	{
-		if ($sum==0) [$payment_method,$payment_report,$sum] = epos_check($order['epos_id']);
-		if ($sum==0) [$payment_method,$payment_report,$sum] = erip_check($order['hutki_billId']);
-		if ($sum==0) [$payment_method,$payment_report,$sum] = alfa_check($order['alfa_orderId']); 
-	}
-	
+	if ($sum==0) [$payment_method,$payment_report,$sum] = epos_check($order['epos_id']);
+	if ($sum==0) [$payment_method,$payment_report,$sum] = erip_check($order['hutki_billId']);
+	if ($sum==0) [$payment_method,$payment_report,$sum] = alfa_check($order['alfa_orderId']); 
 	if ($sum==0) return (NULL);	// оплата не зафиксирована
-	
 	if ($payment_method!='epos') epos_kill($order['epos_id']);
 	if ($payment_method!='erip') erip_kill($order['hutki_billId']);
 	if ($payment_method!='alfa') alfa_kill($order['alfa_orderId']);
-	
-	$payment_records = Exec_PR_SQL($link,"SELECT * FROM payments WHERE order_id=? AND payment_method=?",[$order['id'],$payment_method]);
+	$payment_records = Exec_PR_SQL($link,"SELECT * FROM payments WHERE order_id=? AND sum=? AND payment_method=?",[$order['id'],$sum,$payment_method]);
 	
 	if (count($payment_records)==0) // нет записи об оплате
 	{
@@ -95,22 +79,40 @@ function check_payment_by_order ($order,$payid)	// проверяет стату
 				VALUES (?,?,CURRENT_TIMESTAMP,?,?)";
 		Exec_PR_SQL($link,$que,[$order['id'], $sum, $payment_method, $payment_report ]);
 	}
-	if ($order['datetime_paid']==NULL)
-	{
-		$paid_amount = Exec_PR_SQL($link,"SELECT SUM(`sum`) AS paid FROM `payments` WHERE order_id=?",[$order['id']])[0]['paid'];
-		if ($paid_amount>=$order['sum']) 
+	
+	$paid_amount = Exec_PR_SQL($link,"SELECT SUM(`sum`) AS paid FROM `payments` WHERE order_id=?",[$order['id']])[0]['paid'];
+	if ($paid_amount>=$order['sum']) 
 		{
 			$que = "UPDATE orders SET datetime_paid = CURRENT_TIMESTAMP WHERE id=?";		
 			Exec_PR_SQL($link,$que,[$order['id']]);
 			send_email_detailed($order['number']);	// выслать письмо 
-		}
-	
+		}	
 	send_warning_telegram("check_payment_by_order Видим оплату по заказу {$order['number']} в сумме $sum методом $payment_method. Отмечаем заказ как оплаченный.");	
-		
+	return ('the order has been paid');
+}
+
+
+function check_payment_by_order ($order,$payid)	// проверяет статус заказа или заказов (смотря что на входе)
+{
+	GLOBAL $link;
+	if (is_null($order) || is_null($payid)) // данных нет, перебираем все неоплаченные неотмененные заказы
+	{
+		$orders = Exec_PR_SQL($link,"SELECT * FROM `orders` WHERE `datetime_paid` IS NULL AND `datetime_cancel` IS NULL");
+		if (count($orders)>0) 
+			foreach ($orders AS $order)
+				check_payment_one_order ($order);
+		exit(json_encode(['status'=>'ok', 'message'=>'Payments has been updated']));	
 	}
-		
-	return ($sum);
 	
+	if (!is_null($payid))
+	{
+		$orders = Exec_PR_SQL($link,"SELECT * FROM orders WHERE epos_id=? OR hutki_billId=? OR alfa_orderId=?",[$payid,$payid,$payid]);
+		if (count($orders)==0) exit(json_encode(['status'=>'error', 'error'=>'Incorrect order_number']));	
+		$order = $orders[0];
+	}
+	// если мы тут, то $order уже определен
+	check_payment_one_order ($order);
+	exit(json_encode(['status'=>'ok', 'message'=>'Payments has been updated']));				
 }
 
 if ($method=='check_payment_by_order') // проверить оплату по соотв. заказу
@@ -120,7 +122,7 @@ if ($method=='check_payment_by_order') // проверить оплату по �
 	$orders = Exec_PR_SQL($link,"SELECT * FROM orders WHERE number=?",[$order_number]);
 	if (count($orders)==0) exit(json_encode(['status'=>'error', 'error'=>'Incorrect order_number']));	
 		
-	$sum = check_payment_by_order ($orders[0],NULL);
+	check_payment_by_order ($orders[0],NULL);
 	$order = all_about_order($order_number);
 	exit(json_encode(['status'=>'ok', 'paid_amount'=>$sum, 'order'=>$order]));	
 }
@@ -133,7 +135,6 @@ if ($method=='check_payment_by_id') // проверить оплату по со
 	
 	exit(json_encode(['status'=>'ok', 'paid_amount'=>$sum]));	
 }
-
 
 if ($method=='check_orders_not_paid') // вызываемый webhook по CRON для действий с неоплаченными заказами
 {
@@ -207,7 +208,7 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 		$ins_id = Exec_PR_SQL($link,$que,[ $order['number'], $order['client_id'], $order['client_email'], $doc_sl ] );
 		$rep = mail_sender($order['client_email'], "⚡️ Заказ не оплачен! ☘", $doc);		
 		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report=? WHERE id=?;";
-		Exec_PR_SQL($link,$que,[$rep,$ins_id]);		
+		Exec_PR_SQL($link,$que,[$rep,$ins_id]);	
 
 	}
 	

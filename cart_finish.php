@@ -197,7 +197,7 @@ function qty_by_art ($art)			// вычисление текущего колич
 	INSERT INTO `orders_goods` (`order_id`, `good_art`, `price`, `qty`, `qty_as`) 
 	SELECT ?, `good_art`, `price`, `qty`, 0  
 		FROM `carts_goods`
-		WHERE `client_id` = ?";
+		WHERE `qty`>0 AND `client_id` = ?";
 	Exec_PR_SQL($link,$que,[$order_id,$client_id]);
 	$que = "DELETE FROM `carts_goods` WHERE `client_id` = ?";
 	Exec_PR_SQL($link,$que,[$client_id]);
