@@ -193,8 +193,6 @@
 
 @media (max-width: 1024px) {
     .quantity-button-small {
-        width: 20px !important;
-        height: 20px !important;
         padding: 0 !important;
         display: flex;
         align-items: center !important;
@@ -204,18 +202,13 @@
     .quantity-input-small {
         height: 20px !important;
         width: 30px !important;
+        padding: 10px;
     }
 
     .add-to-cart-small {
         color: #fff;
         padding: 7px 10px !important;
         border-radius: 28px;
-    }
-
-    .quantity-button-small {
-        padding: 10px !important;
-        height: auto !important;
-        width: auto !important;
     }
 
     .similar-products .quantity-selector {
