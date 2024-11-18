@@ -45,36 +45,38 @@ function handleAppleCredentialResponse(response) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  AppleID?.auth?.init({
-    clientId: "com.fitokramaby.app",
+  if (AppleID)
+    AppleID?.auth?.init({
+      clientId: "com.fitokramaby.app",
 
-    scope: "name email",
+      scope: "name email",
 
-    redirectURI: "https://fitokrama.by/check_authorization.php",
+      redirectURI: "https://fitokrama.by/check_authorization.php",
 
-    state: "initial_state",
+      state: "initial_state",
 
-    usePopup: true,
+      usePopup: true,
 
-    responseMode: "fragment",
-  });
-
-  document
-    .querySelector(".authWithAppleID")
-    .addEventListener("click", function () {
-      AppleID.auth
-        .signIn()
-        .then(function (response) {
-          if (response.authorization && response.authorization.id_token) {
-            handleAppleCredentialResponse(response.authorization);
-          } else {
-            document.querySelector("#universalConfirm").style.display = "flex";
-
-            document.querySelector(".msg").innerHTML = "Что-то пошло не так";
-          }
-        })
-        .catch(function (error) {});
+      responseMode: "fragment",
     });
+  if (AppleID)
+    document
+      .querySelector(".authWithAppleID")
+      .addEventListener("click", function () {
+        AppleID.auth
+          .signIn()
+          .then(function (response) {
+            if (response.authorization && response.authorization.id_token) {
+              handleAppleCredentialResponse(response.authorization);
+            } else {
+              document.querySelector("#universalConfirm").style.display =
+                "flex";
+
+              document.querySelector(".msg").innerHTML = "Что-то пошло не так";
+            }
+          })
+          .catch(function (error) {});
+      });
 });
 window.onload = function () {
   google.accounts.id.initialize({

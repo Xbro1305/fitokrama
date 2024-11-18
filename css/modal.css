@@ -356,4 +356,9 @@
         color: #fff;
         text-decoration: none;
     }
+
+    .modal .close {
+        top: -2px !important;
+        right: 10px !important;
+    }
 }

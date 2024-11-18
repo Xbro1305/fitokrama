@@ -1,5 +1,5 @@
 function navigateTo(art) {
-  window.location.href = `http://fitokrama.by/art_page.php?art=${art}`;
+  window.location.href = `http://fitokrama.by/art_page.php/${art}`;
 }
 
 const getEmailCode = () => {
