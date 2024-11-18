@@ -121,10 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const dlt = (art, price) => {
     deletingItem.id = art;
+    document.querySelector("#deleteItem").style.display = "flex";
+
     deletingItem.price = price;
     deletingItem.qty = 0;
-
-    deleteItem();
   };
 
   function deleteItem() {
