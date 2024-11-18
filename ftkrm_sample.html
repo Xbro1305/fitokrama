@@ -884,7 +884,10 @@
                             [good_name]
                         </h4>
 
-                        <button class="dltButton" onclick="dlt([good_art],[good_price])">
+                        <button
+                            class="dltButton"
+                            onclick="dlt([good_art],[good_price])"
+                        >
                             <img src="./logos/Frame 15.svg" alt="" />
                         </button>
 
@@ -1906,8 +1909,9 @@
                             "#addedToCartModal"
                         ).style.display = "flex";
 
-                    document.querySelector(".modalMobMsg").innerHTML =
-                        res?.cart_count;
+                    if (document.querySelector(".modalMobMsg"))
+                        document.querySelector(".modalMobMsg").innerHTML =
+                            res?.cart_count;
                 })
                 .catch((err) => console.log(err));
 
