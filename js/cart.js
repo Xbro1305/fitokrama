@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const dlt = (art, price) => {
-    deletingItem.id = id;
+    deletingItem.id = art;
     deletingItem.price = price;
     deletingItem.qty = 0;
 
