@@ -119,6 +119,14 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  const dlt = (art, price) => {
+    deletingItem.id = id;
+    deletingItem.price = price;
+    deletingItem.qty = 0;
+
+    deleteItem();
+  };
+
   function deleteItem() {
     fetch("https://fitokrama.by/cart_correct.php", {
       method: "POST",

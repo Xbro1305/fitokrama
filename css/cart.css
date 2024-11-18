@@ -620,12 +620,24 @@
 
     .cart-item {
         position: relative;
+        align-items: flex-start !important;
         padding-bottom: 70px !important;
     }
 
     .cart-item .product-name {
-        width: calc(100% - 30px);
+        width: calc(100% - 70px);
     }
+
+    .dltButton {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: none;
+        background: none;
+        width: 30px;
+        height: 30px;
+    }
+
     .cart-item .quantity-selector {
         min-width: 0;
         width: auto;
