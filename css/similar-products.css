@@ -172,7 +172,6 @@
     color: #fff;
     padding: 7px 20px;
     border-radius: 28px;
-    height: 30px !important;
 }
 
 .add-to-cart-small img {
@@ -211,6 +210,31 @@
         color: #fff;
         padding: 7px 10px !important;
         border-radius: 28px;
+    }
+
+    .quantity-button-small {
+        padding: 10px !important;
+        height: auto !important;
+        width: auto !important;
+    }
+
+    .similar-products .quantity-selector {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .quantity-input-small {
+        text-align: center;
+        padding: auto 0;
+        height: 30px !important;
+        width: 50px !important;
+    }
+
+    .similar-products .quantity-selector > button {
+        height: auto !important;
+        width: auto !important;
+        padding: 10px 20px !important;
+        border-radius: 25px;
     }
 }
 

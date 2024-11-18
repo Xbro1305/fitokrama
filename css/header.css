@@ -56,6 +56,7 @@
 
 .contact-info a:hover {
     background: none !important;
+    opacity: 0.8;
 }
 
 .contact-info img {
@@ -217,12 +218,11 @@
 
 .account-buttons img {
     width: 25px; /* Задаем высоту значков */
-
-    height: 25px; /* Задаем высоту значков */
+    aspect-ratio: 1/1;
 }
 .menuButton {
     width: 30px;
-    height: 30px;
+    aspect-ratio: 1/1;
     background: none;
     border: none;
     display: none;
@@ -464,6 +464,7 @@
 
     .mobHeader > :last-child img {
         width: 100%;
+        height: auto !important;
     }
 
     .mobLogo {

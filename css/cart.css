@@ -27,9 +27,6 @@
     display: flex;
 }
 
-
-
-
 .buy-button {
     display: inline-block;
     padding: 10px 20px;
@@ -51,7 +48,8 @@
     .empty-cart-image {
         flex: 0 0 auto;
         max-width: 300px;
-        margin-left: auto; /* Прижимаем картинку к правому краю */
+        margin-left: 100%;
+        transform: translateX(-100%);
         align-self: flex-start;
     }
 }
@@ -62,7 +60,6 @@
         margin: 20px auto; /* Центрируем картинку на мобильных */
     }
 }
-
 
 .delivery-choosing-button {
     width: 20px;
@@ -531,9 +528,9 @@
     .ENC {
         font-size: 14px;
         text-transform: lowercase;
-        padding:0 10px !important;
+        padding: 0 10px !important;
         margin-top: -2px;
-        padding-bottom: 3px;
+        padding-bottom: 3p x;
     }
 
     .PC,

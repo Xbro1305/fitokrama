@@ -203,8 +203,8 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((res) => res.json())
       .then((res) => {
         if (res.error_text) {
-          document.querySelector("#universalConfirm").style.display = "flex";
-          document.querySelector(".msg").innerHTML = res.error_text;
+          document.querySelector("#cartConfirm").style.display = "flex";
+          document.querySelector(".cartConfirmmsg").innerHTML = res.error_text;
           return;
         }
         window.location.href = res.redirect_url;

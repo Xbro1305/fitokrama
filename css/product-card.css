@@ -397,7 +397,7 @@
 @media (max-width: 475px) {
     .product-image {
         width: 100%;
-        min-width: none;
+        min-width: 0 !important;
     }
 }
 
