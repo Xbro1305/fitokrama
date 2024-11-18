@@ -477,6 +477,12 @@
     }
 
     .maintext {
+        top: 140px !important;
+    }
+}
+
+@media (max-width: 660px) {
+    .maintext {
         top: 130px !important;
     }
 }
