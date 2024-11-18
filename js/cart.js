@@ -266,6 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
   window.inc = inc;
 
   window.dec = dec;
+  window.dlt = dlt;
 
   window.setInputValue = setInputValue;
 });
