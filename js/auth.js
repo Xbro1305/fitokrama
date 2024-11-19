@@ -44,20 +44,21 @@ function handleAppleCredentialResponse(response) {
     .finally(() => (document.querySelector("#waiting").style.display = "none"));
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    window.AppleID?.auth?.init({
-      clientId: "com.fitokramaby.app",
+window.onload(() => {
+  window.AppleID?.auth?.init({
+    clientId: "com.fitokramaby.app",
 
-      scope: "name email",
+    scope: "name email",
 
-      redirectURI: "https://fitokrama.by/check_authorization.php",
+    redirectURI: "https://fitokrama.by/check_authorization.php",
 
-      state: "initial_state",
+    state: "initial_state",
 
-      usePopup: true,
+    usePopup: true,
 
-      responseMode: "fragment",
-    });
+    responseMode: "fragment",
+  });
+
   document
     .querySelector(".authWithAppleID")
     .addEventListener("click", function () {
