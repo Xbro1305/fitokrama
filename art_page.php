@@ -103,8 +103,7 @@
 	$art_page_metadata .= '<script type="application/ld+json">'.json_encode($script_descr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).'</script>';
 	$doc = str_replace('<!-- art_page_metadata -->', $art_page_metadata, $doc);
 
-	$doc = str_replace('[similar-good-class]', 'add-to-cart-small good_similars_button', $doc);
-
+	
 	$doc = str_replace('[pagename]', ''.$good['name'].'| Фитокрама', $doc);
 	$doc = str_replace('[goodart]', $good['art'], $doc);
 	$doc = str_replace('[goodname]', $good['name'], $doc);
@@ -181,7 +180,7 @@
 		if ($sgood['qty']-$sgood['qty_fr']<3) $similargood_1 = str_replace('[low_qty]', '', $similargood_1); 		
 										else  $similargood_1 = str_replace('[low_qty]', '', $similargood_1); 		
 	}
-	
+
 	$doc = str_replace('[similargoods]', $similargood_1, $doc);			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! исправить логику
 	//file_put_contents($good['name_human'].'.html', $doc);
 

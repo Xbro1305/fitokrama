@@ -490,8 +490,10 @@ function actual_by_auth ($username,$reddottext,$doc,$sum_goods=0)	// дораб�
 	$count_qty = $cart['count_qty'] ?? 0;
 	
 	if ($count_qty>0) 
-			//$doc = str_replace('[cart_count]', $count_qty, $doc);
-			$doc = str_replace('[CC_display]', 'flex', $doc);		
+		{	
+			$doc = str_replace('[cart_count]', $count_qty, $doc);
+			$doc = str_replace('[CC_display]', 'flex', $doc);	
+		}
 		else 
 			$doc = str_replace('[CC_display]', 'none', $doc);
 		//{ 

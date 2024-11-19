@@ -92,7 +92,6 @@ WHERE g.goods_groups_id IS NOT NULL AND price>0;
 	 else if ($subcat!=NULL) $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', $subcat, $doc);
 		else $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', 'КАТАЛОГ', $doc);
 		
-	$doc = str_replace('[similar-good-class]', 'add-to-cart-small', $doc);
 
 	
 	
@@ -119,8 +118,9 @@ WHERE g.goods_groups_id IS NOT NULL AND price>0;
 										else  $similargood_1 = str_replace('[low_qty]', '', $similargood_1); 
 	}
 	
-	
+
 	$doc = str_replace('[similargoods]', $similargood_1, $doc);
+
 	//file_put_contents('catalog_page'.'.html', $doc);
 	
 	exit ($doc);
