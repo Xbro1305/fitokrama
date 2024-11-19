@@ -44,8 +44,17 @@ function handleAppleCredentialResponse(response) {
     .finally(() => (document.querySelector("#waiting").style.display = "none"));
 }
 
-window.onload(() => {
-  window.AppleID?.auth?.init({
+// document.addEventListener("DOMContentLoaded",);
+
+window.onload = function () {
+  google.accounts.id.initialize({
+    client_id:
+      "623477736615-btbfr5k08fbrkkusiprte24ip5vse4rb.apps.googleusercontent.com",
+
+    callback: handleCredentialResponse,
+  });
+  
+  AppleID?.auth?.init({
     clientId: "com.fitokramaby.app",
 
     scope: "name email",
@@ -58,7 +67,6 @@ window.onload(() => {
 
     responseMode: "fragment",
   });
-
   document
     .querySelector(".authWithAppleID")
     .addEventListener("click", function () {
@@ -75,14 +83,6 @@ window.onload(() => {
         })
         .catch(function (error) {});
     });
-});
-window.onload = function () {
-  google.accounts.id.initialize({
-    client_id:
-      "623477736615-btbfr5k08fbrkkusiprte24ip5vse4rb.apps.googleusercontent.com",
-
-    callback: handleCredentialResponse,
-  });
 };
 
 function onGoogleSignIn() {
