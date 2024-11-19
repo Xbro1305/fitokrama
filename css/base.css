@@ -66,7 +66,7 @@ body ::-webkit-scrollbar {
     border: 1px solid #ccc;
     width: 110px;
     text-align: center;
-    z-index: 999999;
+    z-index: 3;
 }
 
 .profileButton:hover .needAction {
@@ -79,7 +79,7 @@ body ::-webkit-scrollbar {
 
 .popup {
     position: fixed;
-    z-index: 100;
+    z-index: 4;
     left: 10px;
     bottom: 10px;
     overflow: auto;
@@ -92,7 +92,7 @@ body ::-webkit-scrollbar {
     justify-content: center !important;
     max-width: 300px;
     width: 100%;
-    z-index: 99999999999 !important;
+    z-index: 4 !important;
 }
 
 .popup figure {
@@ -230,7 +230,7 @@ body ::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     color: #fff;
-    z-index: 999999 !important;
+    z-index: 3 !important;
 }
 
 @media (max-width: 768px) {

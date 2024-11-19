@@ -60,7 +60,7 @@
 
 .mobSearch {
     display: flex;
-    z-index: 99999999 !important;
+    z-index: 6 !important;
     flex-direction: column;
     position: fixed;
     top: 0;

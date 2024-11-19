@@ -29,7 +29,7 @@
   left: 0;
   min-width: 100%;
   position: absolute;
-  z-index: 9999;
+  z-index: 3;
   -webkit-text-size-adjust: 100%;
 }
 .suggestions-suggestions strong {

@@ -5,7 +5,7 @@
     top: 50%;
     left: 50%;
 
-    z-index: 100;
+    z-index: 10;
 
     left: 0;
 
@@ -23,7 +23,6 @@
     align-items: center;
     justify-content: center;
     padding: 0 !important;
-    z-index: 99999999 !important;
 }
 
 .modal-content {
@@ -45,7 +44,7 @@
 
     border-radius: 10px;
     position: relative;
-    z-index: 999999999999 !important;
+    z-index: 10 !important;
 }
 
 .modal-body {
@@ -114,7 +113,7 @@
     font-size: 28px;
 
     font-weight: bold;
-    z-index: 99999999;
+    z-index: 11;
     position: absolute;
     top: 20px;
     right: 20px;
@@ -131,12 +130,12 @@
 
 #confirmEmail .modal-content,
 #universalConfirm .modal-content {
-    z-index: 99999999 !important;
+    z-index: 10 !important;
 }
 
 #confirmEmail .modal-content,
 #confirmEmail {
-    z-index: 99999999999999 !important;
+    z-index: 10 !important;
 }
 
 .show-with-list {
@@ -151,7 +150,7 @@
 }
 
 #universalConfirm {
-    z-index: 9999999999;
+    z-index: 10;
 }
 
 #authModal .modal-content {

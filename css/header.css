@@ -19,7 +19,7 @@
 
     left: 0;
 
-    z-index: 10;
+    z-index: 3;
 }
 
 .top-bar > section {
@@ -116,7 +116,7 @@
 
     width: 100%;
 
-    z-index: 99999999 !important;
+    z-index: 2 !important;
     overflow: visible;
 }
 
@@ -240,7 +240,7 @@
 
         width: 100%;
 
-        z-index: 100;
+        z-index: 2;
 
         background-color: white;
 
@@ -337,7 +337,7 @@
     background: white;
     width: 100%;
     overflow-y: auto;
-    z-index: 9999999 !important;
+    z-index: 3 !important;
     border-top: none;
 }
 .search-result-item {
@@ -387,7 +387,7 @@
     top: 40px;
     background: white;
     border: 1px solid #ccc;
-    z-index: 1000;
+    z-index: 2;
     width: 150px;
 }
 

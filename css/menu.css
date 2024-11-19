@@ -10,7 +10,7 @@
         top: 0;
         left: 0;
         transform: translateX(-100%);
-        z-index: 999999999999 !important;
+        z-index: 6 !important;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -27,12 +27,12 @@
         left: 0;
         width: 100%;
         height: 100vh;
-        z-index: 10;
+        z-index: 6;
     }
 
     .menuContainer {
         max-width: 280px;
-        z-index: 11;
+        z-index: 6;
         width: 100%;
         height: 100dvh;
         display: flex;
@@ -44,7 +44,7 @@
         top: 1px;
         left: 0;
         transform: translateX(-100%);
-        z-index: 999999999999 !important;
+        z-index: 6 !important;
     }
 
     .menu.active .menuContainer {
