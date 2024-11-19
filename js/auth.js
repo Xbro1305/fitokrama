@@ -45,8 +45,7 @@ function handleAppleCredentialResponse(response) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (AppleID)
-    AppleID?.auth?.init({
+    window.AppleID?.auth?.init({
       clientId: "com.fitokramaby.app",
 
       scope: "name email",
@@ -59,24 +58,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
       responseMode: "fragment",
     });
-  if (AppleID)
-    document
-      .querySelector(".authWithAppleID")
-      .addEventListener("click", function () {
-        AppleID.auth
-          .signIn()
-          .then(function (response) {
-            if (response.authorization && response.authorization.id_token) {
-              handleAppleCredentialResponse(response.authorization);
-            } else {
-              document.querySelector("#universalConfirm").style.display =
-                "flex";
+  document
+    .querySelector(".authWithAppleID")
+    .addEventListener("click", function () {
+      window.AppleID.auth
+        .signIn()
+        .then(function (response) {
+          if (response.authorization && response.authorization.id_token) {
+            handleAppleCredentialResponse(response.authorization);
+          } else {
+            document.querySelector("#universalConfirm").style.display = "flex";
 
-              document.querySelector(".msg").innerHTML = "Что-то пошло не так";
-            }
-          })
-          .catch(function (error) {});
-      });
+            document.querySelector(".msg").innerHTML = "Что-то пошло не так";
+          }
+        })
+        .catch(function (error) {});
+    });
 });
 window.onload = function () {
   google.accounts.id.initialize({
