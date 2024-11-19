@@ -18,7 +18,7 @@ function showAddedToCartModal(art, price, quantity) {
         document.querySelector(".cartCountMob").innerHTML = cartCount;
         document.querySelector(".cartCountPc").innerHTML = cartCount;
       })
-      .catch((error) => console.log(err))
+      .catch((error) => console.log(error))
       .finally(() => {
         document.querySelector("#waiting").style.display = "none";
       });
