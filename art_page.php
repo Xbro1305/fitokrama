@@ -158,7 +158,7 @@
 	FROM goods g
 	WHERE g.goods_groups_id IS NOT NULL
 	AND price>0
-	ORDER BY RAND () LIMIT 3 ";
+	ORDER BY RAND () LIMIT 6 ";
 	$similar_goods = Exec_PR_SQL($link,$que,[]);
 
 	foreach ($similar_goods as $sgood)
