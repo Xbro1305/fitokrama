@@ -236,6 +236,10 @@
         display: grid;
         grid-template-columns: repeat(2, 48%);
     }
+
+    .product-item {
+        width: 100%;
+    }
 }
 
 @media (max-width: 768px) {
