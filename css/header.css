@@ -459,7 +459,9 @@
     }
 
     .mobHeader > :nth-child(3) {
-        width: calc(6.4% * 2 + 5px);
+        width: calc(8.4% * 2 + 5px);
+        display: grid;
+        grid-template-columns: repeat(2, 50%);
     }
 
     .mobHeader > :last-child img {
