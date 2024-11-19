@@ -4,6 +4,8 @@
 	include_once  'yandex_methods.php';
 	include_once  'dpd_methods.php';
 	include_once  'europost_methods.php';
+	include_once  'send_email_detailed.php';
+
 
     if (isset($_SERVER['HTTP_ORIGIN'])) {
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -129,5 +131,7 @@
 	$message = "Сформировано отправление $track_number. Распечатайте наклейку!";
 
 	if (file_exists($label_filename)) $label_content = file_get_contents($label_filename);
+	send_email_detailed($order['number']);	// выслать письмо 
+
 
     exit(json_encode(['message'=>$message,'label_filename'=>$label_filename,'html_for_print'=>$label_content,'post_code'=>$post_code, 'track_number'=>$track_number], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));

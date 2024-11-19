@@ -91,6 +91,9 @@ WHERE g.goods_groups_id IS NOT NULL AND price>0;
 	if ($cat!=NULL) $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', $cat, $doc);
 	 else if ($subcat!=NULL) $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', $subcat, $doc);
 		else $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', 'КАТАЛОГ', $doc);
+		
+	$doc = str_replace('[similar-good-class]', 'add-to-cart-small', $doc);
+
 	
 	
 	foreach ($goods as $sgood)

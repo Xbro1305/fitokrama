@@ -31,7 +31,7 @@ function alfaPOST($method, $data) {
     $response = curl_exec($ch);
     
     if (curl_errno($ch)) {
-        send_warning_telegram('ALFA Ошибка cURL: '. curl_error($ch));
+        //send_warning_telegram('ALFA Ошибка cURL: '. curl_error($ch));
         curl_close($ch);
         return false;
     }

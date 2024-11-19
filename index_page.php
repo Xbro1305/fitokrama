@@ -84,6 +84,8 @@
 	 else if ($subcat!=NULL) $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', $subcat, $doc);
 		else $doc = str_replace('ПОХОЖИЕ ТОВАРЫ', 'КАТАЛОГ', $doc);
 	
+	$doc = str_replace('[similar-good-class]', 'add-to-cart-small', $doc);
+
 	
 	foreach ($goods as $sgood)
 	{

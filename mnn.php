@@ -490,12 +490,14 @@ function actual_by_auth ($username,$reddottext,$doc,$sum_goods=0)	// дораб�
 	$count_qty = $cart['count_qty'] ?? 0;
 	
 	if ($count_qty>0) 
-			$doc = str_replace('[cart_count]', $count_qty, $doc); 
+			//$doc = str_replace('[cart_count]', $count_qty, $doc);
+			$doc = str_replace('[CC_display]', 'flex', $doc);		
 		else 
-		{ 
-			$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
-			$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
-		}
+			$doc = str_replace('[CC_display]', 'none', $doc);
+		//{ 
+		//	$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
+		//	$doc = cut_fragment($doc, '<!-- CART_COUNT_START -->','<!-- CART_COUNT_END -->','');
+		//}
 
 	return $doc;
 
@@ -774,6 +776,7 @@ function qty_weight_volume_by_goods($goods)			// количество, вес, �
 
 function mail_sender($email, $subject, $text)
 {
+	GLOBAL $link;
 	GLOBAL $noreply_email;
 	GLOBAL $noreply_host;
 	GLOBAL $noreply_password;
@@ -804,10 +807,13 @@ function mail_sender($email, $subject, $text)
 
 		$mail->send();
 
+		
         return 'Письмо отправлено mail_sender';
+		
+		
     } catch (Exception $e) {
         send_warning_telegram("Ошибка при отправке e-mail: {$mail->ErrorInfo}");
-		return null;
+		return ("Ошибка при отправке e-mail: {$mail->ErrorInfo}");
     }
 }
 

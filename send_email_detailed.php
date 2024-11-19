@@ -46,7 +46,11 @@ function send_email_detailed($order_number)
 	$subject = str_replace('[order_number]', $order_number, $subject);
 	$subject = str_replace('[client_name]', $client_name, $subject);
 	
-	mail_sender($email, $subject, $doc);					
+		
+	$rep = mail_sender($email, $subject, $doc);					
+	$que = "INSERT INTO messages (order_number, client_id, datetime, type, email, text, report, datetime_sent ) 
+		VALUES ( ?, ?,	CURRENT_TIMESTAMP,	'ORDER_DETAILED', ?, ?, ?, CURRENT_TIMESTAMP );";
+	Exec_PR_SQL($link,$que,[ $order_number, $order['client_id'], $email, $doc, $rep ] );
 	
 	return ('sent to '.$email) ;
 }

@@ -122,7 +122,7 @@ if ($method=='check_payment_by_order') // проверить оплату по �
 	$orders = Exec_PR_SQL($link,"SELECT * FROM orders WHERE number=?",[$order_number]);
 	if (count($orders)==0) exit(json_encode(['status'=>'error', 'error'=>'Incorrect order_number']));	
 		
-	check_payment_by_order ($orders[0],NULL);
+	$sum = check_payment_by_order ($orders[0],NULL);
 	$order = all_about_order($order_number);
 	exit(json_encode(['status'=>'ok', 'paid_amount'=>$sum, 'order'=>$order]));	
 }
@@ -191,25 +191,10 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 		$doc = str_replace('[link]', "https://fitokrama.by/order_page.php?order=$order_number", $doc);
 		$doc_sl = addslashes($doc);
 	
-		$que = "INSERT INTO messages (
-			order_number, 
-			client_id, 
-			datetime, 
-			type, 
-			email, 
-			text 
-		) VALUES (
-			?, ?,
-			CURRENT_TIMESTAMP,
-			'NOT_PAID_EMAIL',
-			?, ? );
-		";
-		
-		$ins_id = Exec_PR_SQL($link,$que,[ $order['number'], $order['client_id'], $order['client_email'], $doc_sl ] );
 		$rep = mail_sender($order['client_email'], "⚡️ Заказ не оплачен! ☘", $doc);		
-		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report=? WHERE id=?;";
-		Exec_PR_SQL($link,$que,[$rep,$ins_id]);	
-
+		$que = "INSERT INTO messages (order_number, client_id, datetime, type, email, text, report, datetime_sent ) 
+		VALUES ( ?, ?,	CURRENT_TIMESTAMP,	'NOT_PAID_EMAIL', ?, ?, ?, CURRENT_TIMESTAMP );";
+		Exec_PR_SQL($link,$que,[ $order['number'], $order['client_id'], $order['client_email'], $doc_sl, $rep ] );
 	}
 	
 		
@@ -292,13 +277,11 @@ if ($method=='check_orders_not_paid') // вызываемый webhook по CRON 
 			?, ? );
 		";
 		
-		$ins_id = Exec_PR_SQL($link,$que,[ $order['number'],	$order['client_id'], $order['client_email'], $doc_sl ]);
 		$rep = mail_sender($order['client_email'], "⚡️ Заказ не оплачен! ☘", $doc);		
-		$que = "UPDATE messages SET datetime_sent=CURRENT_TIMESTAMP, report=? WHERE id=?;";
-		Exec_PR_SQL($link,$que,[$rep,$ins_id]);
+		$que = "INSERT INTO messages (order_number, client_id, datetime, type, email, text, report, datetime_sent ) 
+		VALUES ( ?, ?,	CURRENT_TIMESTAMP,	'NOT_PAID_ORDER_CANCEL', ?, ?, ?, CURRENT_TIMESTAMP );";
+		Exec_PR_SQL($link,$que,[ $order['number'], $order['client_id'], $order['client_email'], $doc_sl, $rep ] );
 		
-		
-
 		// а теперь расформировать заказ!
 		$client_id = $order['client_id'];
 		$order = all_about_order($order_number);
