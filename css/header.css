@@ -508,13 +508,9 @@
         top: 97px !important;
     }
 
-    .mobHeader > :nth-child(3) {
-        width: fit-content;
-    }
-
     .mobHeader > :last-child img {
-        width: 25px !important;
-        height: 25px !important;
+        width: 100% !important;
+        height: auto !important;
     }
 
     .mobLogo {

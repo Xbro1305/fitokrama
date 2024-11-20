@@ -396,7 +396,7 @@
 
 @media (max-width: 600px) {
     .product-image {
-        width: auto;
+        width: fit-content;
         min-width: 0 !important;
     }
 }
@@ -444,5 +444,5 @@
 
 .good_similars_button {
     font-weight: 400 !important;
-    padding: 10px 30px !important;
+    padding: 10px 20px !important;
 }
