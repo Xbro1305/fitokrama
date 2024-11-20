@@ -230,7 +230,7 @@ body ::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     color: #fff;
-    z-index: 3 !important;
+    z-index: 1 !important;
 }
 
 @media (max-width: 768px) {
