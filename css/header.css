@@ -163,6 +163,7 @@
     padding: 5px;
 
     margin: 0 auto; /* Центровка поисковой строки */
+    z-index: 4 !important;
 }
 
 .SI {
