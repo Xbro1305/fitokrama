@@ -112,6 +112,7 @@
     left: 50%;
     transform: translateX(-50%);
     max-height: calc(100vh - 200px);
+    z-index: 9
 }
 
 .search-results > :last-child {
