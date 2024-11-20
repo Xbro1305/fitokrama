@@ -394,9 +394,9 @@
     }
 }
 
-@media (max-width: 475px) {
+@media (max-width: 600px) {
     .product-image {
-        width: 100%;
+        width: auto;
         min-width: 0 !important;
     }
 }
